@@ -42,8 +42,9 @@ namespace Demo.Service
             Console.WriteLine("TCPXml解析器添加完成");
 
             WebApiParser webApiParser = new WebApiParser();
-            webApiParser.Bind(7792, 2);
+            webApiParser.Bind(7792, 10);
             Console.WriteLine("webApiParser解析器添加完成");
+            
 
             rpcService.AddRPCParser("TcpParser", tcpRPCParser);
             rpcService.AddRPCParser("UdpParser", udpRPCParser);
@@ -52,6 +53,14 @@ namespace Demo.Service
 
             rpcService.OpenRPCServer();
             Console.WriteLine("RPC启动完成");
+
+            Console.WriteLine();
+            Console.WriteLine("使用浏览器访问以下连接测试WebApi");
+
+            foreach (var url in webApiParser.RouteMap.Urls)
+            {
+                Console.WriteLine($"http://127.0.0.1:{webApiParser.Service.Port}{url}");
+            }
             Console.ReadKey();
         }
     }

@@ -8,11 +8,14 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMRPC.RRQMTest;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Demo.Client
 {
@@ -21,8 +24,9 @@ namespace Demo.Client
         private static void Main(string[] args)
         {
             Console.ReadKey();
-            //UDPBinarySerialize();
+
             BinarySerialize();
+            UDPBinarySerialize();
             XmlSerialize();
             Console.ReadKey();
         }
@@ -34,7 +38,17 @@ namespace Demo.Client
             RPCClient client = new RPCClient();
             client.ReceivedByteBlock += Client_ReceivedByteBlock;
 
-            client.InitializedRPC(new IPHost("127.0.0.1:7789") );
+            //开启反向RPC，先注册
+            client.RegistService(new CallBackServer());
+            client.OpenCallBackRPCServer();
+
+            TypeInitializeDic pairs = new TypeInitializeDic();
+            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
+            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
+
+            //无法找到的类型，通过TypeInitializeDic显式指定
+
+            client.InitializedRPC(new IPHost("127.0.0.1:7789"), typeDic: pairs);
             Console.WriteLine();
             Console.WriteLine("二进制连接成功");
 
@@ -50,44 +64,45 @@ namespace Demo.Client
             remoteTest.Test08();
             remoteTest.Test09();
             remoteTest.Test10();
-            remoteTest.Test11();
+            remoteTest.Test11(client.ID);
+            remoteTest.Test12();
+            remoteTest.Test13();
+            remoteTest.Test14();
+            remoteTest.Test15(client.ID);//调用服务，然后让服务再回调RPC
 
             Console.WriteLine("二进制测试完成");
             Console.WriteLine();
         }
 
-        //private static void UDPBinarySerialize()
-        //{
-        //    //UDP序列化默认为二进制
+        private static void UDPBinarySerialize()
+        {
+            //UDP序列化默认为二进制
 
-        //    UdpRPCClient client = new UdpRPCClient();
-        //    BindSetting bindSetting = new BindSetting();
-        //    bindSetting.IP = "127.0.0.1";
-        //    bindSetting.Port = 8848;
-        //    bindSetting.MultithreadThreadCount = 1;
-        //    client.b(bindSetting, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7790));
+            UdpRPCClient client = new UdpRPCClient();
+            client.Bind(8848, 1);
+            TypeInitializeDic pairs = new TypeInitializeDic();
+            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
+            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
 
-        //    client.InitializedRPC();
-        //    Console.WriteLine();
-        //    Console.WriteLine("二进制连接成功");
+            client.InitializedRPC(new IPHost("127.0.0.1:7790"), typeDic: pairs);
+            Console.WriteLine();
+            Console.WriteLine("二进制连接成功");
 
-        //    RemoteTest remoteTest = new RemoteTest(client);
+            RemoteTest remoteTest = new RemoteTest(client);
 
-        //    remoteTest.Test01(InvokeOption.NoFeedback);
-        //    remoteTest.Test02();
-        //    remoteTest.Test03();
-        //    remoteTest.Test04();
-        //    remoteTest.Test05();
-        //    remoteTest.Test06();
-        //    remoteTest.Test07();
-        //    remoteTest.Test08();
-        //    remoteTest.Test09();
-        //    remoteTest.Test10();
-        //    remoteTest.Test11();
-
-        //    Console.WriteLine("UDP二进制测试完成");
-        //    Console.WriteLine();
-        //}
+            remoteTest.Test01(InvokeOption.NoFeedback);
+            remoteTest.Test02();
+            remoteTest.Test03();
+            remoteTest.Test04();
+            remoteTest.Test05();
+            remoteTest.Test06();
+            remoteTest.Test07();
+            remoteTest.Test08();
+            remoteTest.Test09();
+            remoteTest.Test10();
+            Console.WriteLine("UDP二进制测试完成");
+            Console.WriteLine();
+        }
 
         private static void Client_ReceivedByteBlock(object sender, RRQMCore.ByteManager.ByteBlock e)
         {
@@ -99,7 +114,11 @@ namespace Demo.Client
             RPCClient client = new RPCClient();
             client.SerializeConverter = new XmlSerializeConverter();
 
-            client.InitializedRPC(new IPHost("127.0.0.1:7791") );
+            TypeInitializeDic pairs = new TypeInitializeDic();
+            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
+            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
+
+            client.InitializedRPC(new IPHost("127.0.0.1:7791"), typeDic: pairs);
             Console.WriteLine();
             Console.WriteLine("Xml连接成功");
 
@@ -115,7 +134,8 @@ namespace Demo.Client
             remoteTest.Test08();
             remoteTest.Test09();
             remoteTest.Test10();
-            remoteTest.Test11();
+            remoteTest.Test12();
+            remoteTest.Test14();
 
             Console.WriteLine("Xml测试完成");
             Console.WriteLine();

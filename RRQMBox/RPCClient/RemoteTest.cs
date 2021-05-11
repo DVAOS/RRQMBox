@@ -3,7 +3,8 @@
 //  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
 //  CSDN博客：https://blog.csdn.net/qq_40374647
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  源代码仓库：https://gitee.com/RRQM_Home
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -13,6 +14,7 @@ using RRQMRPC.RRQMTest;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
+using System.Collections.Generic;
 
 namespace Demo.Client
 {
@@ -119,9 +121,8 @@ namespace Demo.Client
         /// </summary>
         public void Test08()
         {
-            Test01 test01 = new Test01() { Age = 10, Name = "若汝棋茗" };
-            server.TestClass1(test01);
-            Console.WriteLine($"Test08=>TestClass1完成");
+            server.TestDoubleValueDefaultValue();
+            Console.WriteLine($"Test08=>TestDoubleValueDefaultValue完成");
         }
 
         public void Test09()
@@ -133,15 +134,38 @@ namespace Demo.Client
 
         public void Test10()
         {
-            Test03 test03 = new Test03();
-            server.TestClass3(test03);
-            Console.WriteLine($"Test10=>TestClass3完成");
+            server.TestAsync();
+            Console.WriteLine($"Test10=>TestAsync完成");
         }
 
-        public void Test11()
+        public void Test11(string iDToken)
         {
-            server.TestGetSocketClient(this.server.Client.ID);
+            server.TestGetSocketClient(iDToken);
             Console.WriteLine($"Test11=>TestGetSocketClient完成");
+        }
+
+        public void Test12()
+        {
+            List<Test01> tests = server.TestReturnList();
+            Console.WriteLine($"Test12=>TestReturnList完成,长度={tests.Count}");
+        }
+
+        public void Test13()
+        {
+            Dictionary<int, string> tests = server.TestReturnDic();
+            Console.WriteLine($"Test13=>TestReturnDic完成,长度={tests.Count}");
+        }
+
+        public void Test14()
+        {
+            string mes = server.TestAsync();
+            Console.WriteLine($"Test14=>TestAsync完成,mes={mes}");
+        }
+
+        public void Test15(string iDToekn)
+        {
+            server.TestCallBack(iDToekn);
+            Console.WriteLine($"Test15=>TestCallBack完成");
         }
     }
 }

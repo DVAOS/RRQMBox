@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.RPCService", "RPCServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.RPCClient", "RPCClient\Demo.RPCClient.csproj", "{3AC67AFB-820F-4BD9-B9D2-5D253760F4FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCStressTesting", "RPCStressTesting\RPCStressTesting.csproj", "{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{3AC67AFB-820F-4BD9-B9D2-5D253760F4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AC67AFB-820F-4BD9-B9D2-5D253760F4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AC67AFB-820F-4BD9-B9D2-5D253760F4FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{A58F12D7-20FC-4A48-9A70-A1D6B9F1A964} = {69D98B8C-2A24-4FEC-B679-BB69E89E2A93}
 		{6925ED60-C8F4-44DC-B271-3EE3A68AEAB3} = {BFBB219F-E4C6-4152-9CCD-6ADCE8454731}
 		{3AC67AFB-820F-4BD9-B9D2-5D253760F4FC} = {BFBB219F-E4C6-4152-9CCD-6ADCE8454731}
+		{45B4FD9A-2D50-42CD-8FD5-20BE1F9BABAC} = {BFBB219F-E4C6-4152-9CCD-6ADCE8454731}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F5E29A5-7561-4CA5-9E38-F428B413D674}

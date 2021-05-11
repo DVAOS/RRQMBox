@@ -44,8 +44,8 @@
     <Reference Include="RRQMSocket.RPC, Version=1.0.3.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.1.0.3\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.0\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.1.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.1\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
