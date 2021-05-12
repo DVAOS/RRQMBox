@@ -14,7 +14,7 @@
     <PackageReference Include="RRQMCore" Version="1.2.20" />
     <PackageReference Include="RRQMSkin" Version="2.1.3" />
     <PackageReference Include="RRQMSocket" Version="4.0.16" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="1.0.2" />
+    <PackageReference Include="RRQMSocket.FileTransfer" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
