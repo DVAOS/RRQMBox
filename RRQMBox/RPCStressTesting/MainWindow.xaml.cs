@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using RRQMMVVM;
 using RRQMRPC.RRQMTest;
 using RRQMSocket;
@@ -34,7 +24,7 @@ namespace RPCStressTesting
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.SetMaxThreads(100,100);
+            ThreadPool.SetMaxThreads(100, 100);
 
             TestObjects = new RRQMList<TestObject>();
             this.DG.ItemsSource = TestObjects;
@@ -42,7 +32,6 @@ namespace RPCStressTesting
             int testCount = int.Parse(this.TestCount.Text);
             Task.Run(() =>
             {
-
                 for (int i = 0; i < clientCount; i++)
                 {
                     TestObject testObject = new TestObject();
@@ -66,7 +55,6 @@ namespace RPCStressTesting
                     {
                         TestObjects.Add(testObject);
                     });
-
                 }
 
                 foreach (var item in this.TestObjects)
@@ -74,7 +62,6 @@ namespace RPCStressTesting
                     item.Start();
                 }
             });
-
         }
     }
 
@@ -100,10 +87,8 @@ namespace RPCStressTesting
             set { successCount = value; OnPropertyChanged(); }
         }
 
-       
         public int TestCount { get; set; }
 
-      
         private TimeSpan timeSpan;
 
         public TimeSpan TimeSpan
@@ -112,33 +97,27 @@ namespace RPCStressTesting
             set { timeSpan = value; OnPropertyChanged(); }
         }
 
-
         public void Start()
         {
             Task.Run(() =>
             {
-              this.TimeSpan=  RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                {
-                    int count = 0;
-                    while (count < TestCount)
-                    {
-                        try
-                        {
-                            object[] ps = new object[0];
-                            Client.RPCInvoke("TestNullReturnNullParameter", ref ps, InvokeOption.CanFeedback);
-                            SuccessCount++;
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                        finally
-                        {
-                            count++;
-                        }
-                    }
-                });
-                
+                this.TimeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+                  {
+                      int count = 0;
+                      while (count < TestCount)
+                      {
+                          try
+                          {
+                              object[] ps = new object[0];
+                              Client.RPCInvoke("TestNullReturnNullParameter", ref ps, InvokeOption.CanFeedback);
+                              SuccessCount++;
+                          }
+                          finally
+                          {
+                              count++;
+                          }
+                      }
+                  });
             });
         }
     }

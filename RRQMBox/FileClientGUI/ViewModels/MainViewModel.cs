@@ -11,7 +11,6 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Demo.ClientGUI.Models;
@@ -49,6 +48,7 @@ namespace Demo.ClientGUI.ViewModels
         #region 变量
 
         private FileClient fileClient;
+
         #endregion 变量
 
         #region Command
@@ -135,6 +135,7 @@ namespace Demo.ClientGUI.ViewModels
             get { return verifyToken; }
             set { verifyToken = value; OnPropertyChanged(); }
         }
+
         #endregion 属性
 
         #region 绑定方法
@@ -177,7 +178,6 @@ namespace Demo.ClientGUI.ViewModels
                             fileClient.RequestTransfer(UrlFileInfo.CreatUpload(this.url, this.restart, this.fileClient.BreakpointResume));
                             Log.Show("请求成功");
                         });
-
                     }
                     catch (Exception e)
                     {
@@ -209,8 +209,8 @@ namespace Demo.ClientGUI.ViewModels
                 fileClient.StopThisTransfer();
                 Log.Show("停止当前成功");
             }
-        } 
-        
+        }
+
         private void Cancel(UrlFileInfo urlFileInfo)
         {
             if (fileClient != null)
@@ -219,7 +219,6 @@ namespace Demo.ClientGUI.ViewModels
                 {
                     Log.Show("操作成功");
                 }
-               
             }
         }
 
@@ -238,7 +237,6 @@ namespace Demo.ClientGUI.ViewModels
                 Log.Show("请勿重复连接");
                 return;
             }
-
 
             try
             {
@@ -264,8 +262,6 @@ namespace Demo.ClientGUI.ViewModels
                 Log.Show(ex.Message);
             }
         }
-
-       
 
         private void DisConnectService()
         {
@@ -298,8 +294,6 @@ namespace Demo.ClientGUI.ViewModels
                         Log.Show(e.Message);
                     }
                 });
-
-
             }
             else
             {
@@ -318,7 +312,6 @@ namespace Demo.ClientGUI.ViewModels
             {
                 Log.Show(ex.Message);
             }
-
         }
 
         private void RequestFileInfo()
@@ -332,8 +325,8 @@ namespace Demo.ClientGUI.ViewModels
             {
                 Log.Show(ex.Message);
             }
-
         }
+
         #endregion 绑定方法
 
         #region 事件方法
@@ -341,7 +334,6 @@ namespace Demo.ClientGUI.ViewModels
         private void FileClient_FileTransferCollectionChanged(object sender, MesEventArgs e)
         {
             this.FileList = new RRQMList<UrlFileInfo>(this.fileClient.FileTransferCollection);
-           
         }
 
         private void FileClient_DisConnectedService(object sender, MesEventArgs e)
@@ -367,7 +359,6 @@ namespace Demo.ClientGUI.ViewModels
             RRQMSocket.FileTransfer.FileInfo fileInfo = e.FileInfo;//通过事件参数值，可获得完成的文件信息
             if (e.TransferType == TransferType.Download)
             {
-
                 Log.Show(string.Format("文件：{0}下载完成", e.FileInfo.FileName));
             }
             else

@@ -8,22 +8,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using Demo.ClientGUI.Models;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Demo.ClientGUI.Models;
+using Microsoft.Win32;
 
 namespace Demo.ClientGUI.Views
 {
@@ -36,10 +24,6 @@ namespace Demo.ClientGUI.Views
         {
             InitializeComponent();
         }
-
-
-
-
 
         public DialogResult DialogResult
         {
@@ -54,7 +38,7 @@ namespace Demo.ClientGUI.Views
         private static void OnResultChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SaveDialog saveDialog = (SaveDialog)d;
-            if (saveDialog.DialogResult!=null)
+            if (saveDialog.DialogResult != null)
             {
                 saveDialog.Visibility = saveDialog.DialogResult.Visibility;
                 saveDialog.pathBox.Text = saveDialog.DialogResult.Path;
@@ -63,7 +47,7 @@ namespace Demo.ClientGUI.Views
 
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.DialogResult!=null)
+            if (this.DialogResult != null)
             {
                 this.Visibility = Visibility.Hidden;
                 this.DialogResult.WaitHandle.Set();
@@ -79,8 +63,8 @@ namespace Demo.ClientGUI.Views
         {
             SaveFileDialog fileDialog = new SaveFileDialog();
 
-            fileDialog.Filter ="所有文件|*.*"; 
-            fileDialog.FileName =this.DialogResult.Path;
+            fileDialog.Filter = "所有文件|*.*";
+            fileDialog.FileName = this.DialogResult.Path;
             fileDialog.ShowDialog();
 
             if (fileDialog.FileName != null && fileDialog.FileName.Length > 0)

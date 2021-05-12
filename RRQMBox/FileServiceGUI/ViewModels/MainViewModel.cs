@@ -38,7 +38,7 @@ namespace Demo.ServiceGUI.ViewModels
         public ExecuteCommand CreatServiceCommand { get; set; }
         public ExecuteCommand CloseServiceCommand { get; set; }
         public ExecuteCommand<string> SendMesCommand { get; set; }
-      
+
         #endregion Command
 
         #region 属性
@@ -74,7 +74,7 @@ namespace Demo.ServiceGUI.ViewModels
             get { return allowDownload; }
             set { allowDownload = value; OnPropertyChanged(); }
         }
-        
+
         private bool allowDelete = false;
 
         public bool AllowDelete
@@ -82,7 +82,7 @@ namespace Demo.ServiceGUI.ViewModels
             get { return allowDelete; }
             set { allowDelete = value; OnPropertyChanged(); }
         }
-        
+
         private bool getFileInfo = false;
 
         public bool GetFileInfo
@@ -111,14 +111,13 @@ namespace Demo.ServiceGUI.ViewModels
             }
         }
 
-       
         private bool breakpointResume;
 
         public bool BreakpointResume
         {
             get { return breakpointResume; }
-            set 
-            { 
+            set
+            {
                 breakpointResume = value;
             }
         }
@@ -128,15 +127,12 @@ namespace Demo.ServiceGUI.ViewModels
         public string ConnectionToken
         {
             get { return connectionToken; }
-            set { connectionToken = value;OnPropertyChanged(); }
+            set { connectionToken = value; OnPropertyChanged(); }
         }
 
         #endregion 属性
 
-
-
         #region 绑定方法
-
 
         private void CreatService()
         {
@@ -149,7 +145,7 @@ namespace Demo.ServiceGUI.ViewModels
             fileService = new FileService();
             try
             {
-                fileService.Bind(7789,1);
+                fileService.Bind(7789, 1);
                 fileService.VerifyToken = this.connectionToken;
                 fileService.BreakpointResume = this.breakpointResume;
                 fileService.ClientConnected += FileService_ClientConnected;
@@ -193,7 +189,7 @@ namespace Demo.ServiceGUI.ViewModels
 
         private void SendMes(string mes)
         {
-            if (this.selectedClient!=null)
+            if (this.selectedClient != null)
             {
                 this.selectedClient.SendSystemMes(mes);
             }
@@ -211,7 +207,7 @@ namespace Demo.ServiceGUI.ViewModels
         private void FileService_ClientConnected(object sender, MesEventArgs e)
         {
             FileSocketClient client = (FileSocketClient)sender;
-           
+
             UIInvoke(() =>
             {
                 this.ClientItems.Add(client);
@@ -225,6 +221,7 @@ namespace Demo.ServiceGUI.ViewModels
                 this.ClientItems.Remove((FileSocketClient)sender);
             });
         }
+
         private void FileService_FinishedFileTransfer(object sender, TransferFileMessageArgs e)
         {
             if (e.TransferType == TransferType.Download)
@@ -247,14 +244,12 @@ namespace Demo.ServiceGUI.ViewModels
                 }
                 e.TargetPath = @"ServiceReceiveDir\" + e.FileInfo.FileName;
                 e.IsPermitOperation = this.AllowUpload;//是否允许接收
-
             }
             else
             {
                 e.IsPermitOperation = this.AllowDownload;//是否允许下载
             }
         }
-
 
         #endregion 事件方法
     }

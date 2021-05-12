@@ -8,19 +8,16 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using RRQMSocket;
 
 namespace Demo.TestTcpClient
 {
-    class ClientProgram
+    internal class ClientProgram
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.ReadKey();
 

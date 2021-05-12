@@ -8,14 +8,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using System;
+using System.Text;
 using RRQMCore.ByteManager;
 using RRQMSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestAdopter;
 
 namespace Demo.TestTcpService
 {
@@ -26,7 +22,6 @@ namespace Demo.TestTcpService
         /// </summary>
         public override void Create()
         {
-
             this.DataHandlingAdapter = new NormalDataHandlingAdapter();//普通TCP报文处理器
             //this.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();//固定包头TCP报文处理器
             //this.DataHandlingAdapter = new FixedSizeDataHandlingAdapter(1024);//固定长度TCP报文处理器
@@ -34,8 +29,8 @@ namespace Demo.TestTcpService
             //this.DataHandlingAdapter = new MyTestDataHandingAdopter();//自定义处理器
         }
 
+        private int count;
 
-        int count;
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
             count++;
@@ -49,6 +44,5 @@ namespace Demo.TestTcpService
                 this.Send(byteBlock);//回传消息
             }
         }
-
     }
 }

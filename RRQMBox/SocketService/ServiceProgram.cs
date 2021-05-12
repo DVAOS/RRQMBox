@@ -8,26 +8,20 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using RRQMSocket;
 
 namespace Demo.TestTcpService
 {
-    class ServiceProgram
+    internal class ServiceProgram
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             TcpService<MyTcpSocketClient> service = new TcpService<MyTcpSocketClient>();
             service.ClientConnected += Service_ClientConnected;
             service.IsCheckClientAlive = true;
-          
-            service.Bind(7789,10);
+
+            service.Bind(7789, 10);
 
             /*
              * Ipv6
@@ -37,12 +31,10 @@ namespace Demo.TestTcpService
             Console.ReadKey();
         }
 
-        private static void Service_ClientConnected(object sender, RRQMSocket.MesEventArgs e)
+        private static void Service_ClientConnected(object sender, MesEventArgs e)
         {
             MyTcpSocketClient tcpSocketClient = (MyTcpSocketClient)sender;
             Console.WriteLine($"客户端连接,Name={tcpSocketClient.Name},ID={tcpSocketClient.ID}");
         }
     }
-
-   
 }

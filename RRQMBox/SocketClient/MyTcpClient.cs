@@ -8,14 +8,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using System;
+using System.Text;
 using RRQMCore.ByteManager;
 using RRQMSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestAdopter;
 
 namespace Demo.TestTcpClient
 {
@@ -28,10 +24,10 @@ namespace Demo.TestTcpClient
             //this.DataHandlingAdapter = new TerminatorDataHandlingAdapter(1024, "\r\n");//终止字符TCP报文处理器
             //this.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();//固定包头TCP报文处理器
             //this.DataHandlingAdapter = new MyTestDataHandingAdopter();//自定义处理器
-
         }
 
-        int count;
+        private int count;
+
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
             count++;
@@ -40,7 +36,6 @@ namespace Demo.TestTcpClient
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Position);
                 Console.WriteLine($"已接收到信息：{mes},第{count}条");
             }
-
         }
     }
 }

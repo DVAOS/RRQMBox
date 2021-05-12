@@ -9,21 +9,20 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSocket;
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
-using RRQMSocket.RPC.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using RRQMSocket;
+using RRQMSocket.RPC.RRQMRPC;
+using RRQMSocket.RPC.WebApi;
 
 namespace Demo.Service
 {
     /*
     若汝棋茗
     */
+
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
     {
@@ -98,6 +97,7 @@ namespace Demo.Service
             ISocketClient socketClient = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).Service.SocketClients[iDToken];
             socketClient.Send(Encoding.UTF8.GetBytes("若汝棋茗"));
         }
+
         [RRQMRPCMethod]
         public void TestCallBack(string iDToken)
         {
@@ -116,9 +116,7 @@ namespace Demo.Service
                 {
                     Console.WriteLine($"TestCallBack调用异常,信息：{ex.Message}");
                 }
-
             });
-
         }
 
         [Route]
@@ -157,23 +155,21 @@ namespace Demo.Service
         [RRQMRPCMethod]
         public void TestStringDefaultNullValue(string s = null)
         {
-
         }
+
         [RRQMRPCMethod]
         public void TestStringDefaultValue(string s = "123123123")
         {
-
         }
+
         [RRQMRPCMethod]
         public void TestValueDefaultValue(int a = 1234)
         {
-
         }
 
         [RRQMRPCMethod]
         public void TestDoubleValueDefaultValue(double a = 1234.021)
         {
-
         }
     }
 }

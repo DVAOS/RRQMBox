@@ -32,7 +32,6 @@ namespace Demo.ServiceGUI
             {
                 return 1024 * 1024;
             }
-            
         }
     }
 }

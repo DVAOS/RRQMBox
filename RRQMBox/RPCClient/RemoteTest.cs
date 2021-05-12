@@ -9,12 +9,11 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMCore.Diagnostics;
-using RRQMRPC.RRQMTest;
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
+using RRQMCore.Diagnostics;
+using RRQMRPC.RRQMTest;
+using RRQMSocket.RPC.RRQMRPC;
 
 namespace Demo.Client
 {
