@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <StackPanel Margin="5" VerticalAlignment="Center" Orientation="Horizontal">
             <TextBlock Text="客户端数量：" />
-            <TextBox x:Name="ClientCount" Text="1000" Width="60" />
+            <TextBox x:Name="ClientCount" Text="100" Width="60" />
 
             <TextBlock Text="测试总次数：" Margin="20,0,0,0" />
             <TextBox x:Name="TestCount" Text="1000" Width="60" />

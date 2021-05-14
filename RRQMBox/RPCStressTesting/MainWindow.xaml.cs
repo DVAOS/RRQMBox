@@ -24,7 +24,7 @@ namespace RPCStressTesting
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.SetMaxThreads(100, 100);
+            ThreadPool.SetMaxThreads(1000, 1000);
 
             TestObjects = new RRQMList<TestObject>();
             this.DG.ItemsSource = TestObjects;
@@ -84,10 +84,33 @@ namespace RPCStressTesting
         public int SuccessCount
         {
             get { return successCount; }
-            set { successCount = value; OnPropertyChanged(); }
+            set 
+            { 
+                successCount = value;
+                if (successCount% tick == 0)
+                {
+                    OnPropertyChanged();
+                }
+               
+            }
         }
 
-        public int TestCount { get; set; }
+        private int testCount;
+
+        public int TestCount
+        {
+            get { return testCount; }
+            set 
+            { 
+                testCount = value;
+                if (value > 100)
+                {
+                    tick = (int)(value / 100.0);
+                }
+            }
+        }
+
+        private int tick=1;
 
         private TimeSpan timeSpan;
 
@@ -99,26 +122,27 @@ namespace RPCStressTesting
 
         public void Start()
         {
-            Task.Run(() =>
+            Thread thread = new Thread(()=> 
             {
                 this.TimeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                  {
-                      int count = 0;
-                      while (count < TestCount)
-                      {
-                          try
-                          {
-                              object[] ps = new object[0];
-                              Client.RPCInvoke("TestNullReturnNullParameter", ref ps, InvokeOption.CanFeedback);
-                              SuccessCount++;
-                          }
-                          finally
-                          {
-                              count++;
-                          }
-                      }
-                  });
+                {
+                    int count = 0;
+                    while (count < TestCount)
+                    {
+                        try
+                        {
+                            object[] ps = new object[0];
+                            Client.RPCInvoke("TestNullReturnNullParameter", ref ps, InvokeOption.NoFeedback);
+                            SuccessCount++;
+                        }
+                        finally
+                        {
+                            count++;
+                        }
+                    }
+                });
             });
+            thread.Start();
         }
     }
 }
