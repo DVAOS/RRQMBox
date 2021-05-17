@@ -13,6 +13,7 @@ using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
+using RRQMSocket.RPC.XmlRpc;
 
 namespace Demo.Service
 {
@@ -25,30 +26,35 @@ namespace Demo.Service
 
             TcpRPCParser tcpRPCParser = new TcpRPCParser();
             tcpRPCParser.SerializeConverter = new BinarySerializeConverter();
-            tcpRPCParser.Bind(7789, 10);
+            tcpRPCParser.Bind(7789, 5);
             tcpRPCParser.NameSpace = "RRQMTest";
             Console.WriteLine("TCP解析器添加完成");
 
             UdpRPCParser udpRPCParser = new UdpRPCParser();
             udpRPCParser.SerializeConverter = new BinarySerializeConverter();
             udpRPCParser.NameSpace = "RRQMTest";
-            udpRPCParser.Bind(7790, 10);
+            udpRPCParser.Bind(7790, 5);
             Console.WriteLine("UDP解析器添加完成");
 
             TcpRPCParser tcpXmlRPCParser = new TcpRPCParser();
             tcpXmlRPCParser.SerializeConverter = new XmlSerializeConverter();
             tcpXmlRPCParser.NameSpace = "RRQMTest";
-            tcpXmlRPCParser.Bind(7791, 10);
+            tcpXmlRPCParser.Bind(7791, 5);
             Console.WriteLine("TCPXml解析器添加完成");
 
             WebApiParser webApiParser = new WebApiParser();
-            webApiParser.Bind(7792, 10);
+            webApiParser.Bind(7792, 5);
             Console.WriteLine("webApiParser解析器添加完成");
+
+            XmlRpcParser xmlRpcParser = new XmlRpcParser();
+            xmlRpcParser.Bind(7793, 5);
+            Console.WriteLine("xmlRpcParser解析器添加完成");
 
             rpcService.AddRPCParser("TcpParser", tcpRPCParser);
             rpcService.AddRPCParser("UdpParser", udpRPCParser);
             rpcService.AddRPCParser("tcpXmlRPCParser", tcpXmlRPCParser);
             rpcService.AddRPCParser("webApiParser", webApiParser);
+            rpcService.AddRPCParser("xmlRpcParser", xmlRpcParser);
 
             rpcService.OpenRPCServer();
             Console.WriteLine("RPC启动完成");

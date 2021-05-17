@@ -11,18 +11,16 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
+using RRQMSocket.RPC.XmlRpc;
 
 namespace Demo.Service
 {
-    /*
-    若汝棋茗
-    */
-
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
     {
@@ -171,5 +169,19 @@ namespace Demo.Service
         public void TestDoubleValueDefaultValue(double a = 1234.021)
         {
         }
+
+        [XmlRpc]
+        public string TestXmlRpc(string param, int a, double b, Args[] args)
+        {
+            Console.WriteLine("TestXmlRpc");
+            return "若汝棋茗";
+        }
+    }
+
+    public class Args
+    {
+        public int P1 { get; set; }
+        public double P2 { get; set; }
+        public string P3 { get; set; }
     }
 }

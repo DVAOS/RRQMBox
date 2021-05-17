@@ -142,8 +142,7 @@ namespace RPCStressTesting
                     {
                         try
                         {
-                            object[] ps = new object[0];
-                            Client.RPCInvoke("TestNullReturnNullParameter", ref ps, InvokeOption.NoFeedback);
+                            Client.RPCInvoke("TestNullReturnNullParameter", InvokeOption.NoFeedback);
                             SuccessCount++;
                         }
                         finally

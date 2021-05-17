@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CookComputing.XmlRpc;
 using RRQMRPC.RRQMTest;
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
@@ -23,10 +24,10 @@ namespace Demo.Client
         private static void Main(string[] args)
         {
             Console.ReadKey();
-
+            TestXmlRpc();
             BinarySerialize();
-            UDPBinarySerialize();
-            XmlSerialize();
+            //UDPBinarySerialize();
+            //XmlSerialize();
             Console.ReadKey();
         }
 
@@ -41,19 +42,19 @@ namespace Demo.Client
             client.RegistService(new CallBackServer());
             client.OpenCallBackRPCServer();
 
-            TypeInitializeDic pairs = new TypeInitializeDic();
-            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
-            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
+            //TypeInitializeDic pairs = new TypeInitializeDic();
+            //pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
+            //pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
 
-            //无法找到的类型，通过TypeInitializeDic显式指定
+            ////无法找到的类型，通过TypeInitializeDic显式指定
 
-            client.InitializedRPC(new IPHost("127.0.0.1:7789"), typeDic: pairs);
+            client.InitializedRPC(new IPHost("127.0.0.1:7789"));
             Console.WriteLine();
             Console.WriteLine("二进制连接成功");
 
             RemoteTest remoteTest = new RemoteTest(client);
 
-            remoteTest.Test01(InvokeOption.CanFeedback);
+            remoteTest.Test01(InvokeOption.NoFeedback);
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();
@@ -79,11 +80,8 @@ namespace Demo.Client
 
             UdpRPCClient client = new UdpRPCClient();
             client.Bind(8848, 1);
-            TypeInitializeDic pairs = new TypeInitializeDic();
-            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
-            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
 
-            client.InitializedRPC(new IPHost("127.0.0.1:7790"), typeDic: pairs);
+            client.InitializedRPC(new IPHost("127.0.0.1:7790"));
             Console.WriteLine();
             Console.WriteLine("二进制连接成功");
 
@@ -112,12 +110,7 @@ namespace Demo.Client
         {
             RPCClient client = new RPCClient();
             client.SerializeConverter = new XmlSerializeConverter();
-
-            TypeInitializeDic pairs = new TypeInitializeDic();
-            pairs.Add("List<RRQMRPC.RRQMTest.Test01>", typeof(List<Test01>));
-            pairs.Add("Dictionary<System.Int32,System.String>", typeof(Dictionary<int, string>));
-
-            client.InitializedRPC(new IPHost("127.0.0.1:7791"), typeDic: pairs);
+            client.InitializedRPC(new IPHost("127.0.0.1:7791"));
             Console.WriteLine();
             Console.WriteLine("Xml连接成功");
 
@@ -139,5 +132,34 @@ namespace Demo.Client
             Console.WriteLine("Xml测试完成");
             Console.WriteLine();
         }
+
+        private static void TestXmlRpc()
+        {
+            Console.WriteLine("即将测试XmlRpc");
+            client iclient;
+            XmlRpcClientProtocol protocol;
+            iclient = (client)XmlRpcProxyGen.Create(typeof(client));
+            protocol = (XmlRpcClientProtocol)iclient;
+            protocol.Url = "http://127.0.0.1:7793";
+            protocol.KeepAlive = false;
+
+            string mes = iclient.TestXmlRpc("test", 10, 10.00, new Args[] { new Args() { P3 = "P" }, new Args() { P3 = "PP" } }); //调用
+            Console.WriteLine($"收到返回数据：{mes}");
+
+            Console.WriteLine("XmlRpc测试结束");
+        }
+    }
+
+    public interface client
+    {
+        [XmlRpcMethod("Server.TestXmlRpc")]
+        string TestXmlRpc(string param, int a, double b, Args[] args);
+    }
+
+    public class Args
+    {
+        public int P1 { get; set; }
+        public double P2 { get; set; }
+        public string P3 { get; set; }
     }
 }

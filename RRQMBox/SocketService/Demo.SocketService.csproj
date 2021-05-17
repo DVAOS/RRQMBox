@@ -32,11 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RRQMCore, Version=1.2.20.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.1.2.20\lib\net45\RRQMCore.dll</HintPath>
+    <Reference Include="RRQMCore, Version=1.2.22.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.1.2.22\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=4.0.16.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.4.0.16\lib\net45\RRQMSocket.dll</HintPath>
+    <Reference Include="RRQMSocket, Version=4.0.17.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.4.0.17\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
