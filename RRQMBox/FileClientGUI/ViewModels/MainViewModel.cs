@@ -44,6 +44,19 @@ namespace Demo.ClientGUI.ViewModels
             this.RequestDeleteCommand = new ExecuteCommand(RequestDelete);
             this.RequestFileInfoCommand = new ExecuteCommand(RequestFileInfo);
             this.CancelCommand = new ExecuteCommand<UrlFileInfo>(Cancel);
+
+            fileClient.PauseTransfer();//暂停传输
+            fileClient.ResumeTransfer();//恢复传输
+
+            foreach (var item in fileClient.FileTransferCollection)
+            {
+                fileClient.CancelTransfer(item);//从传输列表中获得传输信息，然后取消该传输任务
+            }
+
+            fileClient.StopThisTransfer();//停止当前下载
+            fileClient.StopAllTransfer();//停止所有下载
+            fileClient.SendSystemMessage("RRQM");//发送系统消息
+            fileClient.SendBytesWaitReturn(new byte[10],0,10);//发生字节数组并等待返回
         }
 
         #region 变量
