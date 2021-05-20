@@ -40,7 +40,7 @@ namespace Demo.TestTcpService
 
             //属性设置
             service.IsCheckClientAlive = true;//使用空包检验活性，不会对数据有任何影响。
-            service.BufferLength = 1024;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+            service.BufferLength = 1024*64;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
             service.IDFormat = "TcpSocketClient_{0}";//设置分配ID的格式， 格式必须符合字符串格式，至少包含一个补位， 初始值为“{0}-TCP”
             service.Logger = new Log();//设置内部日志记录器，默认日志是控制台输出。
             service.MaxCount = 10000;//设置最大连接数，可动态设置，当已连接数超过设置数值时，将主动断开客户端。

@@ -35,7 +35,7 @@ namespace Demo.TestTcpClient
 
             //属性
             client.VerifyToken = "ABC";//设置验证口令
-            client.BufferLength = 1024;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+            client.BufferLength = 1024*64;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
             client.Logger = new Log();//设置内部日志记录器，默认日志是控制台输出。
             client.DataHandlingAdapter = new NormalDataHandlingAdapter();//数据处理适配器，可用于处理粘包、解析对象。
 
@@ -56,7 +56,7 @@ namespace Demo.TestTcpClient
             TcpClient client = new TcpClient();
 
             //属性
-            client.BufferLength = 1024;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+            client.BufferLength = 1024*64;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
             client.Logger = new Log();//设置内部日志记录器，默认日志是控制台输出。
             client.DataHandlingAdapter = new NormalDataHandlingAdapter();//数据处理适配器，可用于处理粘包、解析对象。
 

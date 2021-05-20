@@ -100,27 +100,31 @@ namespace SocketStressTesting
             byte[] data = Encoding.UTF8.GetBytes("RRQM");
             Task.Run(() =>
             {
-                int count = 1000;
-                TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+                for (int j = 0; j < 10; j++)
                 {
-                    for (int i = 0; i < count; i++)
+                    int count = 1000000;
+                    TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                     {
-                        tcpClient.Send(data);
-                    }
-                });
-                Console.WriteLine($"TCP发送{count}次，用时{timeSpan}");
+                        for (int i = 0; i < count; i++)
+                        {
+                            tcpClient.Send(data);
+                        }
+                    });
+                    Console.WriteLine($"TCP发送{count}次，用时{timeSpan}");
+                }
+
             });
         }
 
         private static int count;
         private static void TcpClient_OnReceived(RRQMSocket.TcpClient arg1, ByteBlock byteBlock, object arg3)
         {
-            count++;
-            if (count % 1 == 0)
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-                Console.WriteLine($"已接收到信息：{mes},第{count}条");
-            }
+            //count++;
+            //if (count % 1000 == 0)
+            //{
+            //    string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+            //    Console.WriteLine($"已接收到信息：{mes},第{count}条");
+            //}
         }
     }
 }

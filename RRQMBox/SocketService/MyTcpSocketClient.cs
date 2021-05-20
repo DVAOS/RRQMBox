@@ -35,7 +35,7 @@ namespace Demo.TestTcpService
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
             count++;
-            if (count % 1 == 0)
+            if (count % 1000 == 0)
             {
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
                 Console.WriteLine($"已接收到信息：{mes},第{count}条");
