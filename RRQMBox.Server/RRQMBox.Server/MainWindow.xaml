@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Button x:Name="TcpService" Height="30" Margin="5" Content="启动普通TCP服务器"/>
+            </StackPanel>
+        </ScrollViewer>
+        <TextBox x:Name="msgBox" Grid.Column="1" Margin="5"/>
     </Grid>
 </Window>

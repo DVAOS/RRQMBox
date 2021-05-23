@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using RRQMSocket;
+using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
@@ -174,6 +175,13 @@ namespace Demo.Service
         public string TestXmlRpc(string param, int a, double b, Args[] args)
         {
             Console.WriteLine("TestXmlRpc");
+            return "若汝棋茗";
+        }
+        
+        [JsonRpc]
+        public string TestJsonRpc()
+        {
+            Console.WriteLine("TestJsonRpc");
             return "若汝棋茗";
         }
     }
