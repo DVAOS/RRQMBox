@@ -9,6 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMBox.Server.Win;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace RRQMBox.Server
         {
             InitializeComponent();
             Msg.msgShow = (string msg) => { this.msgBox.AppendText(msg + "\r\n"); };
+        }
+
+        private void CreatTcpService_Click(object sender, RoutedEventArgs e)
+        {
+            CreatTcpWindow window = new CreatTcpWindow();
+            window.Show();
         }
     }
 }

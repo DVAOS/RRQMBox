@@ -1,0 +1,51 @@
+﻿<Window x:Class="RRQMBox.Server.Win.CreatTcpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RRQMBox.Server.Win"
+        mc:Ignorable="d"
+        Title="CreatTcpWindow"
+        Height="450"
+        Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.RowSpan="2" Header="客户端列表" Margin="5">
+            <ListBox BorderThickness="0" />
+        </GroupBox>
+
+        <GroupBox Grid.Column="1" Header="功能" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="IPHost：" Margin="10,0,0,0" />
+                    <TextBox x:Name="iPHostBox" Text="127.0.0.1:7789" Width="120" />
+
+                    <TextBlock Text="最大连接：" Margin="10,0,0,0" />
+                    <TextBox x:Name="maxCountBox" Text="10000" Width="40" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10">
+                    <Button x:Name="Bt_Start"
+                            Style="{StaticResource button}"
+                            Content="启动" Click="Bt_Start_Click"/>
+                    <Button x:Name="Bt_Stop"
+                            Style="{StaticResource button}"
+                            Content="停止" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Grid.Row="1" Header="输出" Margin="5">
+            <TextBox x:Name="msgBox" Margin="3" BorderThickness="0" />
+        </GroupBox>
+    </Grid>
+</Window>

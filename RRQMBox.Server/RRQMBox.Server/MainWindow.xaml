@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <Button x:Name="TcpService" Height="30" Margin="5" Content="启动普通TCP服务器"/>
+                <Button x:Name="CreatTcpService" Height="30" Margin="5" Content="启动普通TCP服务器" Click="CreatTcpService_Click"/>
             </StackPanel>
         </ScrollViewer>
         <TextBox x:Name="msgBox" Grid.Column="1" Margin="5"/>
