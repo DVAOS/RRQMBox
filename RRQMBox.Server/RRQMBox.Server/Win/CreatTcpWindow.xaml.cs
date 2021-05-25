@@ -1,4 +1,7 @@
-﻿using RRQMCore.ByteManager;
+﻿using RRQMBox.Server.Common;
+using RRQMBox.Server.Model;
+using RRQMCore.ByteManager;
+using RRQMMVVM;
 using RRQMSocket;
 using System;
 using System.Collections.Generic;
@@ -24,12 +27,27 @@ namespace RRQMBox.Server.Win
         public CreatTcpWindow()
         {
             InitializeComponent();
+            this.Loaded += this.CreatTcpWindow_Loaded;
         }
 
-       
+        private void CreatTcpWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Cb_AdapterType.ItemsSource = Enum.GetValues(typeof(AdapterType));
+            this.onLineClient = new RRQMList<TcpSocketClient>();
+            this.Lb_OnlineClient.ItemsSource = this.onLineClient;
+        }
+        RRQMList<TcpSocketClient> onLineClient;
+        TcpService<MyTcpSocketClient> service;
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
-            TcpService<MyTcpSocketClient> service = new TcpService<MyTcpSocketClient>();
+            if (service != null && service.IsBind)
+            {
+                ShowMsg("重复绑定");
+                return;
+            }
+            service = new TcpService<MyTcpSocketClient>();
+
+            this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
 
             //订阅事件
             service.ClientConnected += Service_ClientConnected;//订阅连接事件
@@ -37,57 +55,127 @@ namespace RRQMBox.Server.Win
             service.CreatSocketCliect += Service_CreatSocketCliect;//订阅创建辅助类事件，可直接设置其他属性。
 
             //属性设置
-            service.IsCheckClientAlive = true;//使用空包检验活性，不会对数据有任何影响。
+            service.IsCheckClientAlive = (bool)this.Cb_AutoCheck.IsChecked;//使用空包检验活性，不会对数据有任何影响。
             service.BufferLength = 1024;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
             service.IDFormat = "Tcp-{0}";//设置分配ID的格式， 格式必须符合字符串格式，至少包含一个补位， 初始值为“{0}-TCP”
-            service.Logger = new Log();//设置内部日志记录器，默认日志是控制台输出。
-            service.MaxCount = 10000;//设置最大连接数，可动态设置，当已连接数超过设置数值时，将主动断开客户端。
-
-            //属性读取
-            string ipAndPort = service.Name;//获取Ip及端口号
-            string ip = service.IP;//获取IP
-            int port = service.Port;//获取端口号
+            service.Logger = new MsgLog(this.ShowMsg);//设置内部日志记录器
+            service.MaxCount = int.Parse(this.Tb_maxCount.Text);//设置最大连接数，可动态设置，当已连接数超过设置数值时，将主动断开客户端。
 
             //方法
-            service.Bind(7789, 2);//绑定监听，可绑定Ipv6，可监听所有地址。
+            service.Bind(new IPHost(this.Tb_iPHost.Text), 2);//绑定监听，可绑定Ipv6，可监听所有地址。
 
-            Console.WriteLine("TcpService绑定成功");
+            ShowMsg("绑定成功");
+        }
+
+        private int adapterIndex;
+        private void Service_CreatSocketCliect(MyTcpSocketClient arg1, CreatOption arg2)
+        {
+            //此处可进行初始化设置
+            if (arg2.NewCreate)
+            {
+                switch (this.adapterIndex)
+                {
+                    default:
+                    case 0:
+                        {
+                            arg1.DataHandlingAdapter = new NormalDataHandlingAdapter();
+                            break;
+                        }
+                    case 1:
+                        {
+                            arg1.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
+                            break;
+                        }
+                    case 2:
+                        {
+                            arg1.DataHandlingAdapter = new FixedSizeDataHandlingAdapter(1024);
+                            break;
+                        }
+                    case 3:
+                        {
+                            arg1.DataHandlingAdapter = new TerminatorDataHandlingAdapter(1024, "\r\n");
+                            break;
+                        }
+                    case 4:
+                        {
+                            arg1.DataHandlingAdapter = new JsonStringDataHandlingAdapter();
+                            break;
+                        }
+                }
+
+                ShowMsg($"NewCreate适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
+
+                arg1.OnReceived = this.OnReceived;//赋值委托，触发接收
+            }
+
+        }
+
+        private int count;
+        private void OnReceived(MyTcpSocketClient client, ByteBlock byteBlock, object obj)
+        {
+            count++;
+            if (count % 1 == 0)//用于频率输出
+            {
+                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+                ShowMsg($"已接收到信息：{mes},第{count}条");
+            }
+        }
+
+        private void Service_ClientDisconnected(object sender, MesEventArgs e)
+        {
+            this.UIInvoke(() =>
+            {
+                this.onLineClient.Remove((TcpSocketClient)sender);
+            });
+        }
+
+        private void Service_ClientConnected(object sender, MesEventArgs e)
+        {
+
+            this.UIInvoke(() =>
+            {
+                this.onLineClient.Add((TcpSocketClient)sender);
+            });
         }
 
         private void ShowMsg(string msg)
         {
-            this.msgBox.AppendText(msg+"\r\n");
+            this.UIInvoke(() =>
+            {
+                this.msgBox.AppendText($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff")}]:{msg}\r\n");
+            });
+        }
+
+        private void UIInvoke(Action action)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                action.Invoke();
+            });
+        }
+
+        private void Bt_Stop_Click(object sender, RoutedEventArgs e)
+        {
+            if (service != null && service.IsBind)
+            {
+                service.Dispose();
+                ShowMsg("解除绑定");
+                service = null;
+                this.onLineClient.Clear();
+            }
+            else
+            {
+                ShowMsg("服务器未绑定");
+            }
         }
     }
 
     public class MyTcpSocketClient : TcpSocketClient
     {
-        /// <summary>
-        /// 初次创建对象，效应相当于构造函数，但是调用时机在构造函数之后，可覆盖父类方法。
-        /// 适配器只能在此处赋值，在构造函数中赋值会被此处覆盖。
-        /// </summary>
-        public override void Create()
-        {
-            this.DataHandlingAdapter = new NormalDataHandlingAdapter();//普通TCP报文处理器
-            //this.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();//固定包头TCP报文处理器
-            //this.DataHandlingAdapter = new FixedSizeDataHandlingAdapter(1024);//固定长度TCP报文处理器
-            //this.DataHandlingAdapter = new TerminatorDataHandlingAdapter(1024, "\r\n");//终止字符TCP报文处理器
-        }
-
-        private int count;
-
+        public Action<MyTcpSocketClient, ByteBlock, object> OnReceived;
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
-            count++;
-            if (count % 1000 == 0)
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-                Console.WriteLine($"已接收到信息：{mes},第{count}条");
-            }
-            if (this.Online)
-            {
-                this.Send(byteBlock);//回传消息
-            }
+            OnReceived.Invoke(this, byteBlock, obj);//此处通过委托将收到的数据抛出
         }
     }
 }

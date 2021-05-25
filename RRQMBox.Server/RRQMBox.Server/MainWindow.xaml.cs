@@ -43,5 +43,11 @@ namespace RRQMBox.Server
             CreatTcpWindow window = new CreatTcpWindow();
             window.Show();
         }
+
+        private void CreatFileService_Click(object sender, RoutedEventArgs e)
+        {
+            FileServiceWindow window = new FileServiceWindow();
+            window.Show();
+        }
     }
 }

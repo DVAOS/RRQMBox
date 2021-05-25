@@ -14,6 +14,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <Button x:Name="CreatTcpService" Height="30" Margin="5" Content="启动普通TCP服务器" Click="CreatTcpService_Click"/>
+                <Button x:Name="CreatFileService" Height="30" Margin="5" Content="启动文件服务器" Click="CreatFileService_Click"/>
             </StackPanel>
         </ScrollViewer>
         <TextBox x:Name="msgBox" Grid.Column="1" Margin="5"/>
