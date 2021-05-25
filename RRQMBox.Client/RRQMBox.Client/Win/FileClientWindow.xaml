@@ -27,21 +27,19 @@
             <TextBlock x:Name="Tb_Icon" Text="&#xe607;" VerticalAlignment="Center"
                        FontFamily="/RRQMBox.Client;component/Font/#iconfont" FontSize="40" Foreground="AliceBlue" />
 
-            <TextBlock Text="IPHost：" VerticalAlignment="Center"  Margin="10,0,0,0" />
-            <TextBox x:Name="Tb_iPHost" Text="127.0.0.1:7790" Width="150" Style="{DynamicResource inputBox}"/>
+            <TextBlock Text="IPHost：" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox x:Name="Tb_iPHost" Text="127.0.0.1:7790" Width="150"
+                     Style="{DynamicResource inputBox}" />
 
             <TextBlock Text="Token：" Margin="10,0,0,0" VerticalAlignment="Center" />
-            <TextBox x:Name="Tb_VerifyToken"
-                     Width="100"
+            <TextBox x:Name="Tb_VerifyToken" Text="123ABC" Width="100"
                      Style="{DynamicResource inputBox}" />
 
             <controls:CorrugatedButton Content="连接" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
                                        VerticalContentAlignment="Center" Click="ConnectButton_Click" FontSize="15" />
             <controls:CorrugatedButton Content="断开" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       Command="{Binding DisConnectServiceCommand}"
-                                       FontSize="15" />
-            
+                                       VerticalContentAlignment="Center" Click="DisconnectButton_Click" FontSize="15" />
+
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -54,49 +52,42 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <controls:SpeedDial Height="200" Width="200" Grid.Column="0" MaxValue="480" MinValue="0"
-                                    Speed="{Binding Speed}"
+                                    Name="Speed"
                                     Style="{DynamicResource SpeedDialStyle}" />
                 <controls:RoundProgressBar Height="50" Width="50" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"
                                            Background="#FFCECED0"
                                            Style="{DynamicResource RoundProgressBarStyle}"
-                                           Value="{Binding Progress}" />
+                                           Name="Progress" />
             </Grid>
-            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="下载" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Command="{Binding BeginDownloadCommand}" />
+                                               VerticalContentAlignment="Center" Click="DownloadButton_Click" />
                     <controls:CorrugatedButton Content="上传" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="UploadButton_Click"
                                                Command="{Binding BeginUploadFileCommand}" />
                     <controls:CorrugatedButton Content="暂停" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="PauseButton_Click"
                                                Command="{Binding PauseCommand}" />
                     <controls:CorrugatedButton Content="继续" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Command="{Binding ResumeCommand}" />
-                    <CheckBox Content="Restart" Margin="5" VerticalContentAlignment="Center" Foreground="#FFF7F4F5"
-                              IsChecked="{Binding Restart}" />
+                                               VerticalContentAlignment="Center" Click="ResumeButton_Click" />
+                    <CheckBox Content="Restart" Margin="5" VerticalContentAlignment="Center" Foreground="#FFF7F4F5" Name="Cb_Restart" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="终止当前" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="StopThisButton_Click"
                                                Command="{Binding StopThisCommand}" />
                     <controls:CorrugatedButton Content="终止所有" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="StopAllButton_Click"
                                                Command="{Binding StopAllCommand}" />
                     <controls:CorrugatedButton Content="取消选中" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Command="{Binding CancelCommand}"
-                                               CommandParameter="{Binding ElementName=list, Path=SelectedItem}" />
+                                               VerticalContentAlignment="Center" Click="CancelButton_Click" />
                 </StackPanel>
                 <StackPanel Margin="5" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="请求删除文件" Height="30" Width="113" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Command="{Binding RequestDeleteCommand}" />
+                                               VerticalContentAlignment="Center" Click="RequestDeleteButton_Click" />
                     <controls:CorrugatedButton Content="请求文件信息" Height="30" Width="113" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Command="{Binding RequestFileInfoCommand}" />
+                                               VerticalContentAlignment="Center" Click="RequestFileInfoButton_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -112,15 +103,11 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="mesBox" Style="{DynamicResource inputBox}" />
-            <controls:CorrugatedButton Content="发送系统消息" Height="30" Width="110" Grid.Column="1" VerticalContentAlignment="Center"
-                                       Command="{Binding SendSystemMessageCommand}"
-                                       CommandParameter="{Binding ElementName=mesBox, Path=Text}" />
-            <TextBox Text="{Binding Url}"
-                     Grid.Row="3"
+            <controls:CorrugatedButton Content="发送系统消息" Height="25" Click="SendSysMsgButton_Click" Width="110" Grid.Column="1" VerticalContentAlignment="Center" />
+            <TextBox Name="Tb_Url" Grid.Row="3"
                      Style="{DynamicResource inputBox}" />
-            <controls:CorrugatedButton Content="选择" Height="30" Width="110" Grid.Row="1" Grid.Column="1"
-                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                       Command="{Binding SelectPathCommand}" />
+            <controls:CorrugatedButton Content="选择" Height="25" Width="110" Grid.Row="1" Grid.Column="1"
+                                       VerticalContentAlignment="Center" Click="SelectUrlButton_Click"/>
         </Grid>
 
         <Grid Grid.Row="4">
@@ -130,7 +117,6 @@
             </Grid.RowDefinitions>
             <GroupBox Margin="3" Header="传输列表">
                 <ListBox Name="Lb_FileList" Background="Transparent" Foreground="White"
-                         ItemsSource="{Binding FileList}"
                          Style="{DynamicResource TransferFileListStyle}" />
             </GroupBox>
 
@@ -139,7 +125,7 @@
                          Foreground="{DynamicResource foreColor}" />
             </GroupBox>
         </Grid>
-        <views:SaveDialog Grid.RowSpan="5" Panel.ZIndex="1"
+        <views:SaveDialog x:Name="SaveDialog" Grid.RowSpan="5" Panel.ZIndex="1"
                           DialogResult="{Binding DialogResult}"
                           Visibility="Hidden" />
     </Grid>
