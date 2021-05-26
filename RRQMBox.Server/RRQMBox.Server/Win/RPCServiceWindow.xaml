@@ -28,10 +28,6 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </StackPanel.Resources>
-                    <TextBlock Text="IPHost：" Margin="10,0,0,0" />
-                    <TextBox x:Name="Tb_iPHost" Text="127.0.0.1:7791" Width="150"
-                             Style="{DynamicResource inputBox}" />
-
                     <TextBlock Text="多线程数量：" Margin="10,0,0,0" />
                     <TextBox x:Name="Tb_ThreadCount" Text="5" Width="40"
                              Style="{DynamicResource inputBox}" />

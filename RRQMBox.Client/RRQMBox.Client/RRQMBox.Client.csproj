@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CookComputing.XmlRPCv2.2.5.0\lib\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
     <Reference Include="RRQMCore, Version=1.2.23.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMCore.1.2.23\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
@@ -50,20 +53,20 @@
     <Reference Include="RRQMSocket.FileTransfer, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.FileTransfer.1.0.8\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.Http, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.1.0.3\lib\net45\RRQMSocket.Http.dll</HintPath>
+    <Reference Include="RRQMSocket.Http, Version=1.0.4.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.Http.1.0.4\lib\net45\RRQMSocket.Http.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=1.0.8.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.1.0.8\lib\net45\RRQMSocket.RPC.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC, Version=1.0.9.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.1.0.9\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.0\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.3\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.5.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.5\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=1.0.2.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.1.0.2\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.1.0.3\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -88,11 +91,15 @@
     <Compile Include="Common\DialogResult.cs" />
     <Compile Include="Common\MsgLog.cs" />
     <Compile Include="Model\AdapterType.cs" />
+    <Compile Include="RPCTest\RemoteTest.cs" />
     <Compile Include="Views\SaveDialog.xaml.cs">
       <DependentUpon>SaveDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win\FileClientWindow.xaml.cs">
       <DependentUpon>FileClientWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Win\RPCWindow.xaml.cs">
+      <DependentUpon>RPCWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win\TcpClientWindow.xaml.cs">
       <DependentUpon>TcpClientWindow.xaml</DependentUpon>
@@ -118,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Win\FileClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Win\RPCWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,4 +166,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="RRQMRPC\**" xmlns="" />
+  </ItemGroup>
 </Project>

@@ -50,20 +50,20 @@
     <Reference Include="RRQMSocket.FileTransfer, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.FileTransfer.1.0.8\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.Http, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.1.0.3\lib\net45\RRQMSocket.Http.dll</HintPath>
+    <Reference Include="RRQMSocket.Http, Version=1.0.4.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.Http.1.0.4\lib\net45\RRQMSocket.Http.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=1.0.8.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.1.0.8\lib\net45\RRQMSocket.RPC.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC, Version=1.0.9.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.1.0.9\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.0\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.3\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.5.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.5\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=1.0.2.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.1.0.2\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.1.0.3\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

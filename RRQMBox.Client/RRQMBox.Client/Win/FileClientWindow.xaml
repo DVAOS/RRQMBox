@@ -103,11 +103,12 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="mesBox" Style="{DynamicResource inputBox}" />
-            <controls:CorrugatedButton Content="发送系统消息" Height="25" Click="SendSysMsgButton_Click" Width="110" Grid.Column="1" VerticalContentAlignment="Center" />
+            <controls:CorrugatedButton Content="发送系统消息" Height="25" Click="SendSysMsgButton_Click" Width="110" Grid.Column="1"
+                                       VerticalContentAlignment="Center" />
             <TextBox Name="Tb_Url" Grid.Row="3"
                      Style="{DynamicResource inputBox}" />
             <controls:CorrugatedButton Content="选择" Height="25" Width="110" Grid.Row="1" Grid.Column="1"
-                                       VerticalContentAlignment="Center" Click="SelectUrlButton_Click"/>
+                                       VerticalContentAlignment="Center" Click="SelectUrlButton_Click" />
         </Grid>
 
         <Grid Grid.Row="4">
@@ -122,7 +123,7 @@
 
             <GroupBox Grid.Row="1" Margin="3" Header="日志输出">
                 <TextBox x:Name="msgBox" Background="Transparent" BorderThickness="0"
-                         Foreground="{DynamicResource foreColor}" />
+                         Foreground="{DynamicResource foregroundColor}" />
             </GroupBox>
         </Grid>
         <views:SaveDialog x:Name="SaveDialog" Grid.RowSpan="5" Panel.ZIndex="1"

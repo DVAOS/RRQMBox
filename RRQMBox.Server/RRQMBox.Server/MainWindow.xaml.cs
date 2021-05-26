@@ -58,7 +58,8 @@ namespace RRQMBox.Server
 
         private void CreatRPCService_Click(object sender, RoutedEventArgs e)
         {
-
+            RPCServiceWindow window = new RPCServiceWindow();
+            window.Show();
         }
     }
 }
