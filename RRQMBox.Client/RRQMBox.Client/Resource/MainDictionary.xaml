@@ -3,7 +3,8 @@
                     xmlns:Custom="RRQM_Windows"
                     xmlns:controls="RRQM_Controls"
                     xmlns:primitives="RRQM_Primitives">
-    <SolidColorBrush x:Key="foreColor" Color="#FFF7F4F5" />
+    <SolidColorBrush x:Key="foregroundColor" Color="#FFF7F4F5" />
+    <SolidColorBrush x:Key="backgroundColor" Color="#141414" />
 
     <Style x:Key="button" TargetType="Button">
         <Setter Property="Margin" Value="10,0" />
@@ -100,11 +101,12 @@
     </Style>
 
     <Style x:Key="RRQMWindowStyle" TargetType="{x:Type Custom:RRQMWindow}">
+        <Setter Property="Foreground" Value="{StaticResource foregroundColor}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Custom:RRQMWindow}">
                     <Border x:Name="mainBorder"
-                            Background="{TemplateBinding Background}"
+                            Background="{StaticResource backgroundColor}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
@@ -428,7 +430,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <Border x:Name="Bd" Background="Transparent"  BorderThickness="0" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" Background="Transparent" BorderThickness="0" SnapsToDevicePixels="true">
                         <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>

@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMBox.Server.Win;
+using RRQMSkin.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +31,16 @@ namespace RRQMBox.Server
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : RRQMWindow
     {
         public MainWindow()
         {
             InitializeComponent();
-            Msg.msgShow = (string msg) => { this.msgBox.AppendText(msg + "\r\n"); };
         }
 
         private void CreatTcpService_Click(object sender, RoutedEventArgs e)
         {
-            CreatTcpWindow window = new CreatTcpWindow();
+            CreatTcpWindow window = new CreatTcpWindow(false);
             window.Show();
         }
 
@@ -48,6 +48,17 @@ namespace RRQMBox.Server
         {
             FileServiceWindow window = new FileServiceWindow();
             window.Show();
+        }
+
+        private void CreatTokenTcpService_Click(object sender, RoutedEventArgs e)
+        {
+            CreatTcpWindow window = new CreatTcpWindow(true);
+            window.Show();
+        }
+
+        private void CreatRPCService_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

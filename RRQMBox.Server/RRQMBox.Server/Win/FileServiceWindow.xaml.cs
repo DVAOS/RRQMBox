@@ -75,7 +75,7 @@ namespace RRQMBox.Server.Win
         {
             this.UIInvoke(() =>
             {
-                this.msgBox.AppendText($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff")}]:{msg}\r\n");
+                this.msgBox.AppendText($"{msg}\r\n");
             });
         }
 
@@ -135,11 +135,11 @@ namespace RRQMBox.Server.Win
                 }
                 e.TargetPath = @"ServiceReceiveDir\" + e.FileInfo.FileName;
 
-                UIInvoke(()=> 
+                UIInvoke(() =>
                 {
                     e.IsPermitOperation = (bool)this.Cb_AllowUpload.IsChecked;//是否允许接收
                 });
-                
+
             }
             else
             {
@@ -147,18 +147,26 @@ namespace RRQMBox.Server.Win
                 {
                     e.IsPermitOperation = (bool)this.Cb_AllowDownload.IsChecked;//是否允许下载
                 });
-               
+
             }
         }
 
         private void FileService_RequestFileInfo(object sender, FileOperationEventArgs e)
         {
-            e.IsPermitOperation = (bool)this.Cb_GetFileInfo.IsChecked;
+            UIInvoke(() =>
+            {
+                e.IsPermitOperation = (bool)this.Cb_GetFileInfo.IsChecked;
+            });
+
         }
 
         private void FileService_RequestDeleteFile(object sender, FileOperationEventArgs e)
         {
-            e.IsPermitOperation = (bool)this.Cb_AllowDelete.IsChecked;
+            UIInvoke(() =>
+            {
+                e.IsPermitOperation = (bool)this.Cb_AllowDelete.IsChecked;
+            });
+
         }
         #endregion 事件方法
 

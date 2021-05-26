@@ -4,9 +4,10 @@
                     xmlns:common="clr-namespace:RRQMBox.Server.Common"
                     xmlns:controls="RRQM_Controls"
                     xmlns:primitives="RRQM_Primitives">
-    <SolidColorBrush x:Key="foreColor" Color="#FFF7F4F5" />
+    <SolidColorBrush x:Key="foregroundColor" Color="#FFF7F4F5" />
+    <SolidColorBrush x:Key="backgroundColor" Color="#141414" />
 
-    <Style x:Key="button" TargetType="Button">
+    <Style x:Key="button" TargetType="controls:CorrugatedButton">
         <Setter Property="Margin" Value="10,0" />
         <Setter Property="Height" Value="25" />
         <Setter Property="Width" Value="70" />
@@ -104,11 +105,12 @@
     <common:SpeedConverter x:Key="speedConverter" />
 
     <Style x:Key="RRQMWindowStyle" TargetType="{x:Type Custom:RRQMWindow}">
+        <Setter Property="Foreground" Value="{StaticResource foregroundColor}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Custom:RRQMWindow}">
                     <Border x:Name="mainBorder"
-                            Background="{TemplateBinding Background}"
+                            Background="{StaticResource backgroundColor}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
@@ -380,6 +382,58 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CliectListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource foregroundColor}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+        <Setter Property="ScrollViewer.PanningMode" Value="Both" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Bd" Padding="1"
+                            Background="{DynamicResource backgroundColor}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                        <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Grid>
+                                    <Border x:Name="back" Margin="5" Background="#D620E7" CornerRadius="3" Opacity="0.6" />
+                                    <Border Margin="5" Background="Transparent" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="back" Property="Opacity" Value="0.8" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="back" Property="Opacity" Value="1" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
             </Setter.Value>
         </Setter>
     </Style>

@@ -9,6 +9,7 @@
     <Grid>
         <StackPanel>
             <Button Content="测试文件传输" Click="TestFileTransferButton_Click"/>
+            <Button Content="测试TCP" Click="TestTcpClientButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

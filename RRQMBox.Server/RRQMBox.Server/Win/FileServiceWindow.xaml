@@ -9,8 +9,6 @@
                     Title="FileServiceWindow"
                     Height="600"
                     Width="800"
-                    Background="#141414"
-                    Foreground="#FFF7F4F5"
                     Style="{DynamicResource RRQMWindowStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
@@ -55,7 +53,7 @@
                  Style="{DynamicResource ListBoxStyle}" />
 
         <GroupBox Grid.Row="3" Margin="3" Header="日志输出">
-            <TextBox x:Name="msgBox"   Background="Transparent" BorderThickness="0" Foreground="{DynamicResource foreColor}"/>
+            <TextBox x:Name="msgBox"   Background="Transparent" BorderThickness="0" Foreground="{DynamicResource foregroundColor}"/>
         </GroupBox>
 
         <Grid Grid.Row="4">

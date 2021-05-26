@@ -31,5 +31,11 @@ namespace RRQMBox.Client
             FileClientWindow window = new FileClientWindow();
             window.Show();
         }
+        
+        private void TestTcpClientButton_Click(object sender, RoutedEventArgs e)
+        {
+            TcpClientWindow window = new TcpClientWindow();
+            window.Show();
+        }
     }
 }

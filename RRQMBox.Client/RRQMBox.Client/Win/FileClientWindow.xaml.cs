@@ -184,7 +184,11 @@ namespace RRQMBox.Client.Win
                 dialogResult.Visibility = System.Windows.Visibility.Visible;
                 dialogResult.WaitHandle = new System.Threading.AutoResetEvent(false);
 
-                this.SaveDialog.DialogResult = dialogResult;
+                UIInvoke(()=> 
+                {
+                    this.SaveDialog.DialogResult = dialogResult;
+                });
+               
                 dialogResult.WaitHandle.WaitOne();
                 e.TargetPath = dialogResult.Path;
             }
@@ -197,7 +201,14 @@ namespace RRQMBox.Client.Win
 
         private void FileClient_TransferFileError(object sender, TransferFileMessageArgs e)
         {
-            ShowMsg(e.Message);
+            if (e.TransferType == TransferType.Download)
+            {
+                ShowMsg(e.Message);
+            }
+            else
+            {
+                ShowMsg("服务器拒绝上传");
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -275,7 +286,6 @@ namespace RRQMBox.Client.Win
                     try
                     {
                         fileClient.RequestTransfer(UrlFileInfo.CreatUpload(this.Tb_Url.Text, (bool)this.Cb_Restart.IsChecked, this.fileClient.BreakpointResume));
-                        ShowMsg("请求成功");
                     }
                     catch (Exception e)
                     {
