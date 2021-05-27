@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RRQMBox.Client.Win;
+using RRQMSkin.Windows;
 
 namespace RRQMBox.Client
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : RRQMWindow
     {
         public MainWindow()
         {
@@ -35,6 +36,18 @@ namespace RRQMBox.Client
         private void TestTcpClientButton_Click(object sender, RoutedEventArgs e)
         {
             TcpClientWindow window = new TcpClientWindow();
+            window.Show();
+        }
+
+        private void TestRPCButton_Click(object sender, RoutedEventArgs e)
+        {
+            RPCWindow window = new RPCWindow();
+            window.Show();
+        }
+
+        private void StressTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            StressTestingWindow window = new StressTestingWindow();
             window.Show();
         }
     }

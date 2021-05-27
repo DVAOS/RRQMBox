@@ -155,13 +155,31 @@ namespace RRQMBox.Server.Win
                 }
                 arg1.OnReceived = this.OnReceived;//赋值委托，触发接收
             }
-            ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
+            if (!isPerformanceTest)
+            {
+                ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
+            }
+           
         }
 
+        private int count;
+        private long size;
         private void OnReceived(MyTcpSocketClient client, ByteBlock byteBlock, object obj)
         {
-            string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-            ShowMsg($"已接收到信息：{mes}");
+            if (isPerformanceTest)
+            {
+                size += byteBlock.Length;
+                if (++count%testTick==0)
+                {
+                    ShowMsg($"已接收到{count}条信，总计长度为：{size}");
+                }
+            }
+            else
+            {
+                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+                ShowMsg($"已接收到信息：{mes}");
+            }
+            
         }
 
         private void Service_ClientDisconnected(object sender, MesEventArgs e)
@@ -230,6 +248,32 @@ namespace RRQMBox.Server.Win
             {
                 ShowMsg("请先选择客户端列表");
             }
+        }
+
+        private bool isPerformanceTest;
+        private int testTick;
+        private void TestCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Cb_PerformanceTest.IsChecked == true)
+            {
+                this.Tb_OutputTick.Visibility = Visibility.Visible;
+                isPerformanceTest = true;
+            }
+            else
+            {
+                this.Tb_OutputTick.Visibility = Visibility.Hidden;
+                isPerformanceTest = false;
+            }
+            int.TryParse(this.Tb_OutputTick.Text, out testTick);
+            if (testTick < 1)
+            {
+                testTick = 1;
+            }
+        }
+
+        private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.msgBox.Clear();
         }
     }
 

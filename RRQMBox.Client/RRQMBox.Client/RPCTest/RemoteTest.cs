@@ -39,8 +39,7 @@ namespace RRQMBox.Client.RPCTest
 
             server.TestNullReturnNullParameter(invokeOption);
 
-            Console.WriteLine("Test01=>性能测试完成，耗时->");
-            Console.WriteLine();
+            ShowMsg("Test01=>测试完成");
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace RRQMBox.Client.RPCTest
             int age;
             string occupation;
             server.TestNullReturnOutParameters(out name, out age, out occupation);
-            Console.WriteLine($"Test02=>TestNullReturnOutParameters完成,name={name},age={age},occupation={occupation}");
+            ShowMsg($"Test02=>TestNullReturnOutParameters完成,name={name},age={age},occupation={occupation}");
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace RRQMBox.Client.RPCTest
         {
             string name;
             server.TestNullReturnOutStringParameter(out name);
-            Console.WriteLine($"Test03=>TestNullReturnOutStringParameter完成,name={name}");
+            ShowMsg($"Test03=>TestNullReturnOutStringParameter完成,name={name}");
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace RRQMBox.Client.RPCTest
         {
             string name = "张三";
             server.TestNullReturnRefStringParameter(ref name);
-            Console.WriteLine($"Test04=>TestNullReturnRefStringParameter完成,name={name}");
+            ShowMsg($"Test04=>TestNullReturnRefStringParameter完成,name={name}");
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace RRQMBox.Client.RPCTest
         {
             string name = "张三";
             server.TestNullReturnStringParameter(name);
-            Console.WriteLine($"Test05=>TestNullReturnStringParameter完成");
+            ShowMsg($"Test05=>TestNullReturnStringParameter完成");
         }
 
         /// <summary>
@@ -91,7 +90,7 @@ namespace RRQMBox.Client.RPCTest
         public void Test06()
         {
             string s = server.TestStringReturnNullParameter();
-            Console.WriteLine($"Test06=>TestStringReturnNullParameter完成,Return={s}");
+            ShowMsg($"Test06=>TestStringReturnNullParameter完成,Return={s}");
         }
 
         /// <summary>
@@ -101,59 +100,53 @@ namespace RRQMBox.Client.RPCTest
         {
             string name;
             string s = server.TestStringReturnOutStringParameter(out name);
-            Console.WriteLine($"Test07=>TestStringReturnOutStringParameter完成,Return={s},name={name}");
+            ShowMsg($"Test07=>TestStringReturnOutStringParameter完成,Return={s},name={name}");
         }
 
         /// <summary>
-        /// 测试其他类参数引用
+        /// 测试预设
         /// </summary>
         public void Test08()
         {
             server.TestDoubleValueDefaultValue();
-            Console.WriteLine($"Test08=>TestDoubleValueDefaultValue完成");
+            ShowMsg($"Test08=>TestDoubleValueDefaultValue完成");
         }
 
         public void Test09()
         {
             Test01 test01 = new Test01() { Age = 10, Name = "若汝棋茗" };
             Test02 test02 = server.TestClass1AndClass2(test01);
-            Console.WriteLine($"Test09=>TestClass1AndClass2完成");
-        }
-
-        public void Test10()
-        {
-            server.TestAsync();
-            Console.WriteLine($"Test10=>TestAsync完成");
+            ShowMsg($"Test09=>TestClass1AndClass2完成");
         }
 
         public void Test11(string iDToken)
         {
             server.TestGetSocketClient(iDToken);
-            Console.WriteLine($"Test11=>TestGetSocketClient完成");
+            ShowMsg($"Test11=>TestGetSocketClient完成");
         }
 
         public void Test12()
         {
             List<Test01> tests = server.TestReturnList();
-            Console.WriteLine($"Test12=>TestReturnList完成,长度={tests.Count}");
+            ShowMsg($"Test12=>TestReturnList完成,长度={tests.Count}");
         }
 
         public void Test13()
         {
             Dictionary<int, string> tests = server.TestReturnDic();
-            Console.WriteLine($"Test13=>TestReturnDic完成,长度={tests.Count}");
+            ShowMsg($"Test13=>TestReturnDic完成,长度={tests.Count}");
         }
 
         public void Test14()
         {
             string mes = server.TestAsync();
-            Console.WriteLine($"Test14=>TestAsync完成,mes={mes}");
+            ShowMsg($"Test14=>TestAsync完成,mes={mes}");
         }
 
         public void Test15(string iDToekn)
         {
             server.TestCallBack(iDToekn);
-            Console.WriteLine($"Test15=>TestCallBack完成");
+            ShowMsg($"Test15=>TestCallBack完成");
         }
     }
 }

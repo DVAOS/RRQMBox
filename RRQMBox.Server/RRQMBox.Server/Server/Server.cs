@@ -25,23 +25,35 @@ namespace RRQMBox.Server
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
     {
+        private void ShowMsg(string msg)
+        {
+            ShowMsgMethod.Invoke(msg);
+        }
+        public static Action<string> ShowMsgMethod;
+
         private int a;
+
+        [RRQMRPCMethod]
+        public void PerformanceTest()
+        {
+            if (++a % 1000 == 0)
+            {
+                ShowMsg($"TestNullReturnNullParameter,a={a}");
+            }
+        }
 
         [Route]
         [RRQMRPCMethod]
         public void TestNullReturnNullParameter()
         {
-            if (++a % 1000 == 0)
-            {
-                Console.WriteLine($"TestNullReturnNullParameter,a={a}");
-            }
+            ShowMsg($"TestNullReturnNullParameter,a={a}");
         }
 
         [Route]
         [RRQMRPCMethod]
         public string TestStringReturnNullParameter()
         {
-            Console.WriteLine("TestStringReturnNullParameter");
+            ShowMsg("TestStringReturnNullParameter");
             return "若汝棋茗";
         }
 
@@ -49,20 +61,20 @@ namespace RRQMBox.Server
         [RRQMRPCMethod]
         public void TestNullReturnStringParameter(string name)
         {
-            Console.WriteLine($"TestNullReturnStringParameter,String:{name}");
+            ShowMsg($"TestNullReturnStringParameter,String:{name}");
         }
 
         [RRQMRPCMethod]
         public void TestNullReturnOutStringParameter(out string name)
         {
-            Console.WriteLine($"TestNullReturnOutStringParameter");
+            ShowMsg($"TestNullReturnOutStringParameter");
             name = "若汝棋茗";
         }
 
         [RRQMRPCMethod]
         public string TestStringReturnOutStringParameter(out string name)
         {
-            Console.WriteLine($"TestStringReturnOutStringParameter");
+            ShowMsg($"TestStringReturnOutStringParameter");
             name = "若汝棋茗";
             return name;
         }
@@ -70,14 +82,14 @@ namespace RRQMBox.Server
         [RRQMRPCMethod]
         public void TestNullReturnRefStringParameter(ref string name)
         {
-            Console.WriteLine($"TestStringReturnOutStringParameter,String:{name}");
+            ShowMsg($"TestStringReturnOutStringParameter,String:{name}");
             name = "若汝棋茗";
         }
 
         [RRQMRPCMethod]
         public void TestNullReturnOutParameters(out string name, out int age, out string occupation)
         {
-            Console.WriteLine($"TestNullReturnOutParameters");
+            ShowMsg($"TestNullReturnOutParameters");
             name = "若汝棋茗";
             age = 23;
             occupation = "搬砖工程师";
@@ -93,8 +105,8 @@ namespace RRQMBox.Server
         [RRQMRPCMethod]
         public void TestGetSocketClient(string iDToken)
         {
-            //ISocketClient socketClient = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).Service.SocketClients[iDToken];
-            //socketClient.Send(Encoding.UTF8.GetBytes("若汝棋茗"));
+            ISocketClient socketClient = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).Service.SocketClients[iDToken];
+            socketClient.Send(Encoding.UTF8.GetBytes("若汝棋茗"));
         }
 
         [RRQMRPCMethod]
@@ -109,11 +121,11 @@ namespace RRQMBox.Server
                 {
                     string mes = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(iDToken, 1000, invokeOption, 10);
 
-                    Console.WriteLine($"TestCallBack，mes={mes}");
+                    ShowMsg($"TestCallBack，mes={mes}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"TestCallBack调用异常,信息：{ex.Message}");
+                    ShowMsg($"TestCallBack调用异常,信息：{ex.Message}");
                 }
             });
         }
@@ -124,7 +136,7 @@ namespace RRQMBox.Server
         {
             return await Task.Run(() =>
             {
-                Console.WriteLine(nameof(TestAsync));
+                ShowMsg("TestAsync");
                 return "若汝棋茗";
             });
         }
@@ -174,14 +186,14 @@ namespace RRQMBox.Server
         [XmlRpc]
         public string TestXmlRpc(string param, int a, double b, Args[] args)
         {
-            Console.WriteLine("TestXmlRpc");
+            ShowMsg("TestXmlRpc");
             return "若汝棋茗";
         }
-        
+
         [JsonRpc]
-        public string TestJsonRpc()
+        public string TestJsonRpc(int a)
         {
-            Console.WriteLine("TestJsonRpc");
+            ShowMsg("TestJsonRpc");
             return "若汝棋茗";
         }
     }

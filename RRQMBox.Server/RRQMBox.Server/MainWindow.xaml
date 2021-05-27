@@ -12,6 +12,10 @@
                     Style="{DynamicResource RRQMWindowStyle}"
                     mc:Ignorable="d">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -19,12 +23,13 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <controls:CorrugatedButton x:Name="CreatFileService" Content="文件服务器" Height="100" Width="150" Grid.Column="0"
-                                   Click="CreatFileService_Click" Margin="10"/>
+                                   Margin="10" Click="CreatFileService_Click" />
         <controls:CorrugatedButton x:Name="CreatTcpService" Content="TCP服务器" Height="100" Width="150" Grid.Column="1"
-                                   Click="CreatTcpService_Click" Margin="10"/>
+                                   Margin="10" Click="CreatTcpService_Click" />
         <controls:CorrugatedButton x:Name="CreatTokenTcpService" Content="TokenTCP服务器" Height="100" Width="150" Grid.Column="2"
-                                   Click="CreatTokenTcpService_Click" Margin="10"/>
+                                   Margin="10" Click="CreatTokenTcpService_Click" />
         <controls:CorrugatedButton x:Name="CreatRPCService" Content="RPC服务器" Height="100" Width="150" Grid.Column="3"
-                                   Click="CreatRPCService_Click" Margin="10"/>
+                                   Margin="10" Click="CreatRPCService_Click" />
+
     </Grid>
 </windows:RRQMWindow>

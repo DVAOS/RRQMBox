@@ -28,6 +28,7 @@ namespace RRQMBox.Server.Win
         public RPCServiceWindow()
         {
             InitializeComponent();
+            Server.ShowMsgMethod = this.ShowMsg;
         }
 
         private void ShowMsg(string msg)

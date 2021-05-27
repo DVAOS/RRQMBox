@@ -18,23 +18,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <GroupBox Margin="5" Header="客户端测试">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Margin="10,0" VerticalAlignment="Center" Orientation="Horizontal">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <controls:CorrugatedButton Content="测试RRQM二进制" Height="25" Width="150" Margin="10,0" Click="RRQMBinaryButton_Click" />
-                    <controls:CorrugatedButton Content="断开连接" Height="25" Width="90" Margin="10,0" />
-                </StackPanel>
-            </Grid>
+            <WrapPanel Margin="10">
+                <controls:CorrugatedButton Content="测试RRQM TCP Binary" Height="40" Width="200" Margin="10" Click="RRQMBinaryButton_Click" />
+                <controls:CorrugatedButton Content="测试RRQM TCP Xml" Height="40" Width="200" Margin="10" Click="RRQMXmlButton_Click" />
+                <controls:CorrugatedButton Content="测试RRQM UDP Binary" Height="40" Width="200" Margin="10" Click="RRQMUDPBinaryButton_Click" />
+                <controls:CorrugatedButton Content="测试XmlRpc" Height="40" Width="200" Margin="10" Click="XmlRpcButton_Click" />
+                <controls:CorrugatedButton Content="测试JsonRpc" Height="40" Width="200" Margin="10" Click="JsonRpcButton_Click" />
+            </WrapPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Margin="3" Header="日志输出">
             <TextBox x:Name="msgBox" Background="Transparent" BorderThickness="0"
