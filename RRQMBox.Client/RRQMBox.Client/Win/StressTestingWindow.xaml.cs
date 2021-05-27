@@ -51,6 +51,10 @@ namespace RRQMBox.Client.Win
             {
                 for (int i = 0; i < clientCount; i++)
                 {
+                    if (!isTest)
+                    {
+                        break;
+                    }
                     TestObject testObject = new TestObject();
                     testObject.Client = new TcpClient();
                     testObject.Data = data;

@@ -63,7 +63,6 @@ namespace RRQMBox.Server
         {
             RPCServiceWindow window = new RPCServiceWindow();
             window.Show();
-           
         }
     }
 }

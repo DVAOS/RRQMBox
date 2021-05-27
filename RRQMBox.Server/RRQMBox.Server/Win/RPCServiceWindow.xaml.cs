@@ -54,6 +54,7 @@ namespace RRQMBox.Server.Win
 
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
+            int threadCount = int.Parse(this.Tb_ThreadCount.Text);
             RPCService rpcService = new RPCService();
             rpcService.RegistAllService();//注册所有服务
 
@@ -62,31 +63,31 @@ namespace RRQMBox.Server.Win
             tcpRPCParser.Service.VerifyToken = "123RPC";
             tcpRPCParser.ProxyToken = "RPC";
             tcpRPCParser.NameSpace = "RRQMTest";
-            tcpRPCParser.Bind(7700, 5);
+            tcpRPCParser.Bind(7700, threadCount);
             ShowMsg("TCP解析器添加完成，端口号：7700，VerifyToken=123RPC，ProxyToken=RPC");
 
             UdpRPCParser udpRPCParser = new UdpRPCParser();
             udpRPCParser.SerializeConverter = new BinarySerializeConverter();
             udpRPCParser.NameSpace = "RRQMTest";
-            udpRPCParser.Bind(7701, 5);
+            udpRPCParser.Bind(7701, threadCount);
             ShowMsg("UDP解析器添加完成");
 
             TcpRPCParser tcpXmlRPCParser = new TcpRPCParser();
             tcpXmlRPCParser.SerializeConverter = new XmlSerializeConverter();
             tcpXmlRPCParser.NameSpace = "RRQMTest";
-            tcpXmlRPCParser.Bind(7702, 5);
+            tcpXmlRPCParser.Bind(7702, threadCount);
             ShowMsg("TCPXml解析器添加完成");
 
             WebApiParser webApiParser = new WebApiParser();
-            webApiParser.Bind(7703, 5);
+            webApiParser.Bind(7703, threadCount);
             ShowMsg("webApiParser解析器添加完成");
 
             XmlRpcParser xmlRpcParser = new XmlRpcParser();
-            xmlRpcParser.Bind(7704, 5);
+            xmlRpcParser.Bind(7704, threadCount);
             ShowMsg("xmlRpcParser解析器添加完成");
 
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
-            jsonRpcParser.Bind(7705, 5);
+            jsonRpcParser.Bind(7705, threadCount);
             ShowMsg("jsonRpcParser解析器添加完成");
 
             rpcService.AddRPCParser("TcpParser", tcpRPCParser);
