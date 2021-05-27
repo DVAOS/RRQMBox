@@ -27,7 +27,7 @@
             <TextBlock x:Name="Tb_Icon" Text="&#xe607;" VerticalAlignment="Center"
                        FontFamily="/RRQMBox.Client;component/Font/#iconfont" FontSize="40" Foreground="AliceBlue" />
 
-            <TextBlock Text="IPHost：" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBlock Text="IPHost：" Margin="10,0,0,0" VerticalAlignment="Center" />
             <TextBox x:Name="Tb_iPHost" Text="127.0.0.1:7790" Width="150"
                      Style="{DynamicResource inputBox}" />
 
@@ -51,15 +51,15 @@
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <controls:SpeedDial Height="200" Width="200" Grid.Column="0" MaxValue="480" MinValue="0"
-                                    Name="Speed"
+                <controls:SpeedDial Name="Speed" Height="200" Width="200" Grid.Column="0" MaxValue="480"
+                                    MinValue="0"
                                     Style="{DynamicResource SpeedDialStyle}" />
-                <controls:RoundProgressBar Height="50" Width="50" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"
-                                           Background="#FFCECED0"
-                                           Style="{DynamicResource RoundProgressBarStyle}"
-                                           Name="Progress" />
+               
+                <controls:RoundProgressBar Name="Progress" Height="80" Width="80" Grid.Row="1" Grid.Column="1"
+                                           VerticalAlignment="Bottom" Background="#FFCECED0"
+                                           Style="{DynamicResource RoundProgressBarStyle}" />
             </Grid>
-            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="下载" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" Click="DownloadButton_Click" />
@@ -71,7 +71,7 @@
                                                Command="{Binding PauseCommand}" />
                     <controls:CorrugatedButton Content="继续" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" Click="ResumeButton_Click" />
-                    <CheckBox Content="Restart" Margin="5" VerticalContentAlignment="Center" Foreground="#FFF7F4F5" Name="Cb_Restart" />
+                    <CheckBox Name="Cb_Restart" Content="Restart" Margin="5" VerticalContentAlignment="Center" Foreground="#FFF7F4F5" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="终止当前" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
@@ -103,8 +103,8 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="mesBox" Style="{DynamicResource inputBox}" />
-            <controls:CorrugatedButton Content="发送系统消息" Height="25" Click="SendSysMsgButton_Click" Width="110" Grid.Column="1"
-                                       VerticalContentAlignment="Center" />
+            <controls:CorrugatedButton Content="发送系统消息" Height="25" Width="110" Grid.Column="1" VerticalContentAlignment="Center"
+                                       Click="SendSysMsgButton_Click" />
             <TextBox Name="Tb_Url" Grid.Row="3"
                      Style="{DynamicResource inputBox}" />
             <controls:CorrugatedButton Content="选择" Height="25" Width="110" Grid.Row="1" Grid.Column="1"

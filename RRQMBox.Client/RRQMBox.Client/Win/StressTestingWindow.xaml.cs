@@ -93,7 +93,7 @@ namespace RRQMBox.Client.Win
 
         private void GroupSend()
         {
-            int size = 500;//每个线程托管的客户端
+            int size = Math.Min(this.TestObjects.Count, 500);//每个线程托管的客户端
             int threadCount = this.TestObjects.Count / size + 1;
             ThreadPool.SetMinThreads(threadCount,10);
             TestObject[] allObjects = this.TestObjects.ToArray();
@@ -128,6 +128,7 @@ namespace RRQMBox.Client.Win
             {
                 item.Client.Dispose();
             }
+            this.TestObjects.Clear();
         }
 
         private void Cb_IsAsync_Click(object sender, RoutedEventArgs e)

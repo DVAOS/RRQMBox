@@ -42,24 +42,28 @@ namespace RRQMBox.Server
         {
             CreatTcpWindow window = new CreatTcpWindow(false);
             window.Show();
+            
         }
 
         private void CreatFileService_Click(object sender, RoutedEventArgs e)
         {
             FileServiceWindow window = new FileServiceWindow();
             window.Show();
+            
         }
 
         private void CreatTokenTcpService_Click(object sender, RoutedEventArgs e)
         {
             CreatTcpWindow window = new CreatTcpWindow(true);
             window.Show();
+           
         }
 
         private void CreatRPCService_Click(object sender, RoutedEventArgs e)
         {
             RPCServiceWindow window = new RPCServiceWindow();
             window.Show();
+           
         }
     }
 }

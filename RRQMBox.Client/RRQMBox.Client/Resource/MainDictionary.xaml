@@ -395,7 +395,7 @@
                             <primitives:DialText Text="0,60,120,180,240,300,360,420,480" FontSize="12" RadiusRatio="0.6" StartAngle="150" TickAngle="30" />
                             <primitives:DialText Text="30,90,150,210,270,330,390,450" FontSize="6" RadiusRatio="0.7" StartAngle="165" TickAngle="30" />
                             <primitives:DialText Text="单位（MB）" FontSize="20" RadiusRatio="0.5" StartAngle="80" />
-                            <primitives:DialText Text="{Binding Speed, StringFormat=0.00MB/s}"
+                            <primitives:DialText Text="{Binding Speed, StringFormat=0.00MB/s, RelativeSource= {RelativeSource Mode=TemplatedParent}}"
                                                  FontSize="12" RadiusRatio="0.3" StartAngle="80" />
                             <primitives:Pointer x:Name="pointer"
                                                 RatioAngle="{TemplateBinding PointerAngle}"

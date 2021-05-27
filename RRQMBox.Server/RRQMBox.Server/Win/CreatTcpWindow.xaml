@@ -79,8 +79,8 @@
                               Foreground="{DynamicResource foregroundColor}" />
                     <TextBlock Text="输出频率:" Margin="20,0,0,0" VerticalAlignment="Center"
                                Visibility="{Binding ElementName=Tb_OutputTick, Path=Visibility}" />
-                    <TextBox x:Name="Tb_OutputTick" Width="100"
-                             Style="{DynamicResource inputBox}" />
+                    <TextBox x:Name="Tb_OutputTick" Width="100" Visibility="Hidden"
+                             Style="{DynamicResource inputBox}" TextChanged="Tb_OutputTick_TextChanged"/>
                 </StackPanel>
                 <Grid Grid.Row="3" Margin="10">
                     <Grid.ColumnDefinitions>

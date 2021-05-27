@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -30,6 +31,9 @@ namespace RRQMBox.Client.Win
         {
             InitializeComponent();
             this.Loaded += this.FileClientWindow_Loaded;
+            Timer timer = new Timer(1000);
+            timer.Elapsed += this.Timer_Tick;
+            timer.Start();
         }
 
         private void FileClientWindow_Loaded(object sender, RoutedEventArgs e)
@@ -213,16 +217,20 @@ namespace RRQMBox.Client.Win
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (fileClient != null)
+            UIInvoke(()=> 
             {
-                this.Speed.Speed = fileClient.TransferSpeed / (1024 * 1024.0);
-                this.Progress.Value = fileClient.TransferProgress;
-            }
-            else
-            {
-                this.Speed.Speed = 0;
-                this.Progress.Value = 0;
-            }
+                if (fileClient != null)
+                {
+                    this.Speed.Speed = fileClient.TransferSpeed / (1024 * 1024.0);
+                    this.Progress.Value = fileClient.TransferProgress;
+                }
+                else
+                {
+                    this.Speed.Speed = 0;
+                    this.Progress.Value = 0;
+                }
+            });
+           
         }
 
         #endregion 事件方法

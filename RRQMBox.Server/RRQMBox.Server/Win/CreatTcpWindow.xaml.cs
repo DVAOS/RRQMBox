@@ -264,16 +264,21 @@ namespace RRQMBox.Server.Win
                 this.Tb_OutputTick.Visibility = Visibility.Hidden;
                 isPerformanceTest = false;
             }
-            int.TryParse(this.Tb_OutputTick.Text, out testTick);
-            if (testTick < 1)
-            {
-                testTick = 1;
-            }
+            
         }
 
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
             this.msgBox.Clear();
+        }
+
+        private void Tb_OutputTick_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse(this.Tb_OutputTick.Text, out testTick);
+            if (testTick < 1)
+            {
+                testTick = 1;
+            }
         }
     }
 
