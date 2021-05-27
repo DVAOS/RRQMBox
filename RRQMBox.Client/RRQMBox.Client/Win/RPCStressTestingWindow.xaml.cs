@@ -178,7 +178,7 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.RPCInvoke("PerformanceTest", InvokeOption.CanFeedback, os);
+                Client.RPCInvoke("PerformanceTest", InvokeOption.NoFeedback, os);
                 this.send++;
             }
             catch (Exception)
