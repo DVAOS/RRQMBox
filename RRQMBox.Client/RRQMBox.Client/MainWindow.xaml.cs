@@ -50,5 +50,11 @@ namespace RRQMBox.Client
             StressTestingWindow window = new StressTestingWindow();
             window.Show();
         }
+
+        private void RPCStressTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            RPCStressTestingWindow window = new RPCStressTestingWindow();
+            window.Show();
+        }
     }
 }

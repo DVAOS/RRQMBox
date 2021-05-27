@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,9 +37,9 @@ namespace RRQMBox.Server
         [RRQMRPCMethod]
         public void PerformanceTest()
         {
-            if (++a % 1000 == 0)
+            if (++a % 10000 == 0)//每1w次输出
             {
-                ShowMsg($"TestNullReturnNullParameter,a={a}");
+                ShowMsg($"[{DateTime.Now.TimeOfDay}]TestNullReturnNullParameter,a={a}");
             }
         }
 

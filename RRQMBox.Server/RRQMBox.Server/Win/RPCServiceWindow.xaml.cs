@@ -106,5 +106,10 @@ namespace RRQMBox.Server.Win
                 ShowMsg($"http://127.0.0.1:{webApiParser.Service.Port}{url}");
             }
         }
+
+        private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.msgBox.Clear();
+        }
     }
 }

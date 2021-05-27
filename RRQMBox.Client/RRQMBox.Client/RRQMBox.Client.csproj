@@ -98,6 +98,9 @@
     <Compile Include="Win\FileClientWindow.xaml.cs">
       <DependentUpon>FileClientWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win\RPCStressTestingWindow.xaml.cs">
+      <DependentUpon>RPCStressTestingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Win\RPCWindow.xaml.cs">
       <DependentUpon>RPCWindow.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Win\FileClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Win\RPCStressTestingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
