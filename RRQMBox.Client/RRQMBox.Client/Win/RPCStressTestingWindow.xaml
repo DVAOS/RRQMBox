@@ -21,14 +21,6 @@
             <TextBox x:Name="ClientCount" Text="100" Width="60"
                      Style="{DynamicResource inputBox}" />
 
-            <TextBlock Text="测试内容：" Margin="20,0,0,0" VerticalAlignment="Center" />
-            <TextBox x:Name="Tb_TestContent" Text="RRQM" Width="200"
-                     Style="{DynamicResource inputBox}" />
-
-            <CheckBox x:Name="Cb_IsAsync" Content="异步发送" Grid.Column="1" VerticalContentAlignment="Center"
-                      Foreground="{DynamicResource foregroundColor}"
-                      Click="Cb_IsAsync_Click" />
-
             <controls:CorrugatedButton Content="开始测试" Width="80" Margin="10,0" Click="StartButton_Click" />
             <controls:CorrugatedButton Content="结束测试" Width="80" Margin="10,0" Click="StopButton_Click" />
         </StackPanel>

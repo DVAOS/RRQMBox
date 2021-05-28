@@ -44,10 +44,6 @@ namespace RRQMBox.Client.Win
             TestObjects = new RRQMList<RPCTestObject>();
             this.DG.ItemsSource = TestObjects;
 
-            byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
-            //byte[] data =new byte[1024];
-
-            TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
             {
                 for (int i = 0; i < clientCount; i++)
@@ -58,7 +54,6 @@ namespace RRQMBox.Client.Win
                     }
                     RPCTestObject testObject = new RPCTestObject();
                     testObject.Client = new RPCClient();
-                    testObject.Data = data;
                     testObject.Num = i;
 
                     try
@@ -135,17 +130,10 @@ namespace RRQMBox.Client.Win
             }
             this.TestObjects.Clear();
         }
-
-        private void Cb_IsAsync_Click(object sender, RoutedEventArgs e)
-        {
-            TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
-        }
     }
 
     public class RPCTestObject : ObservableObject
     {
-        public byte[] Data { get; set; }
-        public static bool IsAsync { get; set; }
         public int Num { get; set; }
 
         public RPCClient Client { get; set; }
