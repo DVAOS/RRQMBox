@@ -38,8 +38,8 @@
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <HintPath>..\packages\CookComputing.XmlRPCv2.2.5.0\lib\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMCore, Version=1.2.23.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.1.2.23\lib\net45\RRQMCore.dll</HintPath>
+    <Reference Include="RRQMCore, Version=1.2.24.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.1.2.24\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
     <Reference Include="RRQMMVVM, Version=2.1.2.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMMVVM.2.1.2\lib\net45\RRQMMVVM.dll</HintPath>
@@ -59,8 +59,8 @@
     <Reference Include="RRQMSocket.RPC, Version=1.0.9.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.1.0.9\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.1.1, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.1.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
     </Reference>
     <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.5.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.5\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
