@@ -57,6 +57,7 @@ namespace RRQMBox.Client.Win
                     }
                     TestObject testObject = new TestObject();
                     testObject.Client = new TcpClient();
+                   // testObject.Client.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
                     testObject.Data = data;
                     testObject.Num = i;
 
