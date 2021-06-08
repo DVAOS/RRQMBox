@@ -106,8 +106,20 @@ namespace RRQMBox.Client.Win
             ShowMsg("二进制连接成功");
 
             RemoteTest remoteTest = new RemoteTest(client);
+            
 
-            remoteTest.Test01(InvokeOption.NoFeedback);
+            //TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+            //{
+            //    for (int i = 0; i < 100000; i++)
+            //    {
+            //        object[] vs = new object[0];
+            //        client.Invoke("PerformanceTest", InvokeOption.CanFeedback,ref vs);
+            //    }
+            //});
+
+            //int a = 0;
+
+            remoteTest.Test01(InvokeOption.CanFeedback);
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();

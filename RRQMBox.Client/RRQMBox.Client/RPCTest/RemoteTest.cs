@@ -36,7 +36,6 @@ namespace RRQMBox.Client.RPCTest
         /// </summary>
         public void Test01(InvokeOption invokeOption)
         {
-
             server.TestNullReturnNullParameter(invokeOption);
 
             ShowMsg("Test01=>测试完成");
