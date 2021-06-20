@@ -1,4 +1,15 @@
-﻿using System;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,6 +60,7 @@ namespace RRQMBox.Client.Win
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
             {
+
                 for (int i = 0; i < clientCount; i++)
                 {
                     if (!isTest)
@@ -56,19 +68,27 @@ namespace RRQMBox.Client.Win
                         break;
                     }
                     TestObject testObject = new TestObject();
-                    testObject.Client = new TcpClient();
-                   // testObject.Client.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
-                    testObject.Data = data;
-                    testObject.Num = i;
 
                     try
                     {
-                        testObject.Client.Connect(new IPHost("127.0.0.1:7790"));
+
+                        testObject.Client = new SimpleTcpClient();
+                        testObject.Data = data;
+                        testObject.Num = i;
+
+                        var config = new TcpClientConfig();
+                        config.SetValue(TcpClientConfig.OnlySendProperty, true)
+                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7790"))
+                        .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new FixedHeaderDataHandlingAdapter())
+                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
+
+                        testObject.Client.Setup(config);
+                        testObject.Client.Connect();
                         testObject.Status = "连接成功";
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        testObject.Status = "连接失败";
+                        testObject.Status = ex.Message;
                     }
                     this.Dispatcher.Invoke(() =>
                     {
@@ -78,7 +98,7 @@ namespace RRQMBox.Client.Win
 
                 GroupSend();
 
-                
+
             });
 
             Task.Run(async () =>
@@ -98,20 +118,29 @@ namespace RRQMBox.Client.Win
 
         private void GroupSend()
         {
-            int size = Math.Min(this.TestObjects.Count, 500);//每个线程托管的客户端
-            int threadCount = this.TestObjects.Count / size + 1;
-            ThreadPool.SetMinThreads(threadCount,10);
+            int size = Math.Min(this.TestObjects.Count, 5);//每个线程托管的客户端
+            int threadCount;
+            if (this.TestObjects.Count % size == 0)
+            {
+                threadCount = this.TestObjects.Count / size;
+            }
+            else
+            {
+                threadCount = this.TestObjects.Count / size + 1;
+            }
+
+            ThreadPool.SetMinThreads(threadCount, threadCount);
             TestObject[] allObjects = this.TestObjects.ToArray();
+
             for (int i = 0; i < threadCount; i++)
             {
                 TestObject[] testObjects = new TestObject[size];
-                Array.Copy(allObjects, i*size,testObjects,0,size);
-                Task.Run(()=> 
+                Array.Copy(allObjects, i * size, testObjects, 0, Math.Min(this.TestObjects.Count - i * size, size));
+                Task.Run(() =>
                 {
                     Run(testObjects);
                 });
             }
-            
         }
 
         private void Run(TestObject[] testObjects)
@@ -121,6 +150,7 @@ namespace RRQMBox.Client.Win
                 foreach (var item in testObjects)
                 {
                     item.Send();
+                    //return;
                 }
             }
         }
@@ -140,6 +170,19 @@ namespace RRQMBox.Client.Win
         {
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
         }
+
+        private void Cb_IsSend_Click(object sender, RoutedEventArgs e)
+        {
+            if (Cb_IsSend.IsChecked == true)
+            {
+                TestObject.IsSend = true;
+                TestObject.waitHandle.Set();
+            }
+            else
+            {
+                TestObject.IsSend = false;
+            }
+        }
     }
 
     public class TestObject : ObservableObject
@@ -147,8 +190,24 @@ namespace RRQMBox.Client.Win
         public byte[] Data { get; set; }
         public static bool IsAsync { get; set; }
         public int Num { get; set; }
+        public static EventWaitHandle waitHandle = new AutoResetEvent(false);
+        public static bool IsSend=true;
+        private SimpleTcpClient client;
 
-        public TcpClient Client { get; set; }
+        public SimpleTcpClient Client
+        {
+            get { return client; }
+            set
+            {
+                client = value;
+                client.DisconnectedService += this.Client_DisconnectedService;
+            }
+        }
+
+        private void Client_DisconnectedService(object sender, MesEventArgs e)
+        {
+            this.Status = "断开连接";
+        }
 
         private string status;
 
@@ -177,6 +236,10 @@ namespace RRQMBox.Client.Win
         {
             try
             {
+                if (!IsSend)
+                {
+                    waitHandle.WaitOne();
+                }
                 if (IsAsync)
                 {
                     Client.SendAsync(Data);
@@ -187,11 +250,11 @@ namespace RRQMBox.Client.Win
                 }
                 this.send++;
             }
-            catch (Exception)
+            catch
             {
 
             }
-           
+
         }
 
         public void ShowInfo()

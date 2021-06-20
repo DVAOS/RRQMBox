@@ -1,0 +1,318 @@
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMBox.Server.Common;
+using RRQMBox.Server.Model;
+using RRQMCore.ByteManager;
+using RRQMMVVM;
+using RRQMSkin.Windows;
+using RRQMSocket;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace RRQMBox.Server.Win
+{
+    /// <summary>
+    /// CreatTcpWindow.xaml 的交互逻辑
+    /// </summary>
+    public partial class CreateTcpWindow : RRQMWindow
+    {
+        public CreateTcpWindow(CreateType createType)
+        {
+            InitializeComponent();
+
+            this.Loaded += this.CreatTcpWindow_Loaded;
+            this.createType = createType;
+            if (createType == CreateType.TCP)
+            {
+                this.Tb_Token.Visibility = Visibility.Collapsed;
+                this.Tb_iPHost.Text = "127.0.0.1:7790";
+            }
+            timer = new Timer(1000);
+            timer.Elapsed += this.Timer_Elapsed;
+            timer.Start();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            UIInvoke(() =>
+            {
+                this.Tb_TickShow.Text = $"已收到{count}条消息，共计{(size / (1024.0 * 1024)).ToString("0.000")}Mb";
+                count = 0;
+                size = 0;
+            });
+        }
+
+        Timer timer;
+        private void CreatTcpWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Cb_AdapterType.ItemsSource = Enum.GetValues(typeof(AdapterType));
+            this.onLineClient = new RRQMList<SocketClient>();
+            this.Lb_OnlineClient.ItemsSource = this.onLineClient;
+        }
+        CreateType createType;      
+        RRQMList<SocketClient> onLineClient;
+        SimpleTcpService tcpService;
+        SimpleTokenService tokenService;
+        
+        private void Bt_Start_Click(object sender, RoutedEventArgs e)
+        {
+            if (createType == CreateType.TCP)
+            {
+                CreateTcp();
+            }
+            else if (createType == CreateType.Token)
+            {
+                CreateTokenTcp();
+            }
+        }
+
+        private void CreateTcp()
+        {
+            if (tcpService == null)
+            {
+                tcpService = new SimpleTcpService();
+                //订阅事件
+                tcpService.ClientConnected += Service_ClientConnected;//订阅连接事件
+                tcpService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
+                tcpService.CreateSocketCliect += Service_CreatSocketCliect;
+                tcpService.Received += this.OnReceived;
+            }
+
+
+            this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
+
+            //属性设置
+
+            var config = new ServerConfig();
+            config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
+                .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
+                .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
+                .SetValue(ServerConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+
+            tcpService.Setup(config);
+            //方法
+            tcpService.Start();
+
+            ShowMsg("绑定成功");
+        }
+
+        private void CreateTokenTcp()
+        {
+            if (tokenService == null)
+            {
+                tokenService = new SimpleTokenService();
+                //订阅事件
+                tokenService.ClientConnected += Service_ClientConnected;//订阅连接事件
+                tokenService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
+                tokenService.CreateSocketCliect += Service_CreatSocketCliect;
+                tokenService.Received += this.OnReceived;
+            }
+
+            this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
+
+            //属性设置
+            var config = new ServerConfig();
+            config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
+                .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
+                .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
+                .SetValue(ServerConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+                .SetValue(TcpServerConfig.IDFormatProperty, "TokenTcp-{0}")//设置分配ID的格式， 格式必须符合字符串格式，至少包含一个补位， 初始值为“{0}-TCP”
+                .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_Token.Text);
+
+
+            //方法
+            tokenService.Setup(config);
+            tokenService.Start();
+            ShowMsg("绑定成功");
+            ShowMsg($"请使用Token为{tokenService.VerifyToken}进行连接");
+        }
+       
+
+        private int adapterIndex;
+        private void Service_CreatSocketCliect(SimpleSocketClient arg1, CreateOption arg2)
+        {
+            //此处可进行初始化设置
+            if (arg2.NewCreate)
+            {
+                switch (this.adapterIndex)
+                {
+                    default:
+                    case 0:
+                        {
+                            arg1.DataHandlingAdapter = new NormalDataHandlingAdapter();
+                            break;
+                        }
+                    case 1:
+                        {
+                            arg1.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
+                            break;
+                        }
+                    case 2:
+                        {
+                            arg1.DataHandlingAdapter = new FixedSizeDataHandlingAdapter(1024);
+                            break;
+                        }
+                    case 3:
+                        {
+                            arg1.DataHandlingAdapter = new TerminatorDataHandlingAdapter(1024, "\r\n");
+                            break;
+                        }
+                    case 4:
+                        {
+                            arg1.DataHandlingAdapter = new JsonStringDataHandlingAdapter();
+                            break;
+                        }
+                }
+            }
+            if (!isPerformanceTest)
+            {
+                ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
+            }
+
+        }
+
+        private int count;
+        private long size;
+        private void OnReceived(SimpleSocketClient client, ByteBlock byteBlock, object obj)
+        {
+            if (isPerformanceTest)
+            {
+                count++;
+                size += byteBlock.Length;
+            }
+            else
+            {
+                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+                ShowMsg($"已接收到信息：{mes}");
+            }
+
+        }
+
+        private void Service_ClientDisconnected(object sender, MesEventArgs e)
+        {
+            this.UIInvoke(() =>
+            {
+                this.onLineClient.Remove((SocketClient)sender);
+                this.Tb_ClientNum.Text = this.onLineClient.Count.ToString();
+            });
+        }
+
+        private void Service_ClientConnected(object sender, MesEventArgs e)
+        {
+
+            this.UIInvoke(() =>
+            {
+                this.onLineClient.Add((SocketClient)sender);
+                this.Tb_ClientNum.Text = this.onLineClient.Count.ToString();
+            });
+        }
+
+        private void ShowMsg(string msg)
+        {
+            this.UIInvoke(() =>
+            {
+                this.msgBox.AppendText($"{msg}\r\n");
+            });
+        }
+
+        private void UIInvoke(Action action)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                action.Invoke();
+            });
+        }
+
+        private void Bt_Stop_Click(object sender, RoutedEventArgs e)
+        {
+            if (tcpService != null && tcpService.ServerState == ServerState.Running)
+            {
+                tcpService.Stop();
+                ShowMsg("解除绑定");
+                this.onLineClient.Clear();
+            }
+            else
+            {
+                ShowMsg("服务器未绑定");
+            }
+        }
+        private void Bt_Dispose_Click(object sender, RoutedEventArgs e)
+        {
+            if (tcpService != null && tcpService.ServerState == ServerState.Running)
+            {
+                tcpService.Dispose();
+                ShowMsg("释放绑定");
+                this.onLineClient.Clear();
+            }
+            else
+            {
+                ShowMsg("服务器未绑定");
+            }
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Lb_OnlineClient.SelectedItem != null)
+            {
+                if (this.Cb_IsAsync.IsChecked == true)
+                {
+                    ((SocketClient)this.Lb_OnlineClient.SelectedItem).SendAsync(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
+                }
+                else
+                {
+                    ((SocketClient)this.Lb_OnlineClient.SelectedItem).Send(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
+                }
+
+            }
+            else
+            {
+                ShowMsg("请先选择客户端列表");
+            }
+        }
+
+        private bool isPerformanceTest;
+       
+        private void TestCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Cb_PerformanceTest.IsChecked == true)
+            {
+                isPerformanceTest = true;
+            }
+            else
+            {
+                isPerformanceTest = false;
+            }
+
+        }
+
+        private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.msgBox.Clear();
+        }
+
+     
+    }
+}

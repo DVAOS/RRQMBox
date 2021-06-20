@@ -29,13 +29,14 @@ namespace RRQMBox.Client.RPCTest
         }
         public static Action<string> ShowMsgMethod;
 
-        private Server server;
+        private IServer server;
 
         /// <summary>
         /// 测试无返回值无参数
         /// </summary>
         public void Test01(InvokeOption invokeOption)
         {
+
             server.TestNullReturnNullParameter(invokeOption);
 
             ShowMsg("Test01=>测试完成");

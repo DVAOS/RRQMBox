@@ -1,0 +1,41 @@
+﻿<windows:RRQMWindow x:Class="RRQMBox.Client.Win.IDRPCWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:local="clr-namespace:RRQMBox.Client.Win"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:windows="RRQM_Windows" xmlns:controls="RRQM_Controls"
+                    Title="IDRPCWindow"
+                    Height="553"
+                    Width="743"
+                    mc:Ignorable="d" Style="{DynamicResource RRQMWindowStyle}">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="IPHost：" Margin="10,0,0,0" VerticalAlignment="Center" />
+            <TextBox x:Name="Tb_iPHost" Text="127.0.0.1:7700" Width="150"
+                     Style="{DynamicResource inputBox}" />
+            <controls:CorrugatedButton Content="连接" Margin="3" Width="70" Height="30" Click="ConnectButton_Click"/>
+            <controls:CorrugatedButton Content="断开" Margin="3" Width="70" Height="30" Click="DicconnectButton_Click"/>
+            <controls:CorrugatedButton Content="释放" Margin="3" Width="70" Height="30" Click="DisposeButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="ID：" Margin="10,0,0,0" VerticalAlignment="Center" />
+            <TextBox x:Name="Tb_ID" Text="0-TCP" Width="150"
+                     Style="{DynamicResource inputBox}" />
+            <TextBlock Text="MethodToken：" Margin="10,0,0,0" VerticalAlignment="Center" />
+            <TextBox x:Name="Tb_MethodToken" Text="1000" Width="100"
+                     Style="{DynamicResource inputBox}" />
+            <controls:CorrugatedButton Content="调用" Margin="3" Width="70" Height="30" Click="IDInvokenButton_Click"/>
+            <controls:CorrugatedButton Content="调用TestString" Margin="3" Width="170" Height="30" Click="TestStringButton_Click"/>
+        </StackPanel>
+        <GroupBox Grid.Row="2" Margin="3" Header="日志输出">
+            <TextBox x:Name="msgBox" Background="Transparent" BorderThickness="0"
+                         Foreground="{DynamicResource foregroundColor}" />
+        </GroupBox>
+    </Grid>
+</windows:RRQMWindow>

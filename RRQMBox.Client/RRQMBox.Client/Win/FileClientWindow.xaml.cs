@@ -1,4 +1,15 @@
-﻿using System;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -112,21 +123,6 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private void RequestDeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.RequestDelete();
-        }
-
-        private void RequestFileInfoButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.RequestFileInfo();
-        }
-
-        private void SendSysMsgButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.SendSystemMessage(this.mesBox.Text);
-        }
-
         private void SelectUrlButton_Click(object sender, RoutedEventArgs e)
         {
             this.SelectPathFile();
@@ -136,11 +132,11 @@ namespace RRQMBox.Client.Win
 
         private void FileClient_FileTransferCollectionChanged(object sender, MesEventArgs e)
         {
-            UIInvoke(()=> 
+            UIInvoke(() =>
             {
                 this.Lb_FileList.ItemsSource = new RRQMList<UrlFileInfo>(this.fileClient.FileTransferCollection);
             });
-            
+
         }
 
         private void FileClient_DisConnectedService(object sender, MesEventArgs e)
@@ -188,11 +184,11 @@ namespace RRQMBox.Client.Win
                 dialogResult.Visibility = System.Windows.Visibility.Visible;
                 dialogResult.WaitHandle = new System.Threading.AutoResetEvent(false);
 
-                UIInvoke(()=> 
+                UIInvoke(() =>
                 {
                     this.SaveDialog.DialogResult = dialogResult;
                 });
-               
+
                 dialogResult.WaitHandle.WaitOne();
                 e.TargetPath = dialogResult.Path;
             }
@@ -205,19 +201,12 @@ namespace RRQMBox.Client.Win
 
         private void FileClient_TransferFileError(object sender, TransferFileMessageArgs e)
         {
-            if (e.TransferType == TransferType.Download)
-            {
-                ShowMsg(e.Message);
-            }
-            else
-            {
-                ShowMsg("服务器拒绝上传");
-            }
+            ShowMsg($"传输类型：{e.TransferType}，信息：{e.Message}");
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            UIInvoke(()=> 
+            UIInvoke(() =>
             {
                 if (fileClient != null)
                 {
@@ -230,11 +219,10 @@ namespace RRQMBox.Client.Win
                     this.Progress.Value = 0;
                 }
             });
-           
+
         }
 
         #endregion 事件方法
-
 
 
         #region 绑定方法
@@ -250,7 +238,9 @@ namespace RRQMBox.Client.Win
 
                 try
                 {
-                    fileClient.RequestTransfer(UrlFileInfo.CreatDownload(this.Tb_Url.Text));
+                    UrlFileInfo fileInfo = UrlFileInfo.CreatDownload(this.Tb_Url.Text);
+                    fileInfo.Restart = (bool)this.Cb_Restart.IsChecked;
+                    fileClient.RequestTransfer(fileInfo);
                 }
                 catch (Exception e)
                 {
@@ -261,13 +251,6 @@ namespace RRQMBox.Client.Win
             else
             {
                 ShowMsg("未连接");
-            }
-        }
-        private void SendSystemMessage(string mes)
-        {
-            if (fileClient != null && fileClient.Online)
-            {
-                fileClient.SendSystemMessage(mes);
             }
         }
         private void StopAll()
@@ -293,7 +276,7 @@ namespace RRQMBox.Client.Win
                 {
                     try
                     {
-                        fileClient.RequestTransfer(UrlFileInfo.CreatUpload(this.Tb_Url.Text, (bool)this.Cb_Restart.IsChecked, this.fileClient.BreakpointResume));
+                        fileClient.RequestTransfer(UrlFileInfo.CreatUpload(this.Tb_Url.Text, fileClient.BreakpointResume, (bool)this.Cb_Restart.IsChecked));
                     }
                     catch (Exception e)
                     {
@@ -347,24 +330,27 @@ namespace RRQMBox.Client.Win
 
         private void ConnectService()
         {
-            if (fileClient != null)
-            {
-                ShowMsg("请勿重复连接");
-                return;
-            }
-
-            try
+            if (fileClient == null)
             {
                 fileClient = new FileClient();
-                fileClient.Logger = new MsgLog(this.ShowMsg);
                 fileClient.TransferFileError += this.FileClient_TransferFileError;
                 fileClient.BeforeFileTransfer += this.FileClient_BeforeFileTransfer; ;
                 fileClient.FinishedFileTransfer += this.FileClient_FinishedFileTransfer; ;
                 fileClient.DisconnectedService += this.FileClient_DisConnectedService;
-                fileClient.ReceiveSystemMes += this.FileClient_ReceiveSystemMes;
                 fileClient.ConnectedService += this.FileClient_ConnectedService;
                 fileClient.FileTransferCollectionChanged += this.FileClient_FileTransferCollectionChanged;
-                fileClient.Connect(new IPHost(this.Tb_iPHost.Text), this.Tb_VerifyToken.Text);
+                fileClient.Received += this.FileClient_Received;
+
+            }
+
+            try
+            {
+                var config = new FileClientConfig();
+                config.SetValue(FileClientConfig.LoggerProperty, new MsgLog(this.ShowMsg))
+                    .SetValue(FileClientConfig.RemoteIPHostProperty, new IPHost(this.Tb_iPHost.Text))
+                    .SetValue(FileClientConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text);
+                fileClient.Setup(config);
+                fileClient.Connect();
             }
             catch (Exception ex)
             {
@@ -379,6 +365,12 @@ namespace RRQMBox.Client.Win
             }
         }
 
+        private void FileClient_Received(object sender, short? procotol, RRQMCore.ByteManager.ByteBlock byteBlock)
+        {
+            ShowMsg($"收到：协议={procotol}，信息={Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2)}");
+        }
+
+
         private void DisconnectService()
         {
             if (fileClient != null && fileClient.Online)
@@ -390,36 +382,49 @@ namespace RRQMBox.Client.Win
             this.Tb_Icon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E8EC"));
         }
 
-        private void RequestDelete()
-        {
-            try
-            {
-                this.fileClient.RequestDelete(new UrlFileInfo(this.Tb_Url.Text));
-                ShowMsg("请求成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMsg(ex.Message);
-            }
-        }
-
-        private void RequestFileInfo()
-        {
-            try
-            {
-                RRQMSocket.FileTransfer.FileInfo fileInfo = this.fileClient.RequestFileInfo(new UrlFileInfo(this.Tb_Url.Text));
-                ShowMsg($"请求成功,文件长度：{fileInfo.FileLength}");
-            }
-            catch (Exception ex)
-            {
-                ShowMsg(ex.Message);
-            }
-        }
 
 
 
         #endregion 绑定方法
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.fileClient != null && this.fileClient.Online)
+            {
+                try
+                {
+                    byte[] data = Encoding.UTF8.GetBytes("RRQM");
+                    this.fileClient.Send(data, 0, data.Length);
+                    this.fileClient.SendAsync(data, 0, data.Length);
+                    ShowMsg($"发送成功");
+                }
+                catch (Exception ex)
+                {
+                    ShowMsg(ex.Message);
+                }
+            }
+        }
 
-
+        private void SendProtocolButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.fileClient != null && this.fileClient.Online)
+            {
+                try
+                {
+                    byte[] data = Encoding.UTF8.GetBytes("RRQM");
+                    this.fileClient.Send(10, data, 0, data.Length);
+                    this.fileClient.SendAsync(10, data, 0, data.Length);
+                    ShowMsg($"发送成功");
+                }
+                catch (Exception ex)
+                {
+                    ShowMsg(ex.Message);
+                }
+            }
+        }
+    }
+    public class FileArgs
+    {
+        public int P1 { get; set; }
+        public string P2 { get; set; }
     }
 }

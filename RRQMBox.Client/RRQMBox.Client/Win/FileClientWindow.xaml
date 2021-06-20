@@ -54,13 +54,13 @@
                 <controls:SpeedDial Name="Speed" Height="200" Width="200" Grid.Column="0" MaxValue="480"
                                     MinValue="0"
                                     Style="{DynamicResource SpeedDialStyle}" />
-               
+
                 <controls:RoundProgressBar Name="Progress" Height="80" Width="80" Grid.Row="1" Grid.Column="1"
                                            VerticalAlignment="Bottom" Background="#FFCECED0"
                                            Style="{DynamicResource RoundProgressBarStyle}" />
             </Grid>
             <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Margin="5,2" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="下载" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" Click="DownloadButton_Click" />
                     <controls:CorrugatedButton Content="上传" Height="30" Width="50" Margin="5" HorizontalContentAlignment="Center"
@@ -73,7 +73,7 @@
                                                VerticalContentAlignment="Center" Click="ResumeButton_Click" />
                     <CheckBox Name="Cb_Restart" Content="Restart" Margin="5" VerticalContentAlignment="Center" Foreground="#FFF7F4F5" />
                 </StackPanel>
-                <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Margin="5,2" Orientation="Horizontal">
                     <controls:CorrugatedButton Content="终止当前" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" Click="StopThisButton_Click"
                                                Command="{Binding StopThisCommand}" />
@@ -83,28 +83,21 @@
                     <controls:CorrugatedButton Content="取消选中" Height="30" Width="80" Margin="5" HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" Click="CancelButton_Click" />
                 </StackPanel>
-                <StackPanel Margin="5" Orientation="Horizontal">
-                    <controls:CorrugatedButton Content="请求删除文件" Height="30" Width="113" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center" Click="RequestDeleteButton_Click" />
-                    <controls:CorrugatedButton Content="请求文件信息" Height="30" Width="113" Margin="5" HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center" Click="RequestFileInfoButton_Click" />
+                <StackPanel Margin="5,2" Orientation="Horizontal">
+                    <controls:CorrugatedButton Content="发送普通字节" Height="30" Width="120" Margin="5" HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="SendButton_Click" />
+                    <controls:CorrugatedButton Content="发送协议字节" Height="30" Width="120" Margin="5" HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" Click="SendProtocolButton_Click" />
                 </StackPanel>
             </StackPanel>
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,5">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="mesBox" Style="{DynamicResource inputBox}" />
-            <controls:CorrugatedButton Content="发送系统消息" Height="25" Width="110" Grid.Column="1" VerticalContentAlignment="Center"
-                                       Click="SendSysMsgButton_Click" />
             <TextBox Name="Tb_Url" Grid.Row="3"
                      Style="{DynamicResource inputBox}" />
             <controls:CorrugatedButton Content="选择" Height="25" Width="110" Grid.Row="1" Grid.Column="1"

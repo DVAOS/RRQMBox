@@ -1,39 +1,33 @@
-//------------------------------------------------------------------------------
-//  此代码版权归作者本人若汝棋茗所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  CSDN博客：https://blog.csdn.net/qq_40374647
-//  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  Gitee源代码仓库：https://gitee.com/RRQM_Home
-//  Github源代码仓库：https://github.com/RRQM
-//  交流QQ群：234762506
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-using RRQMBox.Client.Common;
-using RRQMMVVM;
+﻿using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
-using RRQMSocket.RPC.RRQMRPC;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace RRQMBox.Client.Win
 {
     /// <summary>
-    /// RPCStressTestingWindow.xaml 的交互逻辑
+    /// UDPStressWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class RPCStressTestingWindow : RRQMWindow
+    public partial class UDPStressWindow : RRQMWindow
     {
-        public RPCStressTestingWindow()
+        public UDPStressWindow()
         {
             InitializeComponent();
         }
-
-        public RRQMList<RPCTestObject> TestObjects { get; set; }
+        public RRQMList<UDPTestObject> TestObjects { get; set; }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -45,32 +39,41 @@ namespace RRQMBox.Client.Win
             isTest = true;
             int clientCount = int.Parse(this.ClientCount.Text);
 
-            TestObjects = new RRQMList<RPCTestObject>();
+            TestObjects = new RRQMList<UDPTestObject>();
             this.DG.ItemsSource = TestObjects;
 
+            byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
+            //byte[] data =new byte[1024*10];
+
+            UDPTestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
             {
+
                 for (int i = 0; i < clientCount; i++)
                 {
                     if (!isTest)
                     {
                         break;
                     }
-                    RPCTestObject testObject = new RPCTestObject();
-                    testObject.Client = new TcpRPCClient();
-                    testObject.Num = i;
-                    var config = new TcpRPCClientConfig();
-                    config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
-                          .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC");
+                    UDPTestObject testObject = new UDPTestObject();
+
                     try
                     {
+
+                        testObject.Client = new SimpleUdpSession();
+                        testObject.Data = data;
+                        testObject.Num = i;
+
+                        var config = new UdpSessionConfig();
+                        config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost("127.0.0.1:8848").EndPoint);
+
                         testObject.Client.Setup(config);
-                        testObject.Client.Connect();
+                        testObject.Client.Start();
                         testObject.Status = "连接成功";
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        testObject.Status = "连接失败";
+                        testObject.Status = ex.Message;
                     }
                     this.Dispatcher.Invoke(() =>
                     {
@@ -100,7 +103,7 @@ namespace RRQMBox.Client.Win
 
         private void GroupSend()
         {
-            int size = Math.Min(this.TestObjects.Count, 5);//每个线程托管的客户端
+            int size = Math.Min(this.TestObjects.Count, 1);//每个线程托管的客户端
             int threadCount;
             if (this.TestObjects.Count % size == 0)
             {
@@ -112,11 +115,11 @@ namespace RRQMBox.Client.Win
             }
 
             ThreadPool.SetMinThreads(threadCount, threadCount);
-            RPCTestObject[] allObjects = this.TestObjects.ToArray();
+            UDPTestObject[] allObjects = this.TestObjects.ToArray();
 
             for (int i = 0; i < threadCount; i++)
             {
-                RPCTestObject[] testObjects = new RPCTestObject[size];
+                UDPTestObject[] testObjects = new UDPTestObject[size];
                 Array.Copy(allObjects, i * size, testObjects, 0, Math.Min(this.TestObjects.Count - i * size, size));
                 Task.Run(() =>
                 {
@@ -125,13 +128,14 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private void Run(RPCTestObject[] testObjects)
+        private void Run(UDPTestObject[] testObjects)
         {
             while (isTest)
             {
                 foreach (var item in testObjects)
                 {
                     item.Send();
+                    //return;
                 }
             }
         }
@@ -149,17 +153,39 @@ namespace RRQMBox.Client.Win
 
         private void Cb_IsAsync_Click(object sender, RoutedEventArgs e)
         {
-            //TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
+            UDPTestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
+        }
+
+        private void Cb_IsSend_Click(object sender, RoutedEventArgs e)
+        {
+            if (Cb_IsSend.IsChecked == true)
+            {
+                UDPTestObject.IsSend = true;
+                UDPTestObject.waitHandle.Set();
+            }
+            else
+            {
+                UDPTestObject.IsSend = false;
+            }
         }
     }
-
-    public class RPCTestObject : ObservableObject
+    public class UDPTestObject : ObservableObject
     {
         public byte[] Data { get; set; }
         public static bool IsAsync { get; set; }
         public int Num { get; set; }
+        public static EventWaitHandle waitHandle = new AutoResetEvent(false);
+        public static bool IsSend = true;
+        private SimpleUdpSession client;
 
-        public TcpRPCClient Client { get; set; }
+        public SimpleUdpSession Client
+        {
+            get { return client; }
+            set
+            {
+                client = value;
+            }
+        }
 
         private string status;
 
@@ -183,16 +209,26 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private static object[] os = new object[0];
 
         public void Send()
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.CanFeedback, os);
+                if (!IsSend)
+                {
+                    waitHandle.WaitOne();
+                }
+                if (IsAsync)
+                {
+                    Client.SendAsync(Data);
+                }
+                else
+                {
+                    Client.Send(Data);
+                }
                 this.send++;
             }
-            catch (Exception)
+            catch
             {
 
             }

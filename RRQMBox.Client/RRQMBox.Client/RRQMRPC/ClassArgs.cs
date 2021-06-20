@@ -23,4 +23,11 @@ public System.Int32 Age{get;set;}
 public System.String Name{get;set;}
 }
 
+
+public class FileArgs
+{
+public System.Int32 P1{get;set;}
+public System.String P2{get;set;}
+}
+
 }

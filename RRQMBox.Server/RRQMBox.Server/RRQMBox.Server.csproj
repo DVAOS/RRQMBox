@@ -35,35 +35,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RRQMCore, Version=1.2.24.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.1.2.24\lib\net45\RRQMCore.dll</HintPath>
+    <Reference Include="RRQMCore, Version=2.0.0.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.2.0.0\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMMVVM, Version=2.1.2.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMMVVM.2.1.2\lib\net45\RRQMMVVM.dll</HintPath>
+    <Reference Include="RRQMMVVM">
+      <HintPath>..\..\..\RRQMMVVM\RRQMMVVM\bin\Debug\net45\RRQMMVVM.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSkin, Version=2.1.3.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSkin.2.1.3\lib\net45\RRQMSkin.dll</HintPath>
+    <Reference Include="RRQMSkin">
+      <HintPath>..\..\..\..\CodeOpen_OS\RRQMSkin\RRQMSkin\bin\Debug\net45\RRQMSkin.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=4.0.22.1, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.4.0.22.1\lib\net45\RRQMSocket.dll</HintPath>
+    <Reference Include="RRQMSocket, Version=5.0.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.5.0.0\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.1.0.8\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
+    <Reference Include="RRQMSocket.FileTransfer, Version=5.0.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.FileTransfer.5.0.0\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.Http, Version=1.0.4.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.1.0.4\lib\net45\RRQMSocket.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=1.0.9.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.1.0.9\lib\net45\RRQMSocket.RPC.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=1.0.1.1, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.1.0.1.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=1.0.5.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.1.0.5\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=1.0.3.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.1.0.3\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC, Version=5.0.0.1, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.5.0.0.1\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -88,10 +76,17 @@
     <Compile Include="Common\MsgLog.cs" />
     <Compile Include="Common\SpeedConverter.cs" />
     <Compile Include="Model\AdapterType.cs" />
+    <Compile Include="Model\CreateType.cs" />
     <Compile Include="Msg.cs" />
     <Compile Include="Server\Server.cs" />
-    <Compile Include="Win\CreatTcpWindow.xaml.cs">
-      <DependentUpon>CreatTcpWindow.xaml</DependentUpon>
+    <Compile Include="Win\CreateUdpWindow.xaml.cs">
+      <DependentUpon>CreateUdpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Win\CreateProcotolWindow.xaml.cs">
+      <DependentUpon>CreateProcotolWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Win\CreateTcpWindow.xaml.cs">
+      <DependentUpon>CreateTcpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win\FileServiceWindow.xaml.cs">
       <DependentUpon>FileServiceWindow.xaml</DependentUpon>
@@ -115,7 +110,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Win\CreatTcpWindow.xaml">
+    <Page Include="Win\CreateUdpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Win\CreateProcotolWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Win\CreateTcpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

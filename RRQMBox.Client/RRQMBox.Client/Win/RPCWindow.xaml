@@ -20,10 +20,12 @@
         <GroupBox Margin="5" Header="客户端测试">
             <WrapPanel Margin="10">
                 <controls:CorrugatedButton Content="测试RRQM TCP Binary" Height="40" Width="200" Margin="10" Click="RRQMBinaryButton_Click" />
-                <controls:CorrugatedButton Content="测试RRQM TCP Xml" Height="40" Width="200" Margin="10" Click="RRQMXmlButton_Click" />
+                <controls:CorrugatedButton Content="测试获取代理文件" Height="40" Width="200" Margin="10" Click="GetProxyFileButton_Click" />
                 <controls:CorrugatedButton Content="测试RRQM UDP Binary" Height="40" Width="200" Margin="10" Click="RRQMUDPBinaryButton_Click" />
                 <controls:CorrugatedButton Content="测试XmlRpc" Height="40" Width="200" Margin="10" Click="XmlRpcButton_Click" />
                 <controls:CorrugatedButton Content="测试JsonRpc" Height="40" Width="200" Margin="10" Click="JsonRpcButton_Click" />
+                <controls:CorrugatedButton Content="测试ID调用" Height="40" Width="200" Margin="10" Click="IDInvokenButton_Click" />
+               
             </WrapPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Margin="3" Header="日志输出">

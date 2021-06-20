@@ -9,6 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMBox.Server.Model;
 using RRQMBox.Server.Win;
 using RRQMSkin.Windows;
 using System;
@@ -40,28 +41,43 @@ namespace RRQMBox.Server
 
         private void CreatTcpService_Click(object sender, RoutedEventArgs e)
         {
-            CreatTcpWindow window = new CreatTcpWindow(false);
+            CreateTcpWindow window = new CreateTcpWindow(CreateType.TCP);
             window.Show();
-            
+            this.Close();
+
         }
 
         private void CreatFileService_Click(object sender, RoutedEventArgs e)
         {
             FileServiceWindow window = new FileServiceWindow();
             window.Show();
-            
+            this.Close();
         }
 
         private void CreatTokenTcpService_Click(object sender, RoutedEventArgs e)
         {
-            CreatTcpWindow window = new CreatTcpWindow(true);
+            CreateTcpWindow window = new CreateTcpWindow(CreateType.Token);
             window.Show();
-           
+            this.Close();
         }
 
         private void CreatRPCService_Click(object sender, RoutedEventArgs e)
         {
             RPCServiceWindow window = new RPCServiceWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void CreatProtocolService_Click(object sender, RoutedEventArgs e)
+        {
+            CreateProcotolWindow window = new CreateProcotolWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void CreatUdpService_Click(object sender, RoutedEventArgs e)
+        {
+            CreateUdpWindow window = new CreateUdpWindow();
             window.Show();
         }
     }

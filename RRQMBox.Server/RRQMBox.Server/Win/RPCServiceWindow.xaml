@@ -33,14 +33,42 @@
                                                Style="{DynamicResource button}" />
                     <controls:CorrugatedButton x:Name="Bt_Stop" Content="停止" Click="Bt_Stop_Click"
                                                Style="{DynamicResource button}" />
+                    <CheckBox Content="性能测试输出" IsChecked="False" Grid.Column="1" Margin="10,0,0,0" VerticalContentAlignment="Center"
+                              Click="CheckBox_Click"
+                              Foreground="{DynamicResource foregroundColor}" />
                 </StackPanel>
             </Grid>
         </GroupBox>
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal">
+            <TextBox x:Name="Tb_ID" Text="0-TCP" Width="100"
+                             Style="{DynamicResource inputBox}" />
+            <controls:CorrugatedButton Content="测试反向RPC" Height="30" Width="100" Margin="10,0" Click="CallBaclButton_Click"/>
+            <controls:CorrugatedButton Content="发布事件" Height="30" Width="100" Margin="10,0" Click="PublishEventButton_Click"/>
+        </StackPanel>
         <controls:CorrugatedButton Content="清除" Height="30" Width="60" Grid.Row="1" Grid.Column="1"
                                    HorizontalAlignment="Right" Click="CorrugatedButton_Click" />
-        <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" Header="输出">
-            <TextBox x:Name="msgBox" Margin="3" Background="Transparent" BorderThickness="0"
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.RowSpan="3" Margin="5" Header="客户端列表">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="Tb_ClientNum" Text="0" Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <ListBox x:Name="Lb_OnlineClient" Grid.Row="1" BorderThickness="0"
+                         Style="{DynamicResource CliectListBoxStyle}" />
+                </Grid>
+
+            </GroupBox>
+            <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" Header="输出">
+                <TextBox x:Name="msgBox" Margin="3" Background="Transparent" BorderThickness="0"
                      Foreground="{DynamicResource foregroundColor}" />
-        </GroupBox>
+            </GroupBox>
+        </Grid>
+      
     </Grid>
 </windows:RRQMWindow>

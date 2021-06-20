@@ -11,21 +11,36 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using RRQMSocket;
-using RRQMSocket.RPC.JsonRpc;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMSocket.RPC.WebApi;
-using RRQMSocket.RPC.XmlRpc;
 
 namespace RRQMBox.Server
 {
-    [Route("/[controller]/[action]")]
-    public class Server : ControllerBase
+    //[Route("/[controller]/[action]")]
+    public class Server : ServerProvider
     {
+        public Server()
+        {
+            Timer timer = new Timer(1000);
+            timer.Elapsed += this.Timer_Elapsed;
+            timer.Start();
+        }
+
+        public static bool isStart;
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (isStart)
+            {
+                this.ShowMsg($"PerformanceTest,处理{a}次");
+                a = 0;
+            }
+        }
+
         private void ShowMsg(string msg)
         {
             ShowMsgMethod.Invoke(msg);
@@ -34,45 +49,42 @@ namespace RRQMBox.Server
 
         private int a;
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void PerformanceTest()
         {
-            if (++a % 10000 == 0)//每1w次输出
-            {
-                ShowMsg($"[{DateTime.Now.TimeOfDay}]TestNullReturnNullParameter,a={a}");
-            }
+            a++;
         }
 
-        [Route]
-        [RRQMRPCMethod]
+        //[Route]
+        [RRQMRPC]
         public void TestNullReturnNullParameter()
         {
             ShowMsg($"TestNullReturnNullParameter,a={a}");
         }
 
-        [Route]
-        [RRQMRPCMethod]
+        //[Route]
+        [RRQMRPC]
         public string TestStringReturnNullParameter()
         {
             ShowMsg("TestStringReturnNullParameter");
             return "若汝棋茗";
         }
 
-        [Route]
-        [RRQMRPCMethod]
+        //[Route]
+        [RRQMRPC]
         public void TestNullReturnStringParameter(string name)
         {
             ShowMsg($"TestNullReturnStringParameter,String:{name}");
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestNullReturnOutStringParameter(out string name)
         {
             ShowMsg($"TestNullReturnOutStringParameter");
             name = "若汝棋茗";
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public string TestStringReturnOutStringParameter(out string name)
         {
             ShowMsg($"TestStringReturnOutStringParameter");
@@ -80,14 +92,14 @@ namespace RRQMBox.Server
             return name;
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestNullReturnRefStringParameter(ref string name)
         {
             ShowMsg($"TestStringReturnOutStringParameter,String:{name}");
             name = "若汝棋茗";
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestNullReturnOutParameters(out string name, out int age, out string occupation)
         {
             ShowMsg($"TestNullReturnOutParameters");
@@ -96,21 +108,21 @@ namespace RRQMBox.Server
             occupation = "搬砖工程师";
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public Test02 TestClass1AndClass2(Test01 test01)
         {
             Test02 test02 = new Test02();
             return test02;
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestGetSocketClient(string iDToken)
         {
-            ISocketClient socketClient = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).Service.SocketClients[iDToken];
+            ISocketClient socketClient = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).SocketClients[iDToken];
             socketClient.Send(Encoding.UTF8.GetBytes("若汝棋茗"));
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestCallBack(string iDToken)
         {
             Task.Run(() =>
@@ -120,7 +132,17 @@ namespace RRQMBox.Server
                 invokeOption.WaitTime = 100;
                 try
                 {
+                    //先判断SocketClient是否还在线，然后回调。
+                    //TcpRPCParser tcpRPCParser = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]);
+                    //if (tcpRPCParser.Service.SocketClients.TryGetSocketClient(iDToken, out RPCSocketClient socketClient))
+                    //{
+                    //    string msg = socketClient.CallBack<string>(1000, invokeOption, 10);
+                    //}
+
+                    //或者这样直接调
                     string mes = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(iDToken, 1000, invokeOption, 10);
+
+
 
                     ShowMsg($"TestCallBack，mes={mes}");
                 }
@@ -131,8 +153,8 @@ namespace RRQMBox.Server
             });
         }
 
-        [Route]
-        [RRQMRPCMethod]
+       // [Route]
+        [RRQMRPC]
         public async Task<string> TestAsync()
         {
             return await Task.Run(() =>
@@ -142,8 +164,8 @@ namespace RRQMBox.Server
             });
         }
 
-        [Route]
-        [RRQMRPCMethod]
+        //[Route]
+        [RRQMRPC]
         public List<Test01> TestReturnList()
         {
             List<Test01> list = new List<Test01>();
@@ -153,7 +175,7 @@ namespace RRQMBox.Server
             return list;
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public Dictionary<int, string> TestReturnDic()
         {
             Dictionary<int, string> valuePairs = new Dictionary<int, string>();
@@ -164,39 +186,39 @@ namespace RRQMBox.Server
             return valuePairs;
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestStringDefaultNullValue(string s = null)
         {
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestStringDefaultValue(string s = "123123123")
         {
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestValueDefaultValue(int a = 1234)
         {
         }
 
-        [RRQMRPCMethod]
+        [RRQMRPC]
         public void TestDoubleValueDefaultValue(double a = 1234.021)
         {
         }
 
-        [XmlRpc]
-        public string TestXmlRpc(string param, int a, double b, Args[] args)
-        {
-            ShowMsg("TestXmlRpc");
-            return "若汝棋茗";
-        }
+        //[XmlRpc]
+        //public string TestXmlRpc(string param, int a, double b, Args[] args)
+        //{
+        //    ShowMsg("TestXmlRpc");
+        //    return "若汝棋茗";
+        //}
 
-        [JsonRpc]
-        public string TestJsonRpc(int a)
-        {
-            ShowMsg("TestJsonRpc");
-            return "若汝棋茗";
-        }
+        //[JsonRpc]
+        //public string TestJsonRpc(int a)
+        //{
+        //    ShowMsg("TestJsonRpc");
+        //    return "若汝棋茗";
+        //}
     }
 
     public class Args
