@@ -200,11 +200,12 @@ namespace RRQMBox.Server.Win
 
         private void PublishEventButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.rpcService!=null && this.rpcService.TryGetRPCParser("TcpParser", out IRPCParser parser))
-            {
-                TcpRPCParser tcpRPCParser =(TcpRPCParser) parser;
-                tcpRPCParser.PublishEvent<Action<string>>("TestEvent");
-            }
+            //if (this.rpcService!=null && this.rpcService.TryGetRPCParser("TcpParser", out IRPCParser parser))
+            //{
+            //    TcpRPCParser tcpRPCParser =(TcpRPCParser) parser;
+            //    tcpRPCParser.PublishEvent<Action<string>>("TestEvent");
+            //}
+            MessageBox.Show("未开发");
         }
     }
 }
