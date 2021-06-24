@@ -424,7 +424,7 @@ namespace RRQMBox.Client.Win
                     {
                         try
                         {
-                            ShowMsg(this.fileClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, i));
+                            ShowMsg(this.fileClient.Invoke<int>("Sum", InvokeOption.WaitInvoke, 10,20).ToString());
                         }
                         catch (Exception ex)
                         {

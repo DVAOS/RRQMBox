@@ -225,5 +225,11 @@ namespace RRQMBox.Server.Win
         {
             return a.ToString();
         }
+
+        [RRQMRPC]
+        public int Sum(int a,int b)
+        {
+            return a+b;
+        }
     }
 }
