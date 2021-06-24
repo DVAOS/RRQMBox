@@ -9,14 +9,12 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMBox.Client.Common;
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -61,7 +59,8 @@ namespace RRQMBox.Client.Win
                     testObject.Num = i;
                     var config = new TcpRPCClientConfig();
                     config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
-                          .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC");
+                          .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
+                          .SetValue(TokenClientConfig.SeparateThreadSendProperty, true);
                     try
                     {
                         testObject.Client.Setup(config);
@@ -79,8 +78,6 @@ namespace RRQMBox.Client.Win
                 }
 
                 GroupSend();
-
-
             });
 
             Task.Run(async () =>
@@ -95,7 +92,6 @@ namespace RRQMBox.Client.Win
                     await Task.Delay(1000);
                 }
             });
-
         }
 
         private void GroupSend()
@@ -136,7 +132,8 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        bool isTest;
+        private bool isTest;
+
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             isTest = false;
@@ -189,14 +186,12 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.CanFeedback, os);
+                Client.Invoke("PerformanceTest", InvokeOption.WaitInvoke, os);
                 this.send++;
             }
             catch (Exception)
             {
-
             }
-
         }
 
         public void ShowInfo()

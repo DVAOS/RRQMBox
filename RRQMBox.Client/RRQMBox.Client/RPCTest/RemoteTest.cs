@@ -9,11 +9,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using RRQMCore.Diagnostics;
 using RRQMRPC.RRQMTest;
 using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.Collections.Generic;
 
 namespace RRQMBox.Client.RPCTest
 {
@@ -23,10 +22,12 @@ namespace RRQMBox.Client.RPCTest
         {
             server = new Server(client);
         }
+
         private void ShowMsg(string msg)
         {
             ShowMsgMethod.Invoke(msg);
         }
+
         public static Action<string> ShowMsgMethod;
 
         private IServer server;
@@ -36,7 +37,6 @@ namespace RRQMBox.Client.RPCTest
         /// </summary>
         public void Test01(InvokeOption invokeOption)
         {
-
             server.TestNullReturnNullParameter(invokeOption);
 
             ShowMsg("Test01=>测试完成");

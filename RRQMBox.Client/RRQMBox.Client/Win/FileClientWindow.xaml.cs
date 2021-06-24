@@ -9,27 +9,20 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using RRQMBox.Client.Common;
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
+using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
+using System.Windows.Media;
 
 namespace RRQMBox.Client.Win
 {
@@ -60,10 +53,12 @@ namespace RRQMBox.Client.Win
         {
             ConnectService();
         }
+
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             this.BeginDownload();
         }
+
         private void UploadButton_Click(object sender, RoutedEventArgs e)
         {
             this.BeginUploadFile();
@@ -136,7 +131,6 @@ namespace RRQMBox.Client.Win
             {
                 this.Lb_FileList.ItemsSource = new RRQMList<UrlFileInfo>(this.fileClient.FileTransferCollection);
             });
-
         }
 
         private void FileClient_DisConnectedService(object sender, MesEventArgs e)
@@ -219,13 +213,12 @@ namespace RRQMBox.Client.Win
                     this.Progress.Value = 0;
                 }
             });
-
         }
 
         #endregion 事件方法
 
-
         #region 绑定方法
+
         private void BeginDownload()
         {
             if (fileClient != null && fileClient.Online)
@@ -246,13 +239,13 @@ namespace RRQMBox.Client.Win
                 {
                     ShowMsg(e.Message);
                 }
-
             }
             else
             {
                 ShowMsg("未连接");
             }
         }
+
         private void StopAll()
         {
             if (fileClient != null)
@@ -261,6 +254,7 @@ namespace RRQMBox.Client.Win
                 ShowMsg("已停止下载");
             }
         }
+
         private void Resume()
         {
             if (fileClient != null)
@@ -268,6 +262,7 @@ namespace RRQMBox.Client.Win
                 fileClient.ResumeTransfer();
             }
         }
+
         private void BeginUploadFile()
         {
             if (fileClient != null && fileClient.Online)
@@ -289,6 +284,7 @@ namespace RRQMBox.Client.Win
                 }
             }
         }
+
         private void SelectPathFile()
         {
             FileDialog fileDialog = new OpenFileDialog();
@@ -340,7 +336,6 @@ namespace RRQMBox.Client.Win
                 fileClient.ConnectedService += this.FileClient_ConnectedService;
                 fileClient.FileTransferCollectionChanged += this.FileClient_FileTransferCollectionChanged;
                 fileClient.Received += this.FileClient_Received;
-
             }
 
             try
@@ -370,7 +365,6 @@ namespace RRQMBox.Client.Win
             ShowMsg($"收到：协议={procotol}，信息={Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2)}");
         }
 
-
         private void DisconnectService()
         {
             if (fileClient != null && fileClient.Online)
@@ -382,10 +376,8 @@ namespace RRQMBox.Client.Win
             this.Tb_Icon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E8EC"));
         }
 
-
-
-
         #endregion 绑定方法
+
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.fileClient != null && this.fileClient.Online)
@@ -421,7 +413,29 @@ namespace RRQMBox.Client.Win
                 }
             }
         }
+
+        private void TestInvokeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.fileClient != null)
+            {
+                Task.Run(() =>
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        try
+                        {
+                            ShowMsg(this.fileClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, i));
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowMsg(ex.Message);
+                        }
+                    }
+                });
+            }
+        }
     }
+
     public class FileArgs
     {
         public int P1 { get; set; }

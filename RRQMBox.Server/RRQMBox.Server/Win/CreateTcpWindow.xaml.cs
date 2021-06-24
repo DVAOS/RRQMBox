@@ -16,19 +16,9 @@ using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RRQMBox.Server.Win
 {
@@ -63,18 +53,20 @@ namespace RRQMBox.Server.Win
             });
         }
 
-        Timer timer;
+        private Timer timer;
+
         private void CreatTcpWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.Cb_AdapterType.ItemsSource = Enum.GetValues(typeof(AdapterType));
             this.onLineClient = new RRQMList<SocketClient>();
             this.Lb_OnlineClient.ItemsSource = this.onLineClient;
         }
-        CreateType createType;      
-        RRQMList<SocketClient> onLineClient;
-        SimpleTcpService tcpService;
-        SimpleTokenService tokenService;
-        
+
+        private CreateType createType;
+        private RRQMList<SocketClient> onLineClient;
+        private SimpleTcpService tcpService;
+        private SimpleTokenService tokenService;
+
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             if (createType == CreateType.TCP)
@@ -99,11 +91,9 @@ namespace RRQMBox.Server.Win
                 tcpService.Received += this.OnReceived;
             }
 
-
             this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
 
-            //属性设置
-
+            //注入配置
             var config = new ServerConfig();
             config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
                 .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
@@ -111,8 +101,21 @@ namespace RRQMBox.Server.Win
                 .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(ServerConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
 
+            //载入配置
             tcpService.Setup(config);
-            //方法
+
+            //或通过实例注入配置，实例注入时须实例化对应配置，否则部分属性不可见
+            //var config1 = new TcpServerConfig();
+            //config1.ListenIPHosts = new IPHost[] { new IPHost(this.Tb_iPHost.Text) };
+            //config1.Logger = new MsgLog(this.ShowMsg);
+            //config1.ThreadCount = int.Parse(this.Tb_ThreadCount.Text);
+            //config1.ClearInterval = 300;
+            //config1.BufferLength = 1024;
+
+            //载入配置
+            //tcpService.Setup(config1);
+
+            //启动
             tcpService.Start();
 
             ShowMsg("绑定成功");
@@ -139,19 +142,17 @@ namespace RRQMBox.Server.Win
                 .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
                 .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(ServerConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TcpServerConfig.IDFormatProperty, "TokenTcp-{0}")//设置分配ID的格式， 格式必须符合字符串格式，至少包含一个补位， 初始值为“{0}-TCP”
                 .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_Token.Text);
 
-
             //方法
-            tokenService.Setup(config);
-            tokenService.Start();
-            ShowMsg("绑定成功");
-            ShowMsg($"请使用Token为{tokenService.VerifyToken}进行连接");
+            this.tokenService.Setup(config);
+            this.tokenService.Start();
+            this.ShowMsg("绑定成功");
+            this.ShowMsg($"请使用Token为{tokenService.VerifyToken}进行连接");
         }
-       
 
         private int adapterIndex;
+
         private void Service_CreatSocketCliect(SimpleSocketClient arg1, CreateOption arg2)
         {
             //此处可进行初始化设置
@@ -191,13 +192,17 @@ namespace RRQMBox.Server.Win
             {
                 ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
             }
-
         }
 
         private int count;
         private long size;
+
         private void OnReceived(SimpleSocketClient client, ByteBlock byteBlock, object obj)
         {
+            if (byteBlock.Length==0)
+            {
+
+            }
             if (isPerformanceTest)
             {
                 count++;
@@ -208,7 +213,6 @@ namespace RRQMBox.Server.Win
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
                 ShowMsg($"已接收到信息：{mes}");
             }
-
         }
 
         private void Service_ClientDisconnected(object sender, MesEventArgs e)
@@ -222,7 +226,6 @@ namespace RRQMBox.Server.Win
 
         private void Service_ClientConnected(object sender, MesEventArgs e)
         {
-
             this.UIInvoke(() =>
             {
                 this.onLineClient.Add((SocketClient)sender);
@@ -259,6 +262,7 @@ namespace RRQMBox.Server.Win
                 ShowMsg("服务器未绑定");
             }
         }
+
         private void Bt_Dispose_Click(object sender, RoutedEventArgs e)
         {
             if (tcpService != null && tcpService.ServerState == ServerState.Running)
@@ -285,7 +289,6 @@ namespace RRQMBox.Server.Win
                 {
                     ((SocketClient)this.Lb_OnlineClient.SelectedItem).Send(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
                 }
-
             }
             else
             {
@@ -294,7 +297,7 @@ namespace RRQMBox.Server.Win
         }
 
         private bool isPerformanceTest;
-       
+
         private void TestCheckBox_Click(object sender, RoutedEventArgs e)
         {
             if (this.Cb_PerformanceTest.IsChecked == true)
@@ -305,14 +308,11 @@ namespace RRQMBox.Server.Win
             {
                 isPerformanceTest = false;
             }
-
         }
 
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
             this.msgBox.Clear();
         }
-
-     
     }
 }

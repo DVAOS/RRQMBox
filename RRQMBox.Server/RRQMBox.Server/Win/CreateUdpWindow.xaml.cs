@@ -1,20 +1,21 @@
-﻿using RRQMSkin.Windows;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RRQMBox.Server.Win
 {
@@ -51,7 +52,7 @@ namespace RRQMBox.Server.Win
                 this.udpSession = new SimpleUdpSession();
             }
             var config = new UdpSessionConfig();//UDP配置
-            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty,new IPHost(this.Tb_TargetIPHost.Text).EndPoint);//设置默认终结点
+            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost(this.Tb_TargetIPHost.Text).EndPoint);//设置默认终结点
             if ((bool)this.Cb_UseBind.IsChecked)
             {
                 config.SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定
@@ -64,7 +65,8 @@ namespace RRQMBox.Server.Win
             ShowMsg("服务已启动");
         }
 
-        int count = 0;
+        private int count = 0;
+
         private void UdpSession_Received(EndPoint endpoint, RRQMCore.ByteManager.ByteBlock e)
         {
             if (isPerformanceTest)
@@ -77,7 +79,8 @@ namespace RRQMBox.Server.Win
             }
         }
 
-        SimpleUdpSession udpSession;
+        private SimpleUdpSession udpSession;
+
         private void Bt_Stop_Click(object sender, RoutedEventArgs e)
         {
             if (udpSession != null)
@@ -86,6 +89,7 @@ namespace RRQMBox.Server.Win
                 ShowMsg("解除绑定");
             }
         }
+
         private void Bt_Dispose_Click(object sender, RoutedEventArgs e)
         {
             if (udpSession != null)
@@ -98,7 +102,7 @@ namespace RRQMBox.Server.Win
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.udpSession!=null)
+            if (this.udpSession != null)
             {
                 if ((bool)this.Cb_IsAsync.IsChecked)
                 {
@@ -115,14 +119,16 @@ namespace RRQMBox.Server.Win
         {
             this.msgBox.Clear();
         }
-        bool isPerformanceTest=true;
-        Timer timer;
+
+        private bool isPerformanceTest = true;
+        private Timer timer;
+
         private void TestCheckBox_Click(object sender, RoutedEventArgs e)
         {
             if (this.Cb_PerformanceTest.IsChecked == true)
             {
                 isPerformanceTest = true;
-                if (timer!=null)
+                if (timer != null)
                 {
                     timer.Dispose();
                     timer = null;
@@ -135,7 +141,6 @@ namespace RRQMBox.Server.Win
             {
                 isPerformanceTest = false;
             }
-
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)

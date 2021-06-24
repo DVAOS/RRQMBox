@@ -10,19 +10,15 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using CookComputing.XmlRpc;
-using Microsoft.Win32;
 using RRQMBox.Client.Common;
 using RRQMBox.Client.RPCTest;
-using RRQMRPC.RRQMTest;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-//using RRQMSocket.RPC;
-//using RRQMSocket.RPC.RRQMRPC;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -61,40 +57,24 @@ namespace RRQMBox.Client.Win
             BinarySerialize();
         }
 
-        private void RRQMXmlButton_Click(object sender, RoutedEventArgs e)
-        {
-            Task.Run(() =>
-            {
-                //XmlSerialize();
-            });
-        }
-
         private void RRQMUDPBinaryButton_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
-            {
-                //UDPBinarySerialize();
-            });
+            UDPBinarySerialize();
         }
 
         private void XmlRpcButton_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
-            {
-                //TestXmlRpc();
-            });
-
+            
+                TestXmlRpc();
+           
         }
 
         private void JsonRpcButton_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
-            {
-                //TestJsonRpc();
-            });
+           
+                TestJsonRpc();
+           
         }
-
-
 
         private void IDInvokenButton_Click(object sender, RoutedEventArgs e)
         {
@@ -120,7 +100,7 @@ namespace RRQMBox.Client.Win
 
             RemoteTest remoteTest = new RemoteTest(client);
 
-            remoteTest.Test01(InvokeOption.NoFeedback);
+            remoteTest.Test01(InvokeOption.OnlySend);
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();
@@ -145,13 +125,13 @@ namespace RRQMBox.Client.Win
             config.SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
                 .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
                 .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
-                .SetValue(TcpRPCClientConfig.ProxyTokenProperty,"RPC");
+                .SetValue(TcpRPCClientConfig.ProxyTokenProperty, "RPC");
 
             client.Setup(config);
             client.Connect();
 
-           RPCProxyInfo proxyInfo= client.GetProxyInfo();
-            if (proxyInfo !=null)
+            RPCProxyInfo proxyInfo = client.GetProxyInfo();
+            if (proxyInfo != null)
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
                 System.Windows.Forms.DialogResult result = fbd.ShowDialog();
@@ -160,103 +140,86 @@ namespace RRQMBox.Client.Win
                 {
                     foreach (var item in proxyInfo.Codes)
                     {
-                        File.WriteAllText(Path.Combine(fbd.SelectedPath,item.Name),item.Code);
+                        File.WriteAllText(Path.Combine(fbd.SelectedPath, item.Name), item.Code);
                     }
                 }
-
             }
         }
 
-        //private void UDPBinarySerialize()
-        //{
-        //    //UDP序列化默认为二进制
-        //    //UDP在Feedback模式下也不会返回值，仅确认调用完成（包含状态返回）
+        private void UDPBinarySerialize()
+        {
+            UdpRPCClient client = new UdpRPCClient();
 
-        //    //UdpRPCClient client = new UdpRPCClient();
-        //    //client.Bind(8848, 1);
+            var config = new ServerConfig();
+            config.SetValue(UdpRPCClientConfig.DefaultRemotePointProperty, new IPHost("127.0.0.1:7701").EndPoint)
+                .SetValue(UdpRPCClientConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(8848) })
+                .SetValue(RRQMConfig.BufferLengthProperty, 1024 * 64)
+                .SetValue(UdpRPCClientConfig.ThreadCountProperty, 1)
+                .SetValue(UdpRPCClientConfig.UseBindProperty, true);
+            client.Setup(config);
+            client.Start();
 
-        //    //client.InitializedRPC(new IPHost("127.0.0.1:7701"));
+            client.InitializeRPC();
 
-        //    //ShowMsg("二进制连接成功");
+            ShowMsg("UDP初始化成功");
 
-        //    //RemoteTest remoteTest = new RemoteTest(client);
+            RemoteTest remoteTest = new RemoteTest(client);
 
-        //    //remoteTest.Test01(InvokeOption.NoFeedback);
-        //    //remoteTest.Test02();
-        //    //remoteTest.Test03();
-        //    //remoteTest.Test04();
-        //    //remoteTest.Test05();
-        //    //remoteTest.Test06();
-        //    //remoteTest.Test07();
-        //    //remoteTest.Test08();
-        //    //remoteTest.Test09();
-        //    //ShowMsg("UDP二进制测试完成");
-
-        //}
+            remoteTest.Test01(InvokeOption.OnlySend);
+            remoteTest.Test02();
+            remoteTest.Test03();
+            remoteTest.Test04();
+            remoteTest.Test05();
+            remoteTest.Test06();
+            remoteTest.Test07();
+            remoteTest.Test08();
+            remoteTest.Test09();
+            remoteTest.Test12();
+            remoteTest.Test13();
+            remoteTest.Test14();
+            ShowMsg("UDP二进制测试完成");
+        }
 
         //private void Client_ReceivedByteBlock(object sender, RRQMCore.ByteManager.ByteBlock e)
         //{
         //    ShowMsg($"收到独立消息：{Encoding.UTF8.GetString(e.Buffer, 0, (int)e.Length)}");
         //}
 
-        //private void XmlSerialize()
-        //{
-        //    RPCClient client = new RPCClient();
-        //    client.SerializeConverter = new XmlSerializeConverter();
-        //    client.InitializedRPC(new IPHost("127.0.0.1:7702"));
 
-        //    ShowMsg("Xml连接成功");
 
-        //    RemoteTest remoteTest = new RemoteTest(client);
+        private void TestXmlRpc()
+        {
+            ShowMsg("即将测试XmlRpc");
+            IClient iclient;
+            XmlRpcClientProtocol protocol;
+            iclient = (IClient)XmlRpcProxyGen.Create(typeof(IClient));
+            protocol = (XmlRpcClientProtocol)iclient;
+            protocol.Url = "http://127.0.0.1:7704";
+            protocol.KeepAlive = false;
 
-        //    remoteTest.Test01(InvokeOption.CanFeedback);
-        //    remoteTest.Test02();
-        //    remoteTest.Test03();
-        //    remoteTest.Test04();
-        //    remoteTest.Test05();
-        //    remoteTest.Test06();
-        //    remoteTest.Test07();
-        //    remoteTest.Test08();
-        //    remoteTest.Test09();
-        //    remoteTest.Test12();
-        //    remoteTest.Test14();
+            string mes = iclient.TestXmlRpc("test", 10, 10.00, new Args[] { new Args() { P3 = "P" }, new Args() { P3 = "PP" } }); //调用
+            ShowMsg($"收到返回数据：{mes}");
 
-        //    ShowMsg("Xml测试完成");
+            ShowMsg("XmlRpc测试结束");
+        }
 
-        //}
+        private void TestJsonRpc()
+        {
+            SimpleTcpClient tcpClient = new SimpleTcpClient();
+            tcpClient.Received += this.TcpClient_Received;
+            var config = new TcpClientConfig();
+            config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7705"));
+            tcpClient.Setup(config);
+            tcpClient.Connect();
+            tcpClient.Send(Encoding.UTF8.GetBytes("{\"jsonrpc\":\"2.0\",\"method\":\"TestJsonRpc\",\"params\":[5],\"id\":1}\r\n"));
+        }
 
-        //private void TestXmlRpc()
-        //{
-        //    ShowMsg("即将测试XmlRpc");
-        //    IClient iclient;
-        //    XmlRpcClientProtocol protocol;
-        //    iclient = (IClient)XmlRpcProxyGen.Create(typeof(IClient));
-        //    protocol = (XmlRpcClientProtocol)iclient;
-        //    protocol.Url = "http://127.0.0.1:7704";
-        //    protocol.KeepAlive = false;
+        private void TcpClient_Received(RRQMCore.ByteManager.ByteBlock arg1, object arg2)
+        {
+            string s = Encoding.UTF8.GetString(arg1.Buffer, 0, (int)arg1.Length);
+            ShowMsg("JsonRpc返回数据：" + s);
+        }
 
-        //    string mes = iclient.TestXmlRpc("test", 10, 10.00, new Args[] { new Args() { P3 = "P" }, new Args() { P3 = "PP" } }); //调用
-        //    ShowMsg($"收到返回数据：{mes}");
-
-        //    ShowMsg("XmlRpc测试结束");
-        //}
-
-        //private void TestJsonRpc()
-        //{
-        //    TcpClient tcpClient = new TcpClient();
-        //    tcpClient.OnReceived += this.RpcClient_OnReceived;
-        //    var config = new TcpClientConfig();
-        //    config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7705"));
-        //    tcpClient.Setup(config);
-        //    tcpClient.Connect();
-        //    tcpClient.Send(Encoding.UTF8.GetBytes("{\"jsonrpc\":\"2.0\",\"method\":\"TestJsonRpc\",\"params\":[5],\"id\":1}\r\n"));
-        //}
-
-        //private void RpcClient_OnReceived(TcpClient arg1, RRQMCore.ByteManager.ByteBlock arg2, object arg3)
-        //{
-        //    string s = Encoding.UTF8.GetString(arg2.Buffer, 0, (int)arg2.Length);
-        //    ShowMsg("JsonRpc返回数据：" + s);
-        //}
     }
 
     /// <summary>

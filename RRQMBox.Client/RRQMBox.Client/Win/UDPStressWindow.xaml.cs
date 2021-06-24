@@ -1,20 +1,23 @@
-﻿using RRQMMVVM;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RRQMBox.Client.Win
 {
@@ -27,6 +30,7 @@ namespace RRQMBox.Client.Win
         {
             InitializeComponent();
         }
+
         public RRQMList<UDPTestObject> TestObjects { get; set; }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -48,7 +52,6 @@ namespace RRQMBox.Client.Win
             UDPTestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
             {
-
                 for (int i = 0; i < clientCount; i++)
                 {
                     if (!isTest)
@@ -59,7 +62,6 @@ namespace RRQMBox.Client.Win
 
                     try
                     {
-
                         testObject.Client = new SimpleUdpSession();
                         testObject.Data = data;
                         testObject.Num = i;
@@ -82,8 +84,6 @@ namespace RRQMBox.Client.Win
                 }
 
                 GroupSend();
-
-
             });
 
             Task.Run(async () =>
@@ -98,7 +98,6 @@ namespace RRQMBox.Client.Win
                     await Task.Delay(1000);
                 }
             });
-
         }
 
         private void GroupSend()
@@ -140,7 +139,8 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        bool isTest;
+        private bool isTest;
+
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             isTest = false;
@@ -169,6 +169,7 @@ namespace RRQMBox.Client.Win
             }
         }
     }
+
     public class UDPTestObject : ObservableObject
     {
         public byte[] Data { get; set; }
@@ -209,7 +210,6 @@ namespace RRQMBox.Client.Win
             }
         }
 
-
         public void Send()
         {
             try
@@ -230,9 +230,7 @@ namespace RRQMBox.Client.Win
             }
             catch
             {
-
             }
-
         }
 
         public void ShowInfo()

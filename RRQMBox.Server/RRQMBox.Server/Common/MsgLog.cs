@@ -9,12 +9,8 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RRQMCore.Log;
+using System;
 
 namespace RRQMBox.Server.Common
 {
@@ -26,7 +22,7 @@ namespace RRQMBox.Server.Common
         }
 
         private Action<string> action;
-       
+
         public void Debug(LogType logType, object source, string message, Exception exception)
         {
             this.Debug(logType, source, message);

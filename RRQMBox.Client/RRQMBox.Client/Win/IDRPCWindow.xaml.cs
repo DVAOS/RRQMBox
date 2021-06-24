@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace RRQMBox.Client.Win
 {
@@ -44,6 +45,7 @@ namespace RRQMBox.Client.Win
                 this.msgBox.AppendText($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss fff}]:{msg}\r\n");
             });
         }
+
         private void UIInvoke(Action action)
         {
             this.Dispatcher.Invoke(() =>
@@ -52,7 +54,8 @@ namespace RRQMBox.Client.Win
             });
         }
 
-        TcpRPCClient Client;
+        private TcpRPCClient Client;
+
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.Client == null)
@@ -77,7 +80,6 @@ namespace RRQMBox.Client.Win
                 ShowMsg(ex.Message);
             }
         }
-
 
         private void DicconnectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -106,7 +108,7 @@ namespace RRQMBox.Client.Win
                 {
                     try
                     {
-                        string s = this.Client.Invoke<string>(id, methodToken, InvokeOption.CanFeedback, 10);
+                        string s = this.Client.Invoke<string>(id, methodToken, InvokeOption.WaitInvoke, 10);
                         ShowMsg(s);
                     }
                     catch (Exception ex)
@@ -115,7 +117,6 @@ namespace RRQMBox.Client.Win
                     }
                 }
             });
-
         }
 
         private void TestStringButton_Click(object sender, RoutedEventArgs e)
@@ -126,7 +127,7 @@ namespace RRQMBox.Client.Win
                 {
                     try
                     {
-                        string s = this.Client.Invoke<string>("TestStringReturnNullParameter", InvokeOption.CanFeedback, 10);
+                        string s = this.Client.Invoke<string>("TestStringReturnNullParameter", InvokeOption.WaitInvoke, 10);
                         ShowMsg(s);
                     }
                     catch (Exception ex)
@@ -147,6 +148,7 @@ namespace RRQMBox.Client.Win
         {
             this.msgBox = msgBox;
         }
+
         private Action<string> msgBox;
 
         [RRQMRPCCallBackMethod(1000)]

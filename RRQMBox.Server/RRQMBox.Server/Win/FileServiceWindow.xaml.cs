@@ -9,20 +9,6 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using RRQMBox.Server.Common;
 using RRQMCore.ByteManager;
 using RRQMMVVM;
@@ -31,6 +17,12 @@ using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RRQMBox.Server.Win
 {
@@ -53,6 +45,7 @@ namespace RRQMBox.Server.Win
 
         private FileService fileService;
         private RRQMList<FileSocketClient> clientItems;
+
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             if (fileService == null)
@@ -64,17 +57,23 @@ namespace RRQMBox.Server.Win
                 fileService.BeforeFileTransfer += this.FileService_BeforeFileTransfer;
                 fileService.FinishedFileTransfer += this.FileService_FinishedFileTransfer;
                 fileService.Received += this.FileService_Received;
-            }
 
+                RPCService rPCService = new RPCService();
+                rPCService.RegistServer<MyOperation>();
+                rPCService.AddRPCParser("fileService", fileService);
+                rPCService.OpenServer();
+            }
 
             try
             {
                 var config = new FileServiceConfig();
-                config.SetValue(ServerConfig.ListenIPHostsProperty,new IPHost[] {new IPHost(this.Tb_iPHost.Text) } )
+                config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
                     .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))
                     .SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
                     .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text)
-                    .SetValue(FileServiceConfig.BreakpointResumeProperty, (bool)this.Cb_breakpointResume.IsChecked);
+                    .SetValue(FileServiceConfig.BreakpointResumeProperty, (bool)this.Cb_breakpointResume.IsChecked)
+                    .SetValue(FileServiceConfig.MaxDownloadSpeedProperty, 1024 * 1024 * 10L)
+                    .SetValue(FileServiceConfig.MaxUploadSpeedProperty, 1024 * 1024 * 10L);
 
                 this.fileService.Setup(config);
                 this.fileService.Start();
@@ -90,7 +89,7 @@ namespace RRQMBox.Server.Win
 
         private void FileService_Received(object sender, short? procotol, ByteBlock byteBlock)
         {
-            string msg = Encoding.UTF8.GetString(byteBlock.Buffer,2,(int)byteBlock.Length-2);
+            string msg = Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2);
             ShowMsg($"收到：协议=“{procotol}”，信息：{msg}");
 
             byte[] data = Encoding.UTF8.GetBytes(msg);
@@ -98,8 +97,8 @@ namespace RRQMBox.Server.Win
             ((FileSocketClient)sender).SendAsync(data);
             ShowMsg($"已普通回复");
 
-            ((FileSocketClient)sender).Send(10, data,0,data.Length);
-            ((FileSocketClient)sender).SendAsync(10, data,0,data.Length);
+            ((FileSocketClient)sender).Send(10, data, 0, data.Length);
+            ((FileSocketClient)sender).SendAsync(10, data, 0, data.Length);
             ShowMsg($"已通过协议回复");
         }
 
@@ -118,7 +117,6 @@ namespace RRQMBox.Server.Win
                 action.Invoke();
             });
         }
-
 
         #region 事件方法
 
@@ -149,7 +147,7 @@ namespace RRQMBox.Server.Win
         {
             if (e.TransferType == TransferType.Download)
             {
-                ShowMsg(string.Format("请求的文件：{0}已成功发送\r\n",  e.FileInfo.FileName));
+                ShowMsg(string.Format("请求的文件：{0}已成功发送\r\n", e.FileInfo.FileName));
             }
             else
             {
@@ -168,7 +166,6 @@ namespace RRQMBox.Server.Win
                 e.TargetPath = @"ServiceReceiveDir\" + e.FileInfo.FileName;
 
                 e.IsPermitOperation = this.AllowUp;//是否允许接收
-
             }
             else
             {
@@ -194,7 +191,6 @@ namespace RRQMBox.Server.Win
         {
             if (this.Lb_Client.SelectedItem is FileSocketClient client)
             {
-
             }
         }
 
@@ -225,16 +221,9 @@ namespace RRQMBox.Server.Win
     public class MyOperation : ServerProvider
     {
         [RRQMRPC]
-        public FileArgs SayHello(FileArgs a)
+        public string SayHello(int a)
         {
-            Console.WriteLine(a);
-            return a;
+            return a.ToString();
         }
-    }
-
-    public class FileArgs
-    {
-        public int P1 { get; set; }
-        public string P2 { get; set; }
     }
 }

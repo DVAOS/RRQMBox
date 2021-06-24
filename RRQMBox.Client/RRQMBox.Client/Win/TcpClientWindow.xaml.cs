@@ -9,24 +9,14 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMBox.Client.Model;
+using RRQMSkin.Windows;
+using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RRQMBox.Client.Model;
-using RRQMMVVM;
-using RRQMSkin.Windows;
-using RRQMSocket;
 
 namespace RRQMBox.Client.Win
 {
@@ -57,17 +47,16 @@ namespace RRQMBox.Client.Win
             });
         }
 
-
         private void TcpClientWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.Cb_AdapterType.ItemsSource = Enum.GetValues(typeof(AdapterType));
         }
 
-        SimpleTcpClient tcpClient;
-        SimpleTokenClient tokenClient;
+        private SimpleTcpClient tcpClient;
+        private SimpleTokenClient tokenClient;
+
         private void TcpConnectButton_Click(object sender, RoutedEventArgs e)
         {
-
             if (this.Cb_IsToken.IsChecked == true)
             {
                 CreateTokenTcpClient();
@@ -86,17 +75,18 @@ namespace RRQMBox.Client.Win
                 return;
             }
             tcpClient = new SimpleTcpClient();
-            tcpClient.ConnectedService += this.TcpClient_ConnectedService;
-            tcpClient.DisconnectedService += this.TcpClient_DisconnectedService;
+            tcpClient.ConnectedService += this.TcpClient_ConnectedService;//订阅连接成功事件
+            tcpClient.DisconnectedService += this.TcpClient_DisconnectedService;//订阅断开连接事件
             tcpClient.Received += this.TcpClient_Received;
             try
             {
                 var config = new TcpClientConfig();
-                config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost(this.Tb_iPHost.Text))
-                    .SetValue(TcpClientConfig.SeparateThreadSendProperty, true)
-                    .SetValue(TcpClientConfig.DataHandlingAdapterProperty, GetAdapter(this.Cb_AdapterType));
-                tcpClient.Setup(config);
-                tcpClient.Connect();
+                config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost(this.Tb_iPHost.Text))//远程IPHost
+                    .SetValue(TcpClientConfig.SeparateThreadSendProperty, true)//独立线程发送
+                    .SetValue(TcpClientConfig.DataHandlingAdapterProperty, GetAdapter(this.Cb_AdapterType));//数据处理适配器
+
+                tcpClient.Setup(config);//载入配置
+                tcpClient.Connect();//连接
             }
             catch (Exception ex)
             {
@@ -167,7 +157,6 @@ namespace RRQMBox.Client.Win
                     tcpClient = null;
                 }
             }
-
         }
 
         private void TcpSendButton_Click(object sender, RoutedEventArgs e)
@@ -194,7 +183,6 @@ namespace RRQMBox.Client.Win
                     tcpClient.Send(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
                 }
             }
-
         }
 
         private DataHandlingAdapter GetAdapter(ComboBox comboBox)
@@ -249,7 +237,7 @@ namespace RRQMBox.Client.Win
         {
             if (this.tcpClient != null)
             {
-                Task.Run(()=> 
+                Task.Run(() =>
                 {
                     while (true)
                     {
@@ -262,14 +250,8 @@ namespace RRQMBox.Client.Win
                             ShowMsg(ex.Message);
                         }
                     }
-                    
                 });
-               
-
             }
         }
     }
-
-
 }
-

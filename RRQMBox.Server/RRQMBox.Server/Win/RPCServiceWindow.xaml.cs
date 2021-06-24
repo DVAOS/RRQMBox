@@ -9,29 +9,18 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
+using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
-//using RRQMSocket.RPC;
-//using RRQMSocket.RPC.JsonRpc;
-//using RRQMSocket.RPC.RRQMRPC;
-//using RRQMSocket.RPC.WebApi;
-//using RRQMSocket.RPC.XmlRpc;
+using RRQMSocket.RPC.WebApi;
+using RRQMSocket.RPC.XmlRpc;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace RRQMBox.Server.Win
 {
@@ -48,7 +37,8 @@ namespace RRQMBox.Server.Win
             this.Lb_OnlineClient.ItemsSource = this.onLineClient;
         }
 
-        RRQMList<RPCSocketClient> onLineClient;
+        private RRQMList<RPCSocketClient> onLineClient;
+
         private void ShowMsg(string msg)
         {
             this.UIInvoke(() =>
@@ -72,7 +62,10 @@ namespace RRQMBox.Server.Win
                 rpcService.Dispose();
             }
         }
-        RPCService rpcService;
+
+        private RPCService rpcService;
+
+        
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             if (rpcService != null)
@@ -98,45 +91,50 @@ namespace RRQMBox.Server.Win
             tcpRPCParser.Start();
             ShowMsg("TCP解析器添加完成，端口号：7700，VerifyToken=123RPC，ProxyToken=RPC");
 
-            //UdpRPCParser udpRPCParser = new UdpRPCParser();
-            //udpRPCParser.SerializeConverter = new BinarySerializeConverter();
-            //udpRPCParser.NameSpace = "RRQMTest";
-            //udpRPCParser.Bind(7701, threadCount);
-            //ShowMsg("UDP解析器添加完成");
+            UdpRPCParser udpRPCParser = new UdpRPCParser();
+            var udpConfig = new ServerConfig();
+            udpConfig.SetValue(UdpRPCParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7701) })
+                .SetValue(UdpRPCParserConfig.UseBindProperty, true)
+                .SetValue(UdpRPCParserConfig.BufferLengthProperty, 1024 * 64)
+                .SetValue(UdpRPCParserConfig.ThreadCountProperty, threadCount)
+                .SetValue(UdpRPCParserConfig.SerializeConverterProperty, new BinarySerializeConverter())
+                .SetValue(UdpRPCParserConfig.ProxyTokenProperty, "RPC")
+                .SetValue(UdpRPCParserConfig.NameSpaceProperty, "RRQMTest");
 
-            //TcpRPCParser tcpXmlRPCParser = new TcpRPCParser();
-            //tcpXmlRPCParser.SerializeConverter = new XmlSerializeConverter();
-            //tcpXmlRPCParser.NameSpace = "RRQMTest";
-            //tcpXmlRPCParser.Bind(7702, threadCount);
-            //ShowMsg("TCPXml解析器添加完成");
+            udpRPCParser.Setup(udpConfig);
+            udpRPCParser.Start();
 
-            //WebApiParser webApiParser = new WebApiParser();
-            //webApiParser.Bind(7703, threadCount);
-            //ShowMsg("webApiParser解析器添加完成");
+            ShowMsg("UDP解析器添加完成");
 
-            //XmlRpcParser xmlRpcParser = new XmlRpcParser();
-            //xmlRpcParser.Bind(7704, threadCount);
-            //ShowMsg("xmlRpcParser解析器添加完成");
+            WebApiParser webApiParser = new WebApiParser();
+            webApiParser.Setup(7703);
+            webApiParser.Start();
+            ShowMsg("webApiParser解析器添加完成");
 
-            //JsonRpcParser jsonRpcParser = new JsonRpcParser();
-            //jsonRpcParser.Bind(7705, threadCount);
-            //ShowMsg("jsonRpcParser解析器添加完成");
+            XmlRpcParser xmlRpcParser = new XmlRpcParser();
+            xmlRpcParser.Setup(7704);
+            xmlRpcParser.Start();
+            ShowMsg("xmlRpcParser解析器添加完成");
+
+            JsonRpcParser jsonRpcParser = new JsonRpcParser();
+            jsonRpcParser.Setup(7705);
+            jsonRpcParser.Start();
+            ShowMsg("jsonRpcParser解析器添加完成");
 
             rpcService.AddRPCParser("TcpParser", tcpRPCParser);
-            //rpcService.AddRPCParser("UdpParser", udpRPCParser);
-            //rpcService.AddRPCParser("tcpXmlRPCParser", tcpXmlRPCParser);
-            //rpcService.AddRPCParser("webApiParser", webApiParser);
-            //rpcService.AddRPCParser("xmlRpcParser", xmlRpcParser);
-            //rpcService.AddRPCParser("jsonRpcParser", jsonRpcParser);
+            rpcService.AddRPCParser("UdpParser", udpRPCParser);
+            rpcService.AddRPCParser("webApiParser", webApiParser);
+            rpcService.AddRPCParser("xmlRpcParser", xmlRpcParser);
+            rpcService.AddRPCParser("jsonRpcParser", jsonRpcParser);
 
             rpcService.OpenServer();
             ShowMsg("RPC启动完成");
-            //ShowMsg("使用浏览器访问以下连接测试WebApi");
+            ShowMsg("使用浏览器访问以下连接测试WebApi");
 
-            //foreach (var url in webApiParser.RouteMap.Urls)
-            //{
-            //    ShowMsg($"http://127.0.0.1:{webApiParser.Service.Port}{url}");
-            //}
+            foreach (var url in webApiParser.RouteMap.Urls)
+            {
+                ShowMsg($"http://127.0.0.1:{webApiParser.ListenIPHosts[0].Port}{url}");
+            }
         }
 
         private void TcpRPCParser_ClientDisconnected(object sender, MesEventArgs e)
@@ -162,7 +160,8 @@ namespace RRQMBox.Server.Win
             this.msgBox.Clear();
         }
 
-        int callBackCount;
+        private int callBackCount;
+
         private void CallBaclButton_Click(object sender, RoutedEventArgs e)
         {
             string id = this.Tb_ID.Text;
@@ -174,38 +173,25 @@ namespace RRQMBox.Server.Win
                     {
                         TcpRPCParser tcpRPCParser = (TcpRPCParser)parser;
                         try
-                        { 
+                        {
                             callBackCount++;
-                            string msg = tcpRPCParser.CallBack<string>(id, 1000, InvokeOption.CanFeedback, callBackCount);
+                            string msg = tcpRPCParser.CallBack<string>(id, 1000, InvokeOption.WaitInvoke, callBackCount);
                             ShowMsg(msg);
-                            tcpRPCParser.CallBack<string>(id, 1000, InvokeOption.CanFeedback, callBackCount);
+                            tcpRPCParser.CallBack<string>(id, 1000, InvokeOption.WaitInvoke, callBackCount);
                             ShowMsg("无返回值调用成功");
                         }
                         catch (Exception ex)
                         {
                             ShowMsg(ex.Message);
                         }
-
                     }
-
                 }
             });
-
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
             Server.isStart = (bool)((CheckBox)sender).IsChecked;
-        }
-
-        private void PublishEventButton_Click(object sender, RoutedEventArgs e)
-        {
-            //if (this.rpcService!=null && this.rpcService.TryGetRPCParser("TcpParser", out IRPCParser parser))
-            //{
-            //    TcpRPCParser tcpRPCParser =(TcpRPCParser) parser;
-            //    tcpRPCParser.PublishEvent<Action<string>>("TestEvent");
-            //}
-            MessageBox.Show("未开发");
         }
     }
 }

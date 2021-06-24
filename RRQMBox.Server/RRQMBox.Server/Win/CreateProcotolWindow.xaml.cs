@@ -1,21 +1,22 @@
-﻿using RRQMBox.Server.Common;
+//------------------------------------------------------------------------------
+//  此代码版权归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMBox.Server.Common;
 using RRQMCore.ByteManager;
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RRQMBox.Server.Win
 {
@@ -29,6 +30,7 @@ namespace RRQMBox.Server.Win
             InitializeComponent();
             this.Loaded += this.CreatProcotolWindow_Loaded;
         }
+
         private void ShowMsg(string msg)
         {
             this.UIInvoke(() =>
@@ -51,13 +53,14 @@ namespace RRQMBox.Server.Win
             this.Lb_OnlineClient.ItemsSource = this.onLineClient;
         }
 
-        SimpleProtocolService protocolService;
-        RRQMList<SocketClient> onLineClient;
+        private SimpleProtocolService protocolService;
+        private RRQMList<SocketClient> onLineClient;
+
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             CreateProtocol();
-
         }
+
         private void Bt_ResetID_Click(object sender, RoutedEventArgs e)
         {
             if (this.protocolService != null)
@@ -71,9 +74,9 @@ namespace RRQMBox.Server.Win
                 {
                     ShowMsg(ex.Message);
                 }
-
             }
         }
+
         private void CreateProtocol()
         {
             if (protocolService == null)
@@ -85,7 +88,6 @@ namespace RRQMBox.Server.Win
                 protocolService.Received += this.ProtocolService_Received; ;
             }
 
-           
             //属性设置
             var config = new ServerConfig();
             config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
@@ -93,9 +95,7 @@ namespace RRQMBox.Server.Win
                 .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
                 .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(ServerConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TcpServerConfig.IDFormatProperty, "TokenTcp-{0}")//设置分配ID的格式， 格式必须符合字符串格式，至少包含一个补位， 初始值为“{0}-TCP”
                 .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_Token.Text);
-
 
             //方法
             protocolService.Setup(config);
@@ -115,7 +115,6 @@ namespace RRQMBox.Server.Win
 
         private void Service_ClientConnected(object sender, MesEventArgs e)
         {
-
             this.UIInvoke(() =>
             {
                 this.onLineClient.Add((SocketClient)sender);
@@ -136,6 +135,7 @@ namespace RRQMBox.Server.Win
                 ShowMsg("服务器未绑定");
             }
         }
+
         private void Bt_Dispose_Click(object sender, RoutedEventArgs e)
         {
             if (protocolService != null && protocolService.ServerState == ServerState.Running)
@@ -154,7 +154,7 @@ namespace RRQMBox.Server.Win
         {
             if (arg2 == null)
             {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer,0, (int)byteBlock.Length);
+                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
                 ShowMsg($"接收到无协议信息：ID={arg1.ID},信息：{mes}");
             }
             else
@@ -162,7 +162,6 @@ namespace RRQMBox.Server.Win
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2);
                 ShowMsg($"接收到协议信息：ID={arg1.ID},协议={arg2},信息：{mes}");
             }
-            
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -177,7 +176,6 @@ namespace RRQMBox.Server.Win
                 {
                     ((SocketClient)this.Lb_OnlineClient.SelectedItem).Send(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
                 }
-
             }
             else
             {
@@ -185,7 +183,6 @@ namespace RRQMBox.Server.Win
             }
         }
 
-       
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
             this.msgBox.Clear();

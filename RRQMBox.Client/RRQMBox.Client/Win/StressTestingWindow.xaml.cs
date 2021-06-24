@@ -9,23 +9,15 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMMVVM;
+using RRQMSkin.Windows;
+using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RRQMMVVM;
-using RRQMSkin.Windows;
-using RRQMSocket;
 
 namespace RRQMBox.Client.Win
 {
@@ -60,7 +52,6 @@ namespace RRQMBox.Client.Win
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
             {
-
                 for (int i = 0; i < clientCount; i++)
                 {
                     if (!isTest)
@@ -71,7 +62,6 @@ namespace RRQMBox.Client.Win
 
                     try
                     {
-
                         testObject.Client = new SimpleTcpClient();
                         testObject.Data = data;
                         testObject.Num = i;
@@ -97,8 +87,6 @@ namespace RRQMBox.Client.Win
                 }
 
                 GroupSend();
-
-
             });
 
             Task.Run(async () =>
@@ -113,7 +101,6 @@ namespace RRQMBox.Client.Win
                     await Task.Delay(1000);
                 }
             });
-
         }
 
         private void GroupSend()
@@ -155,7 +142,8 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        bool isTest;
+        private bool isTest;
+
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             isTest = false;
@@ -191,7 +179,7 @@ namespace RRQMBox.Client.Win
         public static bool IsAsync { get; set; }
         public int Num { get; set; }
         public static EventWaitHandle waitHandle = new AutoResetEvent(false);
-        public static bool IsSend=true;
+        public static bool IsSend = true;
         private SimpleTcpClient client;
 
         public SimpleTcpClient Client
@@ -231,7 +219,6 @@ namespace RRQMBox.Client.Win
             }
         }
 
-
         public void Send()
         {
             try
@@ -252,9 +239,7 @@ namespace RRQMBox.Client.Win
             }
             catch
             {
-
             }
-
         }
 
         public void ShowInfo()

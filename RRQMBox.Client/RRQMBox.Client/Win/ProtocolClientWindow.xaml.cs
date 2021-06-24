@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //  此代码版权归作者本人若汝棋茗所有
 //  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
 //  CSDN博客：https://blog.csdn.net/qq_40374647
@@ -9,25 +9,12 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RRQMBox.Client.Model;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
+using System;
+using System.Text;
+using System.Windows;
 
 namespace RRQMBox.Client.Win
 {
@@ -57,11 +44,13 @@ namespace RRQMBox.Client.Win
             });
         }
 
-        SimpleProtocolClient client;
+        private SimpleProtocolClient client;
+
         private void TcpConnectButton_Click(object sender, RoutedEventArgs e)
         {
             CreateClient();
         }
+
         private void CreateClient()
         {
             if (client != null && client.Online)
@@ -88,7 +77,7 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private void Client_Received(short? arg1,ByteBlock byteBlock)
+        private void Client_Received(short? arg1, ByteBlock byteBlock)
         {
             if (arg1 == null)
             {
@@ -102,7 +91,6 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        
         private void TcpClient_DisconnectedService(object sender, MesEventArgs e)
         {
             ShowMsg($"{sender.GetType().Name}已断开连接");
@@ -116,18 +104,15 @@ namespace RRQMBox.Client.Win
 
         private void TcpDicConnectButton_Click(object sender, RoutedEventArgs e)
         {
-
             if (client != null)
             {
                 client.Dispose();
                 client = null;
             }
-
         }
 
         private void TcpSendButton_Click(object sender, RoutedEventArgs e)
         {
-
             if (this.Cb_IsAsync.IsChecked == true)
             {
                 client.SendAsync(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
@@ -136,18 +121,15 @@ namespace RRQMBox.Client.Win
             {
                 client.Send(Encoding.UTF8.GetBytes(this.Tb_TestMsg.Text));
             }
-
         }
+
         private void ResetIDButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.client!=null)
+            if (this.client != null)
             {
                 this.client.ResetID("MyClientID");
                 ShowMsg($"成功重置ID，当年ID={this.client.ID}");
             }
         }
     }
-
-
 }
-

@@ -9,19 +9,22 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMSocket;
+using RRQMSocket.RPC;
+using RRQMSocket.RPC.JsonRpc;
+using RRQMSocket.RPC.RRQMRPC;
+using RRQMSocket.RPC.WebApi;
+using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using RRQMSocket;
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
 
 namespace RRQMBox.Server
 {
-    //[Route("/[controller]/[action]")]
-    public class Server : ServerProvider
+    [Route("/[controller]/[action]")]
+    public class Server : ControllerBase
     {
         public Server()
         {
@@ -45,10 +48,12 @@ namespace RRQMBox.Server
         {
             ShowMsgMethod.Invoke(msg);
         }
+
         public static Action<string> ShowMsgMethod;
 
         private int a;
 
+        [Route]
         [RRQMRPC]
         public void PerformanceTest()
         {
@@ -62,7 +67,7 @@ namespace RRQMBox.Server
             ShowMsg($"TestNullReturnNullParameter,a={a}");
         }
 
-        //[Route]
+        [Route]
         [RRQMRPC]
         public string TestStringReturnNullParameter()
         {
@@ -70,7 +75,7 @@ namespace RRQMBox.Server
             return "若汝棋茗";
         }
 
-        //[Route]
+        [Route]
         [RRQMRPC]
         public void TestNullReturnStringParameter(string name)
         {
@@ -128,7 +133,7 @@ namespace RRQMBox.Server
             Task.Run(() =>
             {
                 InvokeOption invokeOption = new InvokeOption();
-                invokeOption.Feedback = true;
+                invokeOption.FeedbackType = FeedbackType.WaitInvoke;
                 invokeOption.WaitTime = 100;
                 try
                 {
@@ -142,8 +147,6 @@ namespace RRQMBox.Server
                     //或者这样直接调
                     string mes = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(iDToken, 1000, invokeOption, 10);
 
-
-
                     ShowMsg($"TestCallBack，mes={mes}");
                 }
                 catch (Exception ex)
@@ -153,7 +156,7 @@ namespace RRQMBox.Server
             });
         }
 
-       // [Route]
+        [Route]
         [RRQMRPC]
         public async Task<string> TestAsync()
         {
@@ -164,7 +167,7 @@ namespace RRQMBox.Server
             });
         }
 
-        //[Route]
+        [Route]
         [RRQMRPC]
         public List<Test01> TestReturnList()
         {
@@ -206,19 +209,19 @@ namespace RRQMBox.Server
         {
         }
 
-        //[XmlRpc]
-        //public string TestXmlRpc(string param, int a, double b, Args[] args)
-        //{
-        //    ShowMsg("TestXmlRpc");
-        //    return "若汝棋茗";
-        //}
+        [XmlRpc]
+        public string TestXmlRpc(string param, int a, double b, Args[] args)
+        {
+            ShowMsg("TestXmlRpc");
+            return "若汝棋茗";
+        }
 
-        //[JsonRpc]
-        //public string TestJsonRpc(int a)
-        //{
-        //    ShowMsg("TestJsonRpc");
-        //    return "若汝棋茗";
-        //}
+        [JsonRpc]
+        public string TestJsonRpc(int a)
+        {
+            ShowMsg("TestJsonRpc");
+            return "若汝棋茗";
+        }
     }
 
     public class Args

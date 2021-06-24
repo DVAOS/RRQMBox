@@ -13,19 +13,7 @@ using RRQMBox.Server.Model;
 using RRQMBox.Server.Win;
 using RRQMSkin.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RRQMBox.Server
 {
@@ -44,7 +32,6 @@ namespace RRQMBox.Server
             CreateTcpWindow window = new CreateTcpWindow(CreateType.TCP);
             window.Show();
             this.Close();
-
         }
 
         private void CreatFileService_Click(object sender, RoutedEventArgs e)
@@ -75,10 +62,20 @@ namespace RRQMBox.Server
             this.Close();
         }
 
+        private IdWorker idWorker = new IdWorker(4);
+
         private void CreatUdpService_Click(object sender, RoutedEventArgs e)
         {
-            CreateUdpWindow window = new CreateUdpWindow();
-            window.Show();
+            //CreateUdpWindow window = new CreateUdpWindow();
+            //window.Show();
+
+            TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+              {
+                  for (int i = 0; i < 100; i++)
+                  {
+                      long id = idWorker.nextId();
+                  }
+              });
         }
     }
 }
