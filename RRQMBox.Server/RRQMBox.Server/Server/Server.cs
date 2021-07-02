@@ -53,6 +53,8 @@ namespace RRQMBox.Server
 
         private int a;
 
+        [XmlRpc]
+        [JsonRpc]
         [Route]
         [RRQMRPC]
         public void PerformanceTest()
@@ -60,13 +62,17 @@ namespace RRQMBox.Server
             a++;
         }
 
-        //[Route]
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
         [RRQMRPC]
         public void TestNullReturnNullParameter()
         {
             ShowMsg($"TestNullReturnNullParameter,a={a}");
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [Route]
         [RRQMRPC]
         public string TestStringReturnNullParameter()
@@ -75,6 +81,18 @@ namespace RRQMBox.Server
             return "若汝棋茗";
         }
 
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public int TestIntReturnNullParameter()
+        {
+            ShowMsg("TestIntReturnNullParameter");
+            return 10;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
         [Route]
         [RRQMRPC]
         public void TestNullReturnStringParameter(string name)
@@ -113,6 +131,8 @@ namespace RRQMBox.Server
             occupation = "搬砖工程师";
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [RRQMRPC]
         public Test02 TestClass1AndClass2(Test01 test01)
         {
@@ -128,13 +148,10 @@ namespace RRQMBox.Server
         }
 
         [RRQMRPC]
-        public void TestCallBack(string iDToken)
+        public void TestCallBack(string id)
         {
             Task.Run(() =>
             {
-                InvokeOption invokeOption = new InvokeOption();
-                invokeOption.FeedbackType = FeedbackType.WaitInvoke;
-                invokeOption.WaitTime = 100;
                 try
                 {
                     //先判断SocketClient是否还在线，然后回调。
@@ -145,7 +162,7 @@ namespace RRQMBox.Server
                     //}
 
                     //或者这样直接调
-                    string mes = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(iDToken, 1000, invokeOption, 10);
+                    string mes = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(id, 1000, InvokeOption.WaitInvoke, 10);
 
                     ShowMsg($"TestCallBack，mes={mes}");
                 }
@@ -156,6 +173,8 @@ namespace RRQMBox.Server
             });
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [Route]
         [RRQMRPC]
         public async Task<string> TestAsync()
@@ -167,6 +186,8 @@ namespace RRQMBox.Server
             });
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [Route]
         [RRQMRPC]
         public List<Test01> TestReturnList()
@@ -178,6 +199,7 @@ namespace RRQMBox.Server
             return list;
         }
 
+        [JsonRpc]
         [RRQMRPC]
         public Dictionary<int, string> TestReturnDic()
         {
@@ -189,21 +211,29 @@ namespace RRQMBox.Server
             return valuePairs;
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [RRQMRPC]
         public void TestStringDefaultNullValue(string s = null)
         {
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [RRQMRPC]
         public void TestStringDefaultValue(string s = "123123123")
         {
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [RRQMRPC]
         public void TestValueDefaultValue(int a = 1234)
         {
         }
 
+        [XmlRpc]
+        [JsonRpc]
         [RRQMRPC]
         public void TestDoubleValueDefaultValue(double a = 1234.021)
         {
@@ -216,6 +246,7 @@ namespace RRQMBox.Server
             return "若汝棋茗";
         }
 
+        [XmlRpc]
         [JsonRpc]
         public string TestJsonRpc(int a)
         {

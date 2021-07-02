@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMRPC.RRQMTest;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
@@ -117,6 +118,15 @@ namespace RRQMBox.Client.RPCTest
             Test01 test01 = new Test01() { Age = 10, Name = "若汝棋茗" };
             Test02 test02 = server.TestClass1AndClass2(test01);
             ShowMsg($"Test09=>TestClass1AndClass2完成");
+        }
+
+        /// <summary>
+        /// 测试int返回值，无参数
+        /// </summary>
+        public void Test10()
+        {
+            int v = server.TestIntReturnNullParameter();
+            ShowMsg($"Test10=>TestIntReturnNullParameter完成,Return={v}");
         }
 
         public void Test11(string iDToken)

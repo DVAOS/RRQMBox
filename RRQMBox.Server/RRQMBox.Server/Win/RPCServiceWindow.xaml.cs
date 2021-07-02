@@ -9,6 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMBox.Server.Common;
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
@@ -86,7 +87,8 @@ namespace RRQMBox.Server.Win
                 .SetValue(TcpRPCParserConfig.SerializeConverterProperty, new BinarySerializeConverter())
                 .SetValue(TcpRPCParserConfig.ProxyTokenProperty, "RPC")
                 .SetValue(TokenServerConfig.VerifyTokenProperty, "123RPC")
-                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest");
+                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest")
+                .SetValue(TcpRPCParserConfig.RPCCompilerProperty,new RPCCompiler());//注入编译器（仅net4.5以上框架可用）
             tcpRPCParser.Setup(config);
             tcpRPCParser.Start();
             ShowMsg("TCP解析器添加完成，端口号：7700，VerifyToken=123RPC，ProxyToken=RPC");
@@ -107,7 +109,11 @@ namespace RRQMBox.Server.Win
             ShowMsg("UDP解析器添加完成");
 
             WebApiParser webApiParser = new WebApiParser();
-            webApiParser.Setup(7703);
+
+            var webApiConfig = new ServerConfig();
+            webApiConfig.SetValue(WebApiParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7703) })
+                .SetValue(WebApiParserConfig.ApiDataConverterProperty, new JsonDataConverter());
+            webApiParser.Setup(webApiConfig);
             webApiParser.Start();
             ShowMsg("webApiParser解析器添加完成");
 
@@ -117,7 +123,10 @@ namespace RRQMBox.Server.Win
             ShowMsg("xmlRpcParser解析器添加完成");
 
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
-            jsonRpcParser.Setup(7705);
+            var jsonRpcConfig = new ServerConfig();
+            jsonRpcConfig.SetValue(JsonRpcParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7705) })
+                .SetValue(JsonRpcParserConfig.JsonFormatConverterProperty, new TestJsonFormatConverter());
+            jsonRpcParser.Setup(jsonRpcConfig);
             jsonRpcParser.Start();
             ShowMsg("jsonRpcParser解析器添加完成");
 
@@ -128,6 +137,19 @@ namespace RRQMBox.Server.Win
             rpcService.AddRPCParser("jsonRpcParser", jsonRpcParser);
 
             rpcService.OpenServer();
+
+            ////通过检索，拿到TcpRPCParser解析器
+            //TcpRPCParser parser = (TcpRPCParser)rpcService.RPCParsers["TcpParser"];
+
+            ////通过解析器直接回调
+            //string mes = parser.CallBack<string>("ID", 1000, InvokeOption.WaitInvoke, 10);
+
+            ////先拿到socketClient，然后回调
+            //if (parser.TryGetSocketClient("ID",out RPCSocketClient socketClient))
+            //{
+            //   string msg= socketClient.CallBack<string>(1000, InvokeOption.WaitInvoke, 10);
+            //}
+
             ShowMsg("RPC启动完成");
             ShowMsg("使用浏览器访问以下连接测试WebApi");
 

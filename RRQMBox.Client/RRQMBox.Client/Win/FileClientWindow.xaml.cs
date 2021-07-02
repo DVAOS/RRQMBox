@@ -15,6 +15,7 @@ using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.IO;
@@ -343,7 +344,8 @@ namespace RRQMBox.Client.Win
                 var config = new FileClientConfig();
                 config.SetValue(FileClientConfig.LoggerProperty, new MsgLog(this.ShowMsg))
                     .SetValue(FileClientConfig.RemoteIPHostProperty, new IPHost(this.Tb_iPHost.Text))
-                    .SetValue(FileClientConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text);
+                    .SetValue(FileClientConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text)
+                    .SetValue(FileClientConfig.ReceiveDirectoryProperty,"C://新建文件夹");
                 fileClient.Setup(config);
                 fileClient.Connect();
             }
@@ -424,7 +426,7 @@ namespace RRQMBox.Client.Win
                     {
                         try
                         {
-                            ShowMsg(this.fileClient.Invoke<int>("Sum", InvokeOption.WaitInvoke, 10,20).ToString());
+                            ShowMsg(this.fileClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, i));
                         }
                         catch (Exception ex)
                         {

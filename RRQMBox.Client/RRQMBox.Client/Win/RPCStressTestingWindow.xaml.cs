@@ -12,6 +12,7 @@
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace RRQMBox.Client.Win
                     var config = new TcpRPCClientConfig();
                     config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
                           .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
-                          .SetValue(TokenClientConfig.SeparateThreadSendProperty, true);
+                          .SetValue(TcpRPCClientConfig.ProxyTokenProperty,"RPC");
                     try
                     {
                         testObject.Client.Setup(config);
@@ -76,7 +77,7 @@ namespace RRQMBox.Client.Win
                         TestObjects.Add(testObject);
                     });
                 }
-
+                Thread.Sleep(3000);
                 GroupSend();
             });
 
@@ -96,7 +97,7 @@ namespace RRQMBox.Client.Win
 
         private void GroupSend()
         {
-            int size = Math.Min(this.TestObjects.Count, 5);//每个线程托管的客户端
+            int size = Math.Min(this.TestObjects.Count, 1);//每个线程托管的客户端
             int threadCount;
             if (this.TestObjects.Count % size == 0)
             {
@@ -186,7 +187,7 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.WaitInvoke, os);
+                Client.Invoke("PerformanceTest", InvokeOption.OnlySend, os);
                 this.send++;
             }
             catch (Exception)

@@ -102,7 +102,6 @@ namespace RRQMBox.Client.Win
                 return;
             }
             tokenClient = new SimpleTokenClient();
-            tokenClient.DataHandlingAdapter = GetAdapter(this.Cb_AdapterType);
             tokenClient.ConnectedService += this.TcpClient_ConnectedService;
             tokenClient.DisconnectedService += this.TcpClient_DisconnectedService;
             tokenClient.Received += this.TcpClient_Received;

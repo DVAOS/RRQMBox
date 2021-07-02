@@ -96,9 +96,10 @@ namespace RRQMBox.Server.Win
             //注入配置
             var config = new ServerConfig();
             config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetValue(TcpServerConfig.ClearTypeProperty,ClearType.Receive)
                 .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
+                .SetValue(TcpServerConfig.ClearIntervalProperty, 10)//10秒无数据交互将被清理
                 .SetValue(ServerConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
 
             //载入配置
@@ -163,27 +164,27 @@ namespace RRQMBox.Server.Win
                     default:
                     case 0:
                         {
-                            arg1.DataHandlingAdapter = new NormalDataHandlingAdapter();
+                            arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
                             break;
                         }
                     case 1:
                         {
-                            arg1.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
+                            arg1.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
                             break;
                         }
                     case 2:
                         {
-                            arg1.DataHandlingAdapter = new FixedSizeDataHandlingAdapter(1024);
+                            arg1.SetDataHandlingAdapter(new FixedSizeDataHandlingAdapter(1024));
                             break;
                         }
                     case 3:
                         {
-                            arg1.DataHandlingAdapter = new TerminatorDataHandlingAdapter(1024, "\r\n");
+                            arg1.SetDataHandlingAdapter(new TerminatorDataHandlingAdapter(1024, "\r\n"));
                             break;
                         }
                     case 4:
                         {
-                            arg1.DataHandlingAdapter = new JsonStringDataHandlingAdapter();
+                            arg1.SetDataHandlingAdapter(new JsonStringDataHandlingAdapter());
                             break;
                         }
                 }
