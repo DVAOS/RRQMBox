@@ -55,7 +55,7 @@ namespace RRQMBox.Client.Common
                             {
                                 if (i == 0)
                                 {
-                                    methodInvoker.Parameters[i] = JsonConvert.DeserializeObject(httpRequest.BodyString, methodInstance.ParameterTypes[0]);
+                                    methodInvoker.Parameters[i] = JsonConvert.DeserializeObject(httpRequest.Body, methodInstance.ParameterTypes[0]);
                                 }
                                 else
                                 {

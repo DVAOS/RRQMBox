@@ -24,10 +24,9 @@ namespace RRQMBox.Server.Common
            return JsonConvert.DeserializeObject(jsonString,parameterType);
         }
 
-        public override void Serialize(Stream stream, object parameter)
+        public override string Serialize(object parameter)
         {
-            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(parameter));
-            stream.Write(data, 0, data.Length);
+           return JsonConvert.SerializeObject(parameter);
         }
     }
 }
