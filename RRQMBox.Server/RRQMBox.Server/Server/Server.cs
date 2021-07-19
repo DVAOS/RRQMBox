@@ -10,13 +10,13 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket;
-using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -89,6 +89,16 @@ namespace RRQMBox.Server
         {
             ShowMsg("TestIntReturnNullParameter");
             return 10;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public bool TestReturnBoolean()
+        {
+            ShowMsg("TestReturnBoolean");
+            return true;
         }
 
         [XmlRpc]
@@ -186,6 +196,15 @@ namespace RRQMBox.Server
             });
         }
 
+        [RRQMRPC]
+        public async Task TestTaskAsync()
+        {
+            await Task.Run(() =>
+            {
+                ShowMsg("TestAsync");
+            });
+        }
+
         [XmlRpc]
         [JsonRpc]
         [Route]
@@ -253,6 +272,59 @@ namespace RRQMBox.Server
             ShowMsg("TestJsonRpc");
             return "若汝棋茗";
         }
+
+        [XmlRpc]
+        [JsonRpc]
+        [RRQMRPC]
+        public List<FileModel> TestFileModelList()
+        {
+            List<FileModel> fileModels = new List<FileModel>();
+            fileModels.Add(new FileModel());
+            fileModels.Add(new FileModel());
+            fileModels.Add(new FileModel());
+            return fileModels;
+        }
+    }
+
+    [Serializable]
+    public class FileModel
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        private int id;
+        /// <summary>
+        /// 文件名
+        /// </summary>
+        private string fileName;
+        /// <summary>
+        /// 文件路径（相对路径=文件名）
+        /// </summary>
+        private string filePath;
+        /// <summary>
+        /// 服务器工作空间
+        /// </summary>
+        private string serverWorkspace;
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        private string updateDate;
+        /// <summary>
+        /// 大小
+        /// </summary>
+        private long size;
+        /// <summary>
+        /// 备注
+        /// </summary>
+        private string remarks;
+
+        public int Id { get => id; set => id = value; }
+        public string FileName { get => fileName; set => fileName = value; }
+        public string UpdateDate { get => updateDate; set => updateDate = value; }
+        public long Size { get => size; set => size = value; }
+        public string Remarks { get => remarks; set => remarks = value; }
+        public string FilePath { get => filePath; set => filePath = value; }
+        public string ServerWorkspace { get => serverWorkspace; set => serverWorkspace = value; }
     }
 
     public class Args

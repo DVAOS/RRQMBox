@@ -10,9 +10,9 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using CookComputing.XmlRpc;
+using Newtonsoft.Json;
 using RRQMBox.Client.Common;
 using RRQMBox.Client.RPCTest;
-using RRQMRPC.RRQMTest;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
@@ -20,9 +20,8 @@ using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.XmlRpc;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -67,16 +66,12 @@ namespace RRQMBox.Client.Win
 
         private void XmlRpcButton_Click(object sender, RoutedEventArgs e)
         {
-
             TestXmlRpc();
-
         }
 
         private void JsonRpcButton_Click(object sender, RoutedEventArgs e)
         {
-
             TestJsonRpc();
-
         }
 
         private void IDInvokenButton_Click(object sender, RoutedEventArgs e)
@@ -85,27 +80,33 @@ namespace RRQMBox.Client.Win
             window.Show();
         }
 
+        TcpRPCClient client;
         private void BinarySerialize()
         {
             //序列化默认为二进制
-            TcpRPCClient client = new TcpRPCClient();
-            var config = new TcpRPCClientConfig();
-            config.SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
-                .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
-                .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
-                .SetValue(TcpRPCClientConfig.ProxyTokenProperty, "RPC");
+            if (client == null)
+            {
+                client = new TcpRPCClient();
+                client.ServiceDiscovered += this.Client_RPCInitialized1;
+                var config = new TcpRPCClientConfig();
+                config.SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
+                    .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
+                    .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
+                    .SetValue(TcpRPCClientConfig.ProxyTokenProperty, "RPC");
 
-            //开启反向RPC，先注册
-            client.RegisterServer(new CallBackServer());
-            
-            client.Setup(config);
+                
+                config.SetValue(TcpRPCClientConfig.SerializeConverterProperty,new JsonSerializeConverter());
 
-            //先链接到服务器，该语句可省略。
-            client.Connect();
+                //开启反向RPC，先注册
+                client.RegisterServer<CallBackServer>();
+                client.Setup(config);
 
-            client.DiscoveryService();
+                client.DiscoveryService();
 
-            
+                //与InitializeRPC等效。
+                //client.Connect();
+
+            }
 
             RemoteTest remoteTest = new RemoteTest(client);
 
@@ -123,8 +124,22 @@ namespace RRQMBox.Client.Win
             remoteTest.Test13();
             remoteTest.Test14();
             remoteTest.Test15(client.ID);//调用服务，然后让服务再回调RPC
+            remoteTest.Test16();
+            remoteTest.Test17();
+            remoteTest.Test18();
+            remoteTest.Test19();
 
             ShowMsg("二进制测试完成");
+        }
+
+        private void Client_RPCInitialized1(object sender, MesEventArgs e)
+        {
+            ShowMsg("初始化完成");
+        }
+
+        private void ReGetServerProxyButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.client.DiscoveryService(true);
         }
 
         private void GetProxyFileButton_Click(object sender, RoutedEventArgs e)
@@ -192,15 +207,8 @@ namespace RRQMBox.Client.Win
 
         private void Client_RPCInitialized(object sender, MesEventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
-
-        //private void Client_ReceivedByteBlock(object sender, RRQMCore.ByteManager.ByteBlock e)
-        //{
-        //    ShowMsg($"收到独立消息：{Encoding.UTF8.GetString(e.Buffer, 0, (int)e.Length)}");
-        //}
-
-
 
         private void TestXmlRpc()
         {
@@ -215,7 +223,6 @@ namespace RRQMBox.Client.Win
             string mes = iclient.TestXmlRpc("test", 10, 10.00, new Args[] { new Args() { P3 = "P" }, new Args() { P3 = "PP" } }); //调用
             ShowMsg($"收到返回数据：{mes}");
 
-            
             ShowMsg("即将测试RRQMXmlRpc");
             XmlRPCClient client = new XmlRPCClient();
             var config = new TcpRPCClientConfig();
@@ -235,7 +242,6 @@ namespace RRQMBox.Client.Win
             remoteTest.Test12();
             remoteTest.Test14();
             ShowMsg("RRQMXmlRpc测试完成");
-
         }
 
         private void TestJsonRpc()
@@ -244,7 +250,8 @@ namespace RRQMBox.Client.Win
             var config = new TcpRPCClientConfig();
             config.SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
                 .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7705"))
-                .SetValue(JsonRPCClientConfig.JsonFormatConverterProperty, new TestJsonFormatConverter());//此处序列化器使用的是Json库
+                .SetValue(JsonRPCClientConfig.JsonFormatConverterProperty, new TestJsonFormatConverter())//此处序列化器使用的是Json库
+                .SetValue(JsonRPCClientConfig.ProtocolTypeProperty, JsonRpcProtocolType.Tcp);
 
             client.Setup(config);
 
@@ -261,8 +268,13 @@ namespace RRQMBox.Client.Win
             remoteTest.Test12();
             remoteTest.Test13();
             remoteTest.Test14();
+            remoteTest.Test16();
+            remoteTest.Test17();
+            remoteTest.Test19();
             ShowMsg("JsonRPC测试完成");
         }
+
+
     }
 
     /// <summary>

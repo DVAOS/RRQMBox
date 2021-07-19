@@ -18,14 +18,31 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Border Grid.RowSpan="3" Background="#1F1F1F" BorderBrush="#1B6DE0" BorderThickness="2" CornerRadius="10">
+        <Border
+            Grid.RowSpan="3" Background="#1F1F1F"
+            BorderBrush="#1B6DE0" BorderThickness="2"
+            CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="White" />
             </Border.Effect>
         </Border>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="确定保存路径" />
-        <TextBox x:Name="pathBox" Grid.Row="1" Width="240" Margin="5" HorizontalAlignment="Left" Style="{DynamicResource inputBox}" TextChanged="pathBox_TextChanged" />
-        <controls:CorrugatedButton Grid.Row="1" Width="30" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Click="CorrugatedButton_Click_1" Content="..." CornerRadius="2" />
-        <controls:CorrugatedButton Grid.Row="2" Width="100" Height="30" Click="CorrugatedButton_Click" Content="确定" />
+        <TextBlock
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            FontSize="20" Text="确定保存路径" />
+        <TextBox
+            x:Name="pathBox" Grid.Row="1"
+            Width="240" Margin="5"
+            HorizontalAlignment="Left"
+            Style="{DynamicResource inputBox}"
+            TextChanged="pathBox_TextChanged" />
+        <controls:CorrugatedButton
+            Grid.Row="1" Width="30"
+            Margin="5" HorizontalAlignment="Right"
+            VerticalAlignment="Center" Click="CorrugatedButton_Click_1"
+            Content="..." CornerRadius="2" />
+        <controls:CorrugatedButton
+            Grid.Row="2" Width="100"
+            Height="30" Click="CorrugatedButton_Click"
+            Content="确定" />
     </Grid>
 </UserControl>

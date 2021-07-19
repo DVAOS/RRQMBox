@@ -10,7 +10,6 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMRPC.RRQMTest;
-using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
@@ -22,6 +21,7 @@ namespace RRQMBox.Client.RPCTest
         public RemoteTest(IRPCClient client)
         {
             server = new Server(client);
+            //otherAssemblyServer = new OtherAssemblyServer(client);
         }
 
         private void ShowMsg(string msg)
@@ -32,7 +32,7 @@ namespace RRQMBox.Client.RPCTest
         public static Action<string> ShowMsgMethod;
 
         private IServer server;
-
+        //private IOtherAssemblyServer otherAssemblyServer;
         /// <summary>
         /// 测试无返回值无参数
         /// </summary>
@@ -157,6 +157,40 @@ namespace RRQMBox.Client.RPCTest
         {
             server.TestCallBack(iDToekn);
             ShowMsg($"Test15=>TestCallBack完成");
+        }
+
+        public void Test16()
+        {
+            try
+            {
+                //int sum = otherAssemblyServer.Sum(10, 20);
+                // ShowMsg($"Test16=>Sum完成,结果为：{sum}");
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
+        }
+
+        public void Test17()
+        {
+
+            List<FileModel> fileModels = server.TestFileModelList();
+            ShowMsg($"Test17=>TestFileModelList完成,长度为：{fileModels.Count}");
+
+        }
+
+        public void Test18()
+        {
+            server.TestTaskAsync();
+            ShowMsg($"Test18=>TestTaskAsync完成");
+        }
+
+        public void Test19()
+        {
+            server.TestReturnBoolean();
+            ShowMsg($"Test19=>TestReturnBoolean完成");
         }
     }
 }

@@ -34,4 +34,25 @@ namespace RRQMBox.Client.Common
             return JsonConvert.SerializeObject(parameter);
         }
     }
+
+    public class JsonSerializeConverter : RRQMSocket.RPC.RRQMRPC.SerializeConverter
+    {
+        public override object DeserializeParameter(byte[] parameterBytes, Type parameterType)
+        {
+            if (parameterBytes == null)
+            {
+                return null;
+            }
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(parameterBytes), parameterType);
+        }
+
+        public override byte[] SerializeParameter(object parameter)
+        {
+            if (parameter == null)
+            {
+                return null;
+            }
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(parameter)) ;
+        }
+    }
 }

@@ -12,7 +12,6 @@
 using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
-using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Linq;
@@ -61,11 +60,11 @@ namespace RRQMBox.Client.Win
                     var config = new TcpRPCClientConfig();
                     config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
                           .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
-                          .SetValue(TcpRPCClientConfig.ProxyTokenProperty,"RPC");
+                          .SetValue(TcpRPCClientConfig.ProxyTokenProperty, "RPC");
                     try
                     {
                         testObject.Client.Setup(config);
-                        testObject.Client.Connect();
+                        testObject.Client.DiscoveryService();
                         testObject.Status = "连接成功";
                     }
                     catch
@@ -187,7 +186,7 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.OnlySend, os);
+                Client.Invoke("PerformanceTest", InvokeOption.WaitInvoke, os);//14500
                 this.send++;
             }
             catch (Exception)

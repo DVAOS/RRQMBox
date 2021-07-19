@@ -12,7 +12,7 @@
 using RRQMBox.Server.Model;
 using RRQMBox.Server.Win;
 using RRQMSkin.Windows;
-using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace RRQMBox.Server
@@ -62,20 +62,17 @@ namespace RRQMBox.Server
             this.Close();
         }
 
-        private IdWorker idWorker = new IdWorker(4);
-
         private void CreatUdpService_Click(object sender, RoutedEventArgs e)
         {
-            //CreateUdpWindow window = new CreateUdpWindow();
-            //window.Show();
+            CreateUdpWindow window = new CreateUdpWindow();
+            window.Show();
+        }
 
-            TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-              {
-                  for (int i = 0; i < 100; i++)
-                  {
-                      long id = idWorker.nextId();
-                  }
-              });
+        private void CreatXunitTestService_Click(object sender, RoutedEventArgs e)
+        {
+            XUnitWindow window = new XUnitWindow();
+            window.Show();
+            this.Close();
         }
     }
 }

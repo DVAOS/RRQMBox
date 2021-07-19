@@ -56,7 +56,9 @@ namespace RRQMBox.Server.Win
             if ((bool)this.Cb_UseBind.IsChecked)
             {
                 config.SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定
-                    .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) });//绑定的IP，udp只能绑定一个地址。
+                    .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })//绑定的IP，udp只能绑定一个地址。
+                    .SetValue(UdpSessionConfig.SeparateThreadReceiveProperty,false)
+                    .SetValue(UdpSessionConfig.ThreadCountProperty,5);
             }
 
             this.udpSession.Setup(config);//加载配置

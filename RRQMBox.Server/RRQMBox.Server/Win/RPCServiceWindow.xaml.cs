@@ -9,6 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using Newtonsoft.Json;
 using RRQMBox.Server.Common;
 using RRQMMVVM;
 using RRQMSkin.Windows;
@@ -19,6 +20,9 @@ using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -65,8 +69,7 @@ namespace RRQMBox.Server.Win
         }
 
         private RPCService rpcService;
-
-        
+        TcpRPCParser tcpRPCParser;
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             if (rpcService != null)
@@ -75,9 +78,9 @@ namespace RRQMBox.Server.Win
             }
             int threadCount = int.Parse(this.Tb_ThreadCount.Text);
             rpcService = new RPCService();
-            
 
-            TcpRPCParser tcpRPCParser = new TcpRPCParser();
+
+            tcpRPCParser = new TcpRPCParser();
             tcpRPCParser.ClientConnected += this.TcpRPCParser_ClientConnected;
             tcpRPCParser.ClientDisconnected += this.TcpRPCParser_ClientDisconnected;
             var config = new ServiceConfig();
@@ -87,7 +90,10 @@ namespace RRQMBox.Server.Win
                 .SetValue(TcpRPCParserConfig.SerializeConverterProperty, new BinarySerializeConverter())
                 .SetValue(TcpRPCParserConfig.ProxyTokenProperty, "RPC")
                 .SetValue(TokenServiceConfig.VerifyTokenProperty, "123RPC")
-                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest");
+                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest")
+                .SetValue(TcpRPCParserConfig.SeparateThreadReceiveProperty, false);
+
+            config.SetValue(TcpRPCParserConfig.SerializeConverterProperty, new JsonSerializeConverter());
             tcpRPCParser.Setup(config);
             tcpRPCParser.Start();
             ShowMsg("TCP解析器添加完成，端口号：7700，VerifyToken=123RPC，ProxyToken=RPC");
@@ -97,7 +103,7 @@ namespace RRQMBox.Server.Win
             udpConfig.SetValue(UdpRPCParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7701) })
                 .SetValue(UdpRPCParserConfig.UseBindProperty, true)
                 .SetValue(UdpRPCParserConfig.BufferLengthProperty, 1024 * 64)
-                .SetValue(UdpRPCParserConfig.ThreadCountProperty, threadCount)
+                .SetValue(UdpRPCParserConfig.ThreadCountProperty, 1)
                 .SetValue(UdpRPCParserConfig.SerializeConverterProperty, new BinarySerializeConverter())
                 .SetValue(UdpRPCParserConfig.ProxyTokenProperty, "RPC")
                 .SetValue(UdpRPCParserConfig.NameSpaceProperty, "RRQMTest");
@@ -124,7 +130,8 @@ namespace RRQMBox.Server.Win
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
             var jsonRpcConfig = new ServiceConfig();
             jsonRpcConfig.SetValue(JsonRpcParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7705) })
-                .SetValue(JsonRpcParserConfig.JsonFormatConverterProperty, new TestJsonFormatConverter());
+                .SetValue(JsonRpcParserConfig.JsonFormatConverterProperty, new TestJsonFormatConverter())
+                .SetValue(JsonRpcParserConfig.ProtocolTypeProperty, JsonRpcProtocolType.Tcp);
             jsonRpcParser.Setup(jsonRpcConfig);
             jsonRpcParser.Start();
             ShowMsg("jsonRpcParser解析器添加完成");
@@ -135,8 +142,9 @@ namespace RRQMBox.Server.Win
             rpcService.AddRPCParser("xmlRpcParser", xmlRpcParser);
             rpcService.AddRPCParser("jsonRpcParser", jsonRpcParser);
 
-            rpcService.RegisterAllServer();//注册所有服务
-           
+            rpcService.RegisterServer<Server>();//注册服务
+            rpcService.RegisterServer<MyOperation>();//注册服务
+
 
             ////通过检索，拿到TcpRPCParser解析器
             //TcpRPCParser parser = (TcpRPCParser)rpcService.RPCParsers["TcpParser"];
@@ -214,6 +222,70 @@ namespace RRQMBox.Server.Win
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
             Server.isStart = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void PublishEventButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.rpcService != null && this.rpcService.TryGetRPCParser("TcpParser", out IRPCParser parser))
+            {
+                TcpRPCParser tcpRPCParser = (TcpRPCParser)parser;
+                //tcpRPCParser.PublishEvent<Action<string>>("TestEvent");
+            }
+        }
+
+        string path = @"E:\CodeOpen\RRQMSocketFramework\TestDemo\Server\RpcArgsClassLib\bin\Debug\net461\RpcArgsClassLib.dll";
+        private void AddServerButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] data = File.ReadAllBytes(path);
+            Assembly assembly = Assembly.Load(data);
+            Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
+            rpcService.RegisterServer(serverType);
+            ShowMsg("服务增加成功");
+        }
+
+        private void RemoveServerButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] data = File.ReadAllBytes(path);
+            Assembly assembly = Assembly.Load(data);
+            Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
+
+            rpcService.UnregisterServer(serverType);
+            ShowMsg("服务解除成功");
+        }
+
+        private void UpdateServerButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] data = File.ReadAllBytes(path);
+            Assembly assembly = Assembly.Load(data);
+            Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
+
+            rpcService.UpdateRegisteredServer(serverType);
+            ShowMsg("服务更新成功");
+        }
+
+        private void CompilerButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tcpRPCParser.CompilerProxy();
+            ShowMsg("编译成功");
+        }
+    }
+
+    public class JsonSerializeConverter : RRQMSocket.RPC.RRQMRPC.SerializeConverter
+    {
+        public override object DeserializeParameter(byte[] parameterBytes, Type parameterType)
+        {
+            if (parameterBytes == null)
+            {
+                return null;
+            }
+           
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(parameterBytes), parameterType);
+        }
+
+        public override byte[] SerializeParameter(object parameter)
+        {
+            
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(parameter));
         }
     }
 }

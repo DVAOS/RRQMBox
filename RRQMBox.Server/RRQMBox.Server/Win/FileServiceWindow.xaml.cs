@@ -59,8 +59,8 @@ namespace RRQMBox.Server.Win
                 fileService.Received += this.FileService_Received;
 
                 RPCService rPCService = new RPCService();
-                
                 rPCService.AddRPCParser("fileService", fileService);
+
                 rPCService.RegisterServer<MyOperation>();
             }
 

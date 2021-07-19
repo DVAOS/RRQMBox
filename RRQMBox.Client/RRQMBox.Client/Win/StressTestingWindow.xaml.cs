@@ -68,7 +68,7 @@ namespace RRQMBox.Client.Win
 
                         var config = new TcpClientConfig();
                         config.SetValue(TcpClientConfig.OnlySendProperty, true)
-                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("192.168.1.12:7790"))
+                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7790"))
                         .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new FixedHeaderDataHandlingAdapter())
                         .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
 

@@ -20,16 +20,59 @@
         </Grid.RowDefinitions>
         <GroupBox Margin="5" Header="客户端测试">
             <WrapPanel Margin="10">
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="RRQMBinaryButton_Click" Content="测试RRQM TCP Binary" />
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="GetProxyFileButton_Click" Content="测试获取代理文件" />
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="RRQMUDPBinaryButton_Click" Content="测试RRQM UDP Binary" />
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="XmlRpcButton_Click" Content="测试XmlRpc" />
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="JsonRpcButton_Click" Content="测试JsonRpc" />
-                <controls:CorrugatedButton Width="200" Height="40" Margin="10" Click="IDInvokenButton_Click" Content="测试ID调用" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="RRQMBinaryButton_Click"
+                    Content="RRQMRPC" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="ReGetServerProxyButton_Click"
+                    Content="重新发现服务" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="GetProxyFileButton_Click"
+                    Content="获取代理文件" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="RRQMUDPBinaryButton_Click"
+                    Content="UDP RRQMRPC" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="XmlRpcButton_Click"
+                    Content="XmlRpc" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="JsonRpcButton_Click"
+                    Content="测试JsonRpc" />
+                <controls:CorrugatedButton
+                    Width="150"
+                    Height="40"
+                    Margin="10"
+                    Click="IDInvokenButton_Click"
+                    Content="测试ID调用" />
             </WrapPanel>
         </GroupBox>
-        <GroupBox Grid.Row="3" Margin="3" Header="日志输出">
-            <TextBox x:Name="msgBox" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource foregroundColor}" />
+        <GroupBox
+            Grid.Row="3"
+            Margin="3"
+            Header="日志输出">
+            <TextBox
+                x:Name="msgBox"
+                Background="Transparent"
+                BorderThickness="0"
+                Foreground="{DynamicResource foregroundColor}" />
         </GroupBox>
     </Grid>
 </windows:RRQMWindow>
