@@ -11,21 +11,75 @@
                     Height="600"
                     Style="{DynamicResource RRQMWindowStyle}"
                     mc:Ignorable="d">
-    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <controls:CorrugatedButton x:Name="CreatFileService" Grid.Column="0" Width="150" Height="100" Margin="10"
-                                   Click="CreatFileService_Click" Content="文件服务器" />
-        <controls:CorrugatedButton x:Name="CreatTcpService" Grid.Column="1" Width="150" Height="100" Margin="10"
-                                   Click="CreatTcpService_Click" Content="TCP服务器" />
-        <controls:CorrugatedButton x:Name="CreatTokenTcpService" Grid.Column="2" Width="150" Height="100" Margin="10"
-                                   Click="CreatTokenTcpService_Click" Content="TokenTCP服务器" />
-        <controls:CorrugatedButton x:Name="CreatRPCService" Grid.Column="3" Width="150" Height="100" Margin="10"
-                                   Click="CreatRPCService_Click" Content="RPC服务器" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="TB_Tip"
+                     Width="500"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     FontSize="16"
+                     Foreground="{StaticResource foregroundColor}"
+                     TextWrapping="Wrap" />
+        </StackPanel>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <controls:CorrugatedButton x:Name="CreatFileService"
+                                       Grid.Column="0"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatFileService_Click"
+                                       Content="文件服务器" />
+            <controls:CorrugatedButton x:Name="CreatTcpService"
+                                       Grid.Column="1"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatTcpService_Click"
+                                       Content="TCP服务器" />
+            <controls:CorrugatedButton x:Name="CreatTokenTcpService"
+                                       Grid.Column="2"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatTokenTcpService_Click"
+                                       Content="TokenTCP服务器" />
+            <controls:CorrugatedButton x:Name="CreatRPCService"
+                                       Grid.Column="3"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatRPCService_Click"
+                                       Content="RPC服务器" />
 
-        <controls:CorrugatedButton x:Name="CreatProtocolService" Grid.Row="1" Grid.Column="0" Width="150" Height="100"
-                                   Margin="10" Click="CreatProtocolService_Click" Content="Procotol服务器" />
-        <controls:CorrugatedButton x:Name="CreatUdpService" Grid.Row="1" Grid.Column="1" Width="150" Height="100"
-                                   Margin="10" Click="CreatUdpService_Click" Content="Udp服务器" />
-        <controls:CorrugatedButton x:Name="CreatXunitTestService" Grid.Row="1" Grid.Column="1" Width="150" Height="100"
-                                   Margin="10" Click="CreatXunitTestService_Click" Content="Xunit测试服务器" />
-    </WrapPanel>
+            <controls:CorrugatedButton x:Name="CreatProtocolService"
+                                       Grid.Row="1"
+                                       Grid.Column="0"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatProtocolService_Click"
+                                       Content="Procotol服务器" />
+            <controls:CorrugatedButton x:Name="CreatUdpService"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatUdpService_Click"
+                                       Content="Udp服务器" />
+            <controls:CorrugatedButton x:Name="CreatXunitTestService"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Width="150"
+                                       Height="100"
+                                       Margin="10"
+                                       Click="CreatXunitTestService_Click"
+                                       Content="Xunit测试服务器" />
+        </WrapPanel>
+    </Grid>
+
 </windows:RRQMWindow>
