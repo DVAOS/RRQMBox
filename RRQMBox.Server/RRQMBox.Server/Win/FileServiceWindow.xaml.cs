@@ -59,18 +59,18 @@ namespace RRQMBox.Server.Win
                 fileService.Received += this.FileService_Received;
 
                 RPCService rPCService = new RPCService();
-                rPCService.RegistServer<MyOperation>();
+                
                 rPCService.AddRPCParser("fileService", fileService);
-                rPCService.OpenServer();
+                rPCService.RegisterServer<MyOperation>();
             }
 
             try
             {
                 var config = new FileServiceConfig();
-                config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                    .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))
+                config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                    .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))
                     .SetValue(RRQMConfig.LoggerProperty, new MsgLog(this.ShowMsg))
-                    .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text)
+                    .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_VerifyToken.Text)
                     .SetValue(FileServiceConfig.BreakpointResumeProperty, (bool)this.Cb_breakpointResume.IsChecked)
                     .SetValue(FileServiceConfig.MaxDownloadSpeedProperty, 1024 * 1024 * 10L)
                     .SetValue(FileServiceConfig.MaxUploadSpeedProperty, 1024 * 1024 * 10L);

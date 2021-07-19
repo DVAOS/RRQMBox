@@ -94,19 +94,19 @@ namespace RRQMBox.Server.Win
             this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
 
             //注入配置
-            var config = new ServerConfig();
-            config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                .SetValue(TcpServerConfig.ClearTypeProperty,ClearType.Receive)
-                .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
-                .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServerConfig.ClearIntervalProperty, 10)//10秒无数据交互将被清理
-                .SetValue(ServerConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+            var config = new ServiceConfig();
+            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetValue(TcpServiceConfig.ClearTypeProperty,ClearType.Receive)
+                .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
+                .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
+                .SetValue(TcpServiceConfig.ClearIntervalProperty, 10)//10秒无数据交互将被清理
+                .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
 
             //载入配置
             tcpService.Setup(config);
 
             //或通过实例注入配置，实例注入时须实例化对应配置，否则部分属性不可见
-            //var config1 = new TcpServerConfig();
+            //var config1 = new TcpServiceConfig();
             //config1.ListenIPHosts = new IPHost[] { new IPHost(this.Tb_iPHost.Text) };
             //config1.Logger = new MsgLog(this.ShowMsg);
             //config1.ThreadCount = int.Parse(this.Tb_ThreadCount.Text);
@@ -137,13 +137,13 @@ namespace RRQMBox.Server.Win
             this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
 
             //属性设置
-            var config = new ServerConfig();
-            config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                .SetValue(ServerConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
-                .SetValue(ServerConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServerConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
-                .SetValue(ServerConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TokenServerConfig.VerifyTokenProperty, this.Tb_Token.Text);
+            var config = new ServiceConfig();
+            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
+                .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
+                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
+                .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+                .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_Token.Text);
 
             //方法
             this.tokenService.Setup(config);

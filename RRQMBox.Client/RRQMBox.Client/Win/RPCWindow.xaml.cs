@@ -96,15 +96,16 @@ namespace RRQMBox.Client.Win
                 .SetValue(TcpRPCClientConfig.ProxyTokenProperty, "RPC");
 
             //开启反向RPC，先注册
-            client.RegistServer(new CallBackServer());
-            client.OpenCallBackServer();
-
+            client.RegisterServer(new CallBackServer());
+            
             client.Setup(config);
 
-            client.InitializeRPC();
-
-            //与InitializeRPC等效。
+            //先链接到服务器，该语句可省略。
             client.Connect();
+
+            client.DiscoveryService();
+
+            
 
             RemoteTest remoteTest = new RemoteTest(client);
 
@@ -157,8 +158,8 @@ namespace RRQMBox.Client.Win
         private void UDPBinarySerialize()
         {
             UdpRPCClient client = new UdpRPCClient();
-            client.RPCInitialized += this.Client_RPCInitialized;
-            var config = new ServerConfig();
+            client.ServiceDiscovered += this.Client_RPCInitialized;
+            var config = new ServiceConfig();
             config.SetValue(UdpRPCClientConfig.DefaultRemotePointProperty, new IPHost("127.0.0.1:7701").EndPoint)
                 .SetValue(UdpRPCClientConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(8848) })
                 .SetValue(RRQMConfig.BufferLengthProperty, 1024 * 64)
@@ -168,7 +169,7 @@ namespace RRQMBox.Client.Win
             client.Setup(config);
             client.Start();
 
-            client.InitializeRPC();
+            client.DiscoveryService();
 
             ShowMsg("UDP初始化成功");
 
@@ -191,7 +192,7 @@ namespace RRQMBox.Client.Win
 
         private void Client_RPCInitialized(object sender, MesEventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
 
         //private void Client_ReceivedByteBlock(object sender, RRQMCore.ByteManager.ByteBlock e)

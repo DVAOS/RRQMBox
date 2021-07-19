@@ -71,8 +71,7 @@ namespace RRQMBox.Client.Win
                 this.Client.Setup(config);
                 this.Client.Connect();
                 ShowMsg("连接成功");
-                this.Client.RegistServer(new IDCallBackServer(ShowMsg));
-                this.Client.OpenCallBackServer();
+                this.Client.RegisterServer(new IDCallBackServer(ShowMsg));
                 this.TitleContent = Client.ID;
             }
             catch (Exception ex)

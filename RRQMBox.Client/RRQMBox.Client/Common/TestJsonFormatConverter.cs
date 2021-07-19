@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using Newtonsoft.Json;
+using RRQMCore.Helper;
 using RRQMSocket.RPC.JsonRpc;
 using System;
 using System.IO;
@@ -21,7 +22,11 @@ namespace RRQMBox.Client.Common
     {
         public override object Deserialize(string jsonString, Type parameterType)
         {
-           return JsonConvert.DeserializeObject(jsonString,parameterType);
+            if (parameterType.IsPrimitive || parameterType == typeof(string))
+            {
+                return jsonString.ParseToType(parameterType);
+            }
+            return JsonConvert.DeserializeObject(jsonString, parameterType);
         }
 
         public override string Serialize(object parameter)

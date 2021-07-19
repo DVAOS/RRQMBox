@@ -75,26 +75,25 @@ namespace RRQMBox.Server.Win
             }
             int threadCount = int.Parse(this.Tb_ThreadCount.Text);
             rpcService = new RPCService();
-            rpcService.RegistAllServer();//注册所有服务
+            
 
             TcpRPCParser tcpRPCParser = new TcpRPCParser();
             tcpRPCParser.ClientConnected += this.TcpRPCParser_ClientConnected;
             tcpRPCParser.ClientDisconnected += this.TcpRPCParser_ClientDisconnected;
-            var config = new ServerConfig();
-            config.SetValue(ServerConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7700) })
-                .SetValue(ServerConfig.ThreadCountProperty, threadCount)
-                .SetValue(TcpServerConfig.ClearIntervalProperty, 600)
+            var config = new ServiceConfig();
+            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7700) })
+                .SetValue(ServiceConfig.ThreadCountProperty, threadCount)
+                .SetValue(TcpServiceConfig.ClearIntervalProperty, 600)
                 .SetValue(TcpRPCParserConfig.SerializeConverterProperty, new BinarySerializeConverter())
                 .SetValue(TcpRPCParserConfig.ProxyTokenProperty, "RPC")
-                .SetValue(TokenServerConfig.VerifyTokenProperty, "123RPC")
-                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest")
-                .SetValue(TcpRPCParserConfig.RPCCompilerProperty,new RPCCompiler());//注入编译器（仅net4.5以上框架可用）
+                .SetValue(TokenServiceConfig.VerifyTokenProperty, "123RPC")
+                .SetValue(TcpRPCParserConfig.NameSpaceProperty, "RRQMTest");
             tcpRPCParser.Setup(config);
             tcpRPCParser.Start();
             ShowMsg("TCP解析器添加完成，端口号：7700，VerifyToken=123RPC，ProxyToken=RPC");
 
             UdpRPCParser udpRPCParser = new UdpRPCParser();
-            var udpConfig = new ServerConfig();
+            var udpConfig = new ServiceConfig();
             udpConfig.SetValue(UdpRPCParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7701) })
                 .SetValue(UdpRPCParserConfig.UseBindProperty, true)
                 .SetValue(UdpRPCParserConfig.BufferLengthProperty, 1024 * 64)
@@ -110,7 +109,7 @@ namespace RRQMBox.Server.Win
 
             WebApiParser webApiParser = new WebApiParser();
 
-            var webApiConfig = new ServerConfig();
+            var webApiConfig = new ServiceConfig();
             webApiConfig.SetValue(WebApiParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7703) })
                 .SetValue(WebApiParserConfig.ApiDataConverterProperty, new JsonDataConverter());
             webApiParser.Setup(webApiConfig);
@@ -123,7 +122,7 @@ namespace RRQMBox.Server.Win
             ShowMsg("xmlRpcParser解析器添加完成");
 
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
-            var jsonRpcConfig = new ServerConfig();
+            var jsonRpcConfig = new ServiceConfig();
             jsonRpcConfig.SetValue(JsonRpcParserConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(7705) })
                 .SetValue(JsonRpcParserConfig.JsonFormatConverterProperty, new TestJsonFormatConverter());
             jsonRpcParser.Setup(jsonRpcConfig);
@@ -136,7 +135,8 @@ namespace RRQMBox.Server.Win
             rpcService.AddRPCParser("xmlRpcParser", xmlRpcParser);
             rpcService.AddRPCParser("jsonRpcParser", jsonRpcParser);
 
-            rpcService.OpenServer();
+            rpcService.RegisterAllServer();//注册所有服务
+           
 
             ////通过检索，拿到TcpRPCParser解析器
             //TcpRPCParser parser = (TcpRPCParser)rpcService.RPCParsers["TcpParser"];
