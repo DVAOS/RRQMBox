@@ -186,7 +186,7 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.WaitInvoke, os);//14500
+                Client.Invoke("PerformanceTest", InvokeOption.OnlySend, os);//14500
                 this.send++;
             }
             catch (Exception)
