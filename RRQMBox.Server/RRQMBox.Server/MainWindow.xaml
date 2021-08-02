@@ -16,15 +16,6 @@
             <RowDefinition Height="100" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBox x:Name="TB_Tip"
-                     Width="500"
-                     Background="Transparent"
-                     BorderBrush="Transparent"
-                     FontSize="16"
-                     Foreground="{StaticResource foregroundColor}"
-                     TextWrapping="Wrap" />
-        </StackPanel>
         <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <controls:CorrugatedButton x:Name="CreatFileService"
                                        Grid.Column="0"
