@@ -46,8 +46,8 @@ namespace RRQMBox.Client.Win
             TestObjects = new RRQMList<TestObject>();
             this.DG.ItemsSource = TestObjects;
 
-            byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
-            //byte[] data =new byte[1024*10];
+            //byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
+            byte[] data =new byte[1024*10];
 
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>

@@ -38,8 +38,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMCore, Version=2.2.0.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.2.2.0\lib\net45\RRQMCore.dll</HintPath>
+    <Reference Include="RRQMCore, Version=2.2.1.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.2.2.1\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
     <Reference Include="RRQMMVVM, Version=3.0.0.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMMVVM.3.0.0\lib\net45\RRQMMVVM.dll</HintPath>
@@ -59,8 +59,8 @@
     <Reference Include="RRQMSocket.RPC, Version=5.3.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.5.3.0\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.5.3.0\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=5.3.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.5.3.1\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
     </Reference>
     <Reference Include="RRQMSocket.RPC.WebApi, Version=5.3.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.WebApi.5.3.0\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
