@@ -73,7 +73,8 @@ namespace RRQMBox.Server.Win
                 ShowMsg($"ProtocolService收到数据，协议为：{arg2}，数据长度为：{arg3.Len - 2}");
                 if (arg2 == 10)
                 {
-                    arg1.Send(10, Encoding.UTF8.GetBytes(arg1.ID));
+                    byte[] data = Encoding.UTF8.GetBytes(arg1.ID);
+                    arg1.Send(10,data,0,data.Length);
                 }
                 else
                 {

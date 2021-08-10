@@ -259,7 +259,7 @@ namespace RRQMBox.Server.Win
             Assembly assembly = Assembly.Load(data);
             Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
 
-            rpcService.UpdateRegisteredServer(serverType);
+            //rpcService.UpdateRegisteredServer(serverType);
             ShowMsg("服务更新成功");
         }
 

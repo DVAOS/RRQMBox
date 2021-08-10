@@ -25,7 +25,7 @@ namespace RRQMBox.Server
         public MainWindow()
         {
             InitializeComponent();
-            this.TB_Tip.Text = Properties.Settings.Default.Tip;
+            //this.TB_Tip.Text = Properties.Settings.Default.Tip;
         }
 
         private void CreatTcpService_Click(object sender, RoutedEventArgs e)
