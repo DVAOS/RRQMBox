@@ -50,8 +50,8 @@
     <Reference Include="RRQMSocket, Version=5.5.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.5.5.0\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=5.5.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.5.5.0\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
+    <Reference Include="RRQMSocket.FileTransfer, Version=5.5.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.FileTransfer.5.5.1\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
     </Reference>
     <Reference Include="RRQMSocket.Http, Version=5.5.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.Http.5.5.0\lib\net45\RRQMSocket.Http.dll</HintPath>

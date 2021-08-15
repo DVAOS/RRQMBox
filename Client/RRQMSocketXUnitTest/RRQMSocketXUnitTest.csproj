@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="RRQMSocket" Version="5.5.0" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="5.5.0" />
+    <PackageReference Include="RRQMSocket.FileTransfer" Version="5.5.1" />
     <PackageReference Include="RRQMSocket.RPC" Version="5.5.0" />
     <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="5.5.0" />
     <PackageReference Include="RRQMSocket.RPC.WebApi" Version="5.5.0" />
