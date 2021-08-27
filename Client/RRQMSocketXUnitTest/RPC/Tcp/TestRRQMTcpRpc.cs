@@ -9,17 +9,177 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.Serialization;
+using RRQMSocket;
+using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC.Tcp
 {
     public class TestRRQMTcpRpc
     {
-        public void FixedHeaderShouldBeOk(int inputCount, int bufferLength)
-        { 
-        
+        [Fact]
+        public void ShouldBeAbleToDiscoveryService()
+        {
+            TcpRpcClient client = new TcpRpcClient();
+            var config = new TcpRpcClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+            config.VerifyToken = "123RPC";
+            config.ProxyToken = "RPC";
+
+            client.Setup(config);
+            client.Connect();//此步骤可以省略
+            MethodItem[] methodItems = client.DiscoveryService();
+
+            Assert.NotNull(methodItems);
+            Assert.True(methodItems.Length > 0);
+        }
+
+        [Fact]
+        public void ShouldFailedToDiscoveryService()
+        {
+            TcpRpcClient client = new TcpRpcClient();
+            var config = new TcpRpcClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+            config.VerifyToken = "123RPC";
+            config.ProxyToken = "error";
+
+            client.Setup(config);
+            client.Connect();//此步骤可以省略
+            MethodItem[] methodItems = client.DiscoveryService();
+
+            Assert.NotNull(methodItems);
+            Assert.True(methodItems.Length == 0);
+        }
+
+        [Theory]
+        [InlineData(SerializationType.RRQMBinary)]
+        [InlineData(SerializationType.Json)]
+        [InlineData(SerializationType.Xml)]
+        public void ShouldSuccessfulCallService(SerializationType serializationType)
+        {
+            TcpRpcClient client = new TcpRpcClient();
+            var config = new TcpRpcClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+            config.VerifyToken = "123RPC";
+            config.ProxyToken = "RPC";
+
+            client.Setup(config);
+            client.Connect();//此步骤可以省略
+            MethodItem[] methodItems = client.DiscoveryService();
+
+            Assert.NotNull(methodItems);
+            Assert.True(methodItems.Length > 0);
+
+            //此处是修改的默认调用配置参数
+            //可以自己构建为每个调用设置调用
+            InvokeOption.WaitInvoke.SerializationType = serializationType;
+
+            RemoteTest remoteTest = new RemoteTest(client);
+            remoteTest.Test01();
+            remoteTest.Test02();
+            remoteTest.Test03();
+            remoteTest.Test04();
+            remoteTest.Test05();
+            remoteTest.Test06();
+            remoteTest.Test07();
+            remoteTest.Test08();
+            remoteTest.Test09();
+            remoteTest.Test10();
+            remoteTest.Test11();
+
+            if (serializationType != SerializationType.Xml)
+            {
+                remoteTest.Test12();//xml不支持序列化字典
+            }
+
+            remoteTest.Test13();
+            remoteTest.Test14();
+            remoteTest.Test15();
+            remoteTest.Test16();
+            remoteTest.Test17();
+            remoteTest.Test18();
+            remoteTest.Test22();
+        }
+
+        [Fact]
+        public void ShouldSuccessfulCallGlobalInstance()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                TcpRpcClient client = new TcpRpcClient();
+                var config = new TcpRpcClientConfig();
+                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+                config.VerifyToken = "123RPC";
+                config.ProxyToken = "RPC";
+
+                client.Setup(config);
+                client.Connect();//此步骤可以省略
+                client.DiscoveryService();
+
+                RemoteTest remoteTest = new RemoteTest(client);
+                int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.GlobalInstance);
+                Assert.Equal(i, value);
+                client.Dispose();
+            }
+
+        }
+
+        [Fact]
+        public void ShouldSuccessfulCallCustomInstance()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                TcpRpcClient client = new TcpRpcClient();
+                var config = new TcpRpcClientConfig();
+                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+                config.VerifyToken = "123RPC";
+                config.ProxyToken = "RPC";
+
+                client.Setup(config);
+                client.Connect();//此步骤可以省略
+                client.DiscoveryService();
+
+                RemoteTest remoteTest = new RemoteTest(client);
+                for (int j = 0; j < 10; j++)
+                {
+                    int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.CustomInstance);
+                    Assert.Equal(j, value);
+                }
+               
+                client.Dispose();
+            }
+
+        }
+
+        [Fact]
+        public void ShouldSuccessfulCallNewInstance()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                TcpRpcClient client = new TcpRpcClient();
+                var config = new TcpRpcClientConfig();
+                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+                config.VerifyToken = "123RPC";
+                config.ProxyToken = "RPC";
+
+                client.Setup(config);
+                client.Connect();//此步骤可以省略
+                client.DiscoveryService();
+
+                RemoteTest remoteTest = new RemoteTest(client);
+                for (int j = 0; j < 10; j++)
+                {
+                    int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.NewInstance);
+                    Assert.Equal(0, value);
+                }
+
+                client.Dispose();
+            }
+
         }
     }
 }

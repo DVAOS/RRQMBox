@@ -131,6 +131,7 @@ namespace RRQMBox.Server.Win
                 config.VerifyToken = this.Tb_VerifyToken.Text;
                 config.MaxDownloadSpeed = 1024 * 1024 * 10L;
                 config.MaxUploadSpeed = 1024 * 1024 * 10L;
+                config.BufferLength = 1024 * 1024;
                 config.ClearInterval = 500*1000;//500秒后断开
 
                 this.fileService.Setup(config);

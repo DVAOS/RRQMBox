@@ -9,34 +9,41 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
+using CookComputing.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RRQMBox.Server
+namespace RRQMBox.Client.Common
 {
-    public class ServerTwo : ServerProvider
+    public class XmlRPCv2
     {
-        [RRQMRPC]
-        public void AreYouOk(int a)
+        public static string GetMsg()
         {
+            IClient iclient;
+            XmlRpcClientProtocol protocol;
+            iclient = (IClient)XmlRpcProxyGen.Create(typeof(IClient));
+            protocol = (XmlRpcClientProtocol)iclient;
+            protocol.Url = "http://127.0.0.1:7802";
+            protocol.KeepAlive = false;
 
-        }
-
-        [RRQMRPC]
-        public Student UpdateStudent(Student student)
-        {
-            student.Name = "RRQM";
-            return student;
+            string mes = iclient.Test20_XmlRpc("test", 10, 10.00, new Args[] { new Args() { P3 = "P" }, new Args() { P3 = "PP" } }); //调用
+            return mes;
         }
     }
 
-    public class Student
+    public interface IClient
     {
-        public string Name { get; set; }
+        [XmlRpcMethod("Test20_XmlRpc")]
+        string Test20_XmlRpc(string param, int a, double b, Args[] args);
+    }
+
+    public class Args
+    {
+        public System.Int32 P1 { get; set; }
+        public System.Double P2 { get; set; }
+        public System.String P3 { get; set; }
     }
 }

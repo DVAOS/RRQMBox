@@ -19,34 +19,6 @@ using System.Threading.Tasks;
 namespace RRQMRPC.RRQMTest
 {
 
-public class Test02
-{
-public System.Int32 Age{get;set;}
-public System.String Name{get;set;}
-public List<System.Int32> list{get;set;}
-public System.Int32[] nums{get;set;}
-}
-
-
-public class Test01
-{
-public System.Int32 Age{get;set;}
-public System.String Name{get;set;}
-}
-
-
-public class FileModel
-{
-public System.Int32 Id{get;set;}
-public System.String FileName{get;set;}
-public System.String UpdateDate{get;set;}
-public System.Int64 Size{get;set;}
-public System.String Remarks{get;set;}
-public System.String FilePath{get;set;}
-public System.String ServerWorkspace{get;set;}
-}
-
-
 public class ProxyClass3
 {
 public System.Int32 P1{get;set;}
@@ -64,6 +36,29 @@ public class ProxyClass1
 {
 public System.Int32 P1{get;set;}
 public ProxyClass2 P2{get;set;}
+}
+
+
+public class Class01
+{
+public System.Int32 Age{get;set;}
+public System.String Name{get;set;}
+}
+
+
+public class Args
+{
+public System.Int32 P1{get;set;}
+public System.Double P2{get;set;}
+public System.String P3{get;set;}
+}
+
+
+public class Class04
+{
+public System.Int32 P1{get;set;}
+public System.String P2{get;set;}
+public System.Int32 P3{get;set;}
 }
 
 }

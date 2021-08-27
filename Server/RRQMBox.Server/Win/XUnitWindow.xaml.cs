@@ -64,14 +64,10 @@ namespace RRQMBox.Server.Win
         {
             RPCService rpcService = new RPCService();
 
-            rpcService.AddRPCParser("tcpRPCParser_RRQMBinary", CreateRRQMTcpParser(7794, new BinarySerializeConverter()));
-            rpcService.AddRPCParser("tcpRPCParser_Json", CreateRRQMTcpParser(7795, new JsonSerializeConverter()));
-            rpcService.AddRPCParser("tcpRPCParser_Xml", CreateRRQMTcpParser(7796, new XmlSerializeConverter()));
+            rpcService.AddRPCParser("tcpRPCParser", CreateRRQMTcpParser(7794));
 
-            rpcService.AddRPCParser("udpRPCParser_RRQMBinary", CreateRRQMUdpParser(7797, new BinarySerializeConverter()));
-            rpcService.AddRPCParser("udpRPCParser_Json", CreateRRQMUdpParser(7798, new JsonSerializeConverter()));
-            rpcService.AddRPCParser("udpRPCParser_Xml", CreateRRQMUdpParser(7799, new XmlSerializeConverter()));
-
+            rpcService.AddRPCParser("udpRPCParser", CreateRRQMUdpParser(7797));
+          
             rpcService.AddRPCParser("webApiParser_Xml", CreateWebApiParser(7800, new XmlDataConverter()));
             rpcService.AddRPCParser("webApiParser_Json", CreateWebApiParser(7801, new JsonDataConverter()));
 
@@ -129,7 +125,7 @@ namespace RRQMBox.Server.Win
             ShowMsg($"webApiParser解析器添加完成，端口号：{port}，序列化器：{dataConverter.GetType().Name}");
             return webApiParser;
         }
-        private IRPCParser CreateRRQMUdpParser(int port, SerializeConverter serializeConverter)
+        private IRPCParser CreateRRQMUdpParser(int port)
         {
             UdpRpcParser udpRPCParser = new UdpRpcParser();
             var config = new UdpRpcParserConfig();
@@ -137,7 +133,6 @@ namespace RRQMBox.Server.Win
             config.UseBind = true;
             config.BufferLength = 1024;
             config.ThreadCount = 1;
-            config.SerializeConverter = serializeConverter;
             config.ProxyToken = "RPC";
             config.NameSpace = "RRQMTest";
 
@@ -145,11 +140,11 @@ namespace RRQMBox.Server.Win
 
             udpRPCParser.Start();
 
-            ShowMsg($"UDP解析器添加完成，端口号：{port}，ProxyToken={udpRPCParser.ProxyToken}，序列化器：{serializeConverter.GetType().Name}");
+            ShowMsg($"UDP解析器添加完成，端口号：{port}，ProxyToken={udpRPCParser.ProxyToken}");
             return udpRPCParser;
         }
 
-        private IRPCParser CreateRRQMTcpParser(int port, SerializeConverter serializeConverter)
+        private IRPCParser CreateRRQMTcpParser(int port)
         {
             TcpRpcParser tcpRPCParser = new TcpRpcParser();
 
@@ -159,7 +154,6 @@ namespace RRQMBox.Server.Win
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };//监听一个IP地址
             config.ThreadCount = 1;//设置多线程数量
             config.ClearInterval = -1;//规定不清理无数据客户端
-            config.SerializeConverter = serializeConverter;//选用序列化器
             config.VerifyTimeout = 3 * 1000;//令箭验证超时时间，3秒
             config.VerifyToken = "123RPC";//令箭值
             config.ProxyToken = "RPC";//默认服务代理令箭
@@ -171,7 +165,7 @@ namespace RRQMBox.Server.Win
             //启动服务
             tcpRPCParser.Start();
 
-            ShowMsg($"TCP解析器添加完成，端口号：{port}，VerifyToken={tcpRPCParser.VerifyToken}，ProxyToken={tcpRPCParser.ProxyToken}，序列化器：{serializeConverter.GetType().Name}");
+            ShowMsg($"TCP解析器添加完成，端口号：{port}，VerifyToken={tcpRPCParser.VerifyToken}，ProxyToken={tcpRPCParser.ProxyToken}");
             return tcpRPCParser;
         }
 
@@ -214,6 +208,11 @@ namespace RRQMBox.Server.Win
                 arg1.Send(arg2);
             };
 
+            service.CreateSocketCliect += (SimpleSocketClient arg1, CreateOption arg2)=> 
+            {
+                arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
+            };
+
             //属性设置
             var config = new ServiceConfig();
             config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
@@ -228,6 +227,7 @@ namespace RRQMBox.Server.Win
             service.Start();
             ShowMsg($"TokenService已启动,端口：{port}");
         }
+
 
         private void CreateUdpService(int bindPort, int targetPort)
         {

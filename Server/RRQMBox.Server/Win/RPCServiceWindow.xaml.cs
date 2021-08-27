@@ -79,16 +79,15 @@ namespace RRQMBox.Server.Win
             int threadCount = int.Parse(this.Tb_ThreadCount.Text);
             rpcService = new RPCService();
 
-            //CodeGenerator.AddProxyType(typeof(ProxyClass1));
+           // CodeGenerator.AddProxyType(typeof(ProxyClass1));
 
             tcpRPCParser = new TcpRpcParser();
             tcpRPCParser.ClientConnected += this.TcpRPCParser_ClientConnected;
             tcpRPCParser.ClientDisconnected += this.TcpRPCParser_ClientDisconnected;
             var config = new TcpRpcParserConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost(7700) };//监听一个IP地址
-            config.ThreadCount = 1;//设置多线程数量
+            config.ThreadCount = threadCount;//设置多线程数量
             config.ClearInterval = -1;//规定不清理无数据客户端
-            config.SerializeConverter = new BinarySerializeConverter();//选用序列化器
             config.VerifyTimeout = 3 * 1000;//令箭验证超时时间，3秒
             config.VerifyToken = "123RPC";//令箭值
             config.ProxyToken = "RPC";//默认服务代理令箭
@@ -104,8 +103,7 @@ namespace RRQMBox.Server.Win
             udpConfig.ListenIPHosts = new IPHost[] { new IPHost(7701) };
             udpConfig.UseBind = true;
             udpConfig.BufferLength = 1024;
-            udpConfig.ThreadCount = 1;
-            udpConfig.SerializeConverter = new BinarySerializeConverter(); 
+            udpConfig.ThreadCount = threadCount;
             udpConfig.ProxyToken = "RPC";
             udpConfig.NameSpace = "RRQMTest";
 
@@ -117,7 +115,7 @@ namespace RRQMBox.Server.Win
             WebApiParser webApiParser = new WebApiParser();
             var webApiConfig = new WebApiParserConfig();
             webApiConfig.BufferLength = 1024;
-            webApiConfig.ThreadCount = 1;//设置多线程数量
+            webApiConfig.ThreadCount = threadCount;//设置多线程数量
             webApiConfig.ClearInterval = -1;//规定不清理无数据客户端
             webApiConfig.ListenIPHosts = new IPHost[] { new IPHost(7703) };
             webApiConfig.ApiDataConverter = new JsonDataConverter();
@@ -128,7 +126,7 @@ namespace RRQMBox.Server.Win
             XmlRpcParser xmlRpcParser = new XmlRpcParser();
             var xmlRpcConfig = new XmlRpcParserConfig();
             xmlRpcConfig.BufferLength = 1024;
-            xmlRpcConfig.ThreadCount = 1;//设置多线程数量
+            xmlRpcConfig.ThreadCount = threadCount;//设置多线程数量
             xmlRpcConfig.ClearInterval = -1;//规定不清理无数据客户端
             xmlRpcConfig.ListenIPHosts = new IPHost[] { new IPHost(7704) };
             xmlRpcParser.Setup(xmlRpcConfig);
@@ -138,7 +136,7 @@ namespace RRQMBox.Server.Win
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
             var jsonRpcConfig = new JsonRpcParserConfig();
             jsonRpcConfig.BufferLength = 1024;
-            jsonRpcConfig.ThreadCount = 1;//设置多线程数量
+            jsonRpcConfig.ThreadCount = threadCount;//设置多线程数量
             jsonRpcConfig.ClearInterval = -1;//规定不清理无数据客户端
             jsonRpcConfig.ListenIPHosts = new IPHost[] { new IPHost(7705) };
             jsonRpcConfig.ProtocolType =  JsonRpcProtocolType.Tcp;
@@ -258,33 +256,14 @@ namespace RRQMBox.Server.Win
             Assembly assembly = Assembly.Load(data);
             Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
 
-            //rpcService.UpdateRegisteredServer(serverType);
-            //ShowMsg("服务更新成功");
+           // rpcService.UpdateRegisteredServer(serverType);
+            ShowMsg("服务更新成功");
         }
 
         private void CompilerButton_Click(object sender, RoutedEventArgs e)
         {
             this.tcpRPCParser.CompilerProxy();
             ShowMsg("编译成功");
-        }
-    }
-
-    public class JsonSerializeConverter : RRQMSocket.RPC.RRQMRPC.SerializeConverter
-    {
-        public override object DeserializeParameter(byte[] parameterBytes, Type parameterType)
-        {
-            if (parameterBytes == null)
-            {
-                return null;
-            }
-           
-            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(parameterBytes), parameterType);
-        }
-
-        public override byte[] SerializeParameter(object parameter)
-        {
-            
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(parameter));
         }
     }
 }

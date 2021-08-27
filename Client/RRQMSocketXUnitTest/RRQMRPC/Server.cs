@@ -22,48 +22,49 @@ namespace RRQMRPC.RRQMTest
 public interface IServer
 {
 IRpcClient Client{get;}
-  void PerformanceTest (InvokeOption invokeOption = null);
-void PerformanceTestAsync (InvokeOption invokeOption = null);
-  void TestNullReturnNullParameter (InvokeOption invokeOption = null);
-void TestNullReturnNullParameterAsync (InvokeOption invokeOption = null);
- System.String TestStringReturnNullParameter (InvokeOption invokeOption = null);
-Task<System.String> TestStringReturnNullParameterAsync (InvokeOption invokeOption = null);
- System.Int32 TestIntReturnNullParameter (InvokeOption invokeOption = null);
-Task<System.Int32> TestIntReturnNullParameterAsync (InvokeOption invokeOption = null);
- System.Boolean TestReturnBoolean (InvokeOption invokeOption = null);
-Task<System.Boolean> TestReturnBooleanAsync (InvokeOption invokeOption = null);
-  void TestNullReturnStringParameter (System.String name,InvokeOption invokeOption = null);
-void TestNullReturnStringParameterAsync (System.String name,InvokeOption invokeOption = null);
-  void TestNullReturnOutStringParameter (out System.String name,InvokeOption invokeOption = null);
- System.String TestStringReturnOutStringParameter (out System.String name,InvokeOption invokeOption = null);
-  void TestNullReturnRefStringParameter (ref System.String name,InvokeOption invokeOption = null);
-  void TestNullReturnOutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null);
- RRQMRPC.RRQMTest.Test02 TestClass1AndClass2 (RRQMRPC.RRQMTest.Test01 test01,InvokeOption invokeOption = null);
-Task<RRQMRPC.RRQMTest.Test02> TestClass1AndClass2Async (RRQMRPC.RRQMTest.Test01 test01,InvokeOption invokeOption = null);
-  void TestGetSocketClient (System.String iDToken,InvokeOption invokeOption = null);
-void TestGetSocketClientAsync (System.String iDToken,InvokeOption invokeOption = null);
-  void TestCallBack (System.String id,InvokeOption invokeOption = null);
-void TestCallBackAsync (System.String id,InvokeOption invokeOption = null);
- String TestAsync (InvokeOption invokeOption = null);
-Task<String> TestAsyncAsync (InvokeOption invokeOption = null);
-  void TestTaskAsync (InvokeOption invokeOption = null);
-void TestTaskAsyncAsync (InvokeOption invokeOption = null);
- System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01> TestReturnList (InvokeOption invokeOption = null);
-Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01>> TestReturnListAsync (InvokeOption invokeOption = null);
- System.Collections.Generic.Dictionary<System.Int32,System.String> TestReturnDic (InvokeOption invokeOption = null);
-Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> TestReturnDicAsync (InvokeOption invokeOption = null);
-  void TestStringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null);
-void TestStringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null);
-  void TestStringDefaultValue (System.String s="123123123",InvokeOption invokeOption = null);
-void TestStringDefaultValueAsync (System.String s="123123123",InvokeOption invokeOption = null);
-  void TestValueDefaultValue (System.Int32 a=1234,InvokeOption invokeOption = null);
-void TestValueDefaultValueAsync (System.Int32 a=1234,InvokeOption invokeOption = null);
-  void TestDoubleValueDefaultValue (System.Double a=1234.021,InvokeOption invokeOption = null);
-void TestDoubleValueDefaultValueAsync (System.Double a=1234.021,InvokeOption invokeOption = null);
- System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel> TestFileModelList (InvokeOption invokeOption = null);
-Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel>> TestFileModelListAsync (InvokeOption invokeOption = null);
- RRQMRPC.RRQMTest.ProxyClass1 GetProxyClass (InvokeOption invokeOption = null);
-Task<RRQMRPC.RRQMTest.ProxyClass1> GetProxyClassAsync (InvokeOption invokeOption = null);
+  void Test01_Performance (InvokeOption invokeOption = null);
+void Test01_PerformanceAsync (InvokeOption invokeOption = null);
+ String Test02_TaskString (System.String msg,InvokeOption invokeOption = null);
+Task<String> Test02_TaskStringAsync (System.String msg,InvokeOption invokeOption = null);
+ RRQMRPC.RRQMTest.ProxyClass1 Test03_GetProxyClass (InvokeOption invokeOption = null);
+Task<RRQMRPC.RRQMTest.ProxyClass1> Test03_GetProxyClassAsync (InvokeOption invokeOption = null);
+ System.Int32 Test04_In32DefaultValue (System.Int32 a=100,InvokeOption invokeOption = null);
+Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,InvokeOption invokeOption = null);
+  void Test05_NoneReturnNoneParameter (InvokeOption invokeOption = null);
+void Test05_NoneReturnNoneParameterAsync (InvokeOption invokeOption = null);
+  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null);
+  void Test07_OutStringParameter (out System.String name,InvokeOption invokeOption = null);
+  void Test08_RefStringParameter (ref System.String name,InvokeOption invokeOption = null);
+ System.Boolean Test09_Boolean (System.Boolean b,InvokeOption invokeOption = null);
+Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,InvokeOption invokeOption = null);
+ System.String Test10_StringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null);
+Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null);
+ System.String Test11_StringDefaultValue (System.String s="RRQM",InvokeOption invokeOption = null);
+Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",InvokeOption invokeOption = null);
+ System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,InvokeOption invokeOption = null);
+Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,InvokeOption invokeOption = null);
+  void Test13_Task (InvokeOption invokeOption = null);
+void Test13_TaskAsync (InvokeOption invokeOption = null);
+ System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01> Test14_ListClass01 (System.Int32 length,InvokeOption invokeOption = null);
+Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01>> Test14_ListClass01Async (System.Int32 length,InvokeOption invokeOption = null);
+ RRQMRPC.RRQMTest.Args Test15_ReturnArgs (InvokeOption invokeOption = null);
+Task<RRQMRPC.RRQMTest.Args> Test15_ReturnArgsAsync (InvokeOption invokeOption = null);
+ RRQMRPC.RRQMTest.Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
+Task<RRQMRPC.RRQMTest.Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
+ System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,InvokeOption invokeOption = null);
+Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,InvokeOption invokeOption = null);
+ RRQMRPC.RRQMTest.Class01 Test18_Class1 (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null);
+Task<RRQMRPC.RRQMTest.Class01> Test18_Class1Async (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null);
+  void Test19_CallBack (System.String id,InvokeOption invokeOption = null);
+void Test19_CallBackAsync (System.String id,InvokeOption invokeOption = null);
+ System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null);
+Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null);
+ RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (InvokeOption invokeOption = null);
+Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (InvokeOption invokeOption = null);
+ System.Int32 Test22_IncludeCaller (System.Int32 a,InvokeOption invokeOption = null);
+Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,InvokeOption invokeOption = null);
+ System.Int32 Test23_InvokeType (InvokeOption invokeOption = null);
+Task<System.Int32> Test23_InvokeTypeAsync (InvokeOption invokeOption = null);
 }
 public class Server :IServer
 {
@@ -72,169 +73,100 @@ public Server(IRpcClient client)
 this.Client=client;
 }
 public IRpcClient Client{get;private set; }
-public  void PerformanceTest (InvokeOption invokeOption = null)
+public  void Test01_Performance (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{};
-Client.Invoke("PerformanceTest",invokeOption, parameters);
+Client.Invoke("Test01_Performance",invokeOption, parameters);
 }
-public  async void PerformanceTestAsync (InvokeOption invokeOption = null)
+public  async void Test01_PerformanceAsync (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 await Task.Run(() =>{
-PerformanceTest(invokeOption);});
+Test01_Performance(invokeOption);});
 }
-public  void TestNullReturnNullParameter (InvokeOption invokeOption = null)
+public String Test02_TaskString (System.String msg,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{msg};
+String returnData=Client.Invoke<String>("Test02_TaskString",invokeOption, parameters);
+return returnData;
+}
+public  async Task<String> Test02_TaskStringAsync (System.String msg,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test02_TaskString(msg,invokeOption);});
+}
+public RRQMRPC.RRQMTest.ProxyClass1 Test03_GetProxyClass (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{};
-Client.Invoke("TestNullReturnNullParameter",invokeOption, parameters);
+RRQMRPC.RRQMTest.ProxyClass1 returnData=Client.Invoke<RRQMRPC.RRQMTest.ProxyClass1>("Test03_GetProxyClass",invokeOption, parameters);
+return returnData;
 }
-public  async void TestNullReturnNullParameterAsync (InvokeOption invokeOption = null)
+public  async Task<RRQMRPC.RRQMTest.ProxyClass1> Test03_GetProxyClassAsync (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test03_GetProxyClass(invokeOption);});
+}
+public System.Int32 Test04_In32DefaultValue (System.Int32 a=100,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{a};
+System.Int32 returnData=Client.Invoke<System.Int32>("Test04_In32DefaultValue",invokeOption, parameters);
+return returnData;
+}
+public  async Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test04_In32DefaultValue(a,invokeOption);});
+}
+public  void Test05_NoneReturnNoneParameter (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{};
+Client.Invoke("Test05_NoneReturnNoneParameter",invokeOption, parameters);
+}
+public  async void Test05_NoneReturnNoneParameterAsync (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 await Task.Run(() =>{
-TestNullReturnNullParameter(invokeOption);});
+Test05_NoneReturnNoneParameter(invokeOption);});
 }
-public System.String TestStringReturnNullParameter (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.String returnData=Client.Invoke<System.String>("TestStringReturnNullParameter",invokeOption, parameters);
-return returnData;
-}
-public  async Task<System.String> TestStringReturnNullParameterAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return TestStringReturnNullParameter(invokeOption);});
-}
-public System.Int32 TestIntReturnNullParameter (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Int32 returnData=Client.Invoke<System.Int32>("TestIntReturnNullParameter",invokeOption, parameters);
-return returnData;
-}
-public  async Task<System.Int32> TestIntReturnNullParameterAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return TestIntReturnNullParameter(invokeOption);});
-}
-public System.Boolean TestReturnBoolean (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Boolean returnData=Client.Invoke<System.Boolean>("TestReturnBoolean",invokeOption, parameters);
-return returnData;
-}
-public  async Task<System.Boolean> TestReturnBooleanAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return TestReturnBoolean(invokeOption);});
-}
-public  void TestNullReturnStringParameter (System.String name,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{name};
-Client.Invoke("TestNullReturnStringParameter",invokeOption, parameters);
-}
-public  async void TestNullReturnStringParameterAsync (System.String name,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestNullReturnStringParameter(name,invokeOption);});
-}
-public  void TestNullReturnOutStringParameter (out System.String name,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{default(System.String)};
-Type[] types = new Type[]{typeof(System.String)};
-Client.Invoke("TestNullReturnOutStringParameter",invokeOption,ref parameters,types);
-if(parameters!=null)
-{
-name=(System.String)parameters[0];
-}
-else
-{
-name=default(System.String);
-}
-}
-public System.String TestStringReturnOutStringParameter (out System.String name,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{default(System.String)};
-Type[] types = new Type[]{typeof(System.String)};
-System.String returnData=Client.Invoke<System.String>("TestStringReturnOutStringParameter",invokeOption,ref parameters,types);
-if(parameters!=null)
-{
-name=(System.String)parameters[0];
-}
-else
-{
-name=default(System.String);
-}
-return returnData;
-}
-public  void TestNullReturnRefStringParameter (ref System.String name,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{name};
-Type[] types = new Type[]{typeof(System.String)};
-Client.Invoke("TestNullReturnRefStringParameter",invokeOption,ref parameters,types);
-if(parameters!=null)
-{
-name=(System.String)parameters[0];
-}
-}
-public  void TestNullReturnOutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null)
+public  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
@@ -242,7 +174,7 @@ throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值
 }
 object[] parameters = new object[]{default(System.String),default(System.Int32),default(System.String)};
 Type[] types = new Type[]{typeof(System.String),typeof(System.Int32),typeof(System.String)};
-Client.Invoke("TestNullReturnOutParameters",invokeOption,ref parameters,types);
+Client.Invoke("Test06_OutParameters",invokeOption,ref parameters,types);
 if(parameters!=null)
 {
 name=(System.String)parameters[0];
@@ -256,245 +188,320 @@ age=default(System.Int32);
 occupation=default(System.String);
 }
 }
-public RRQMRPC.RRQMTest.Test02 TestClass1AndClass2 (RRQMRPC.RRQMTest.Test01 test01,InvokeOption invokeOption = null)
+public  void Test07_OutStringParameter (out System.String name,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-object[] parameters = new object[]{test01};
-RRQMRPC.RRQMTest.Test02 returnData=Client.Invoke<RRQMRPC.RRQMTest.Test02>("TestClass1AndClass2",invokeOption, parameters);
+object[] parameters = new object[]{default(System.String)};
+Type[] types = new Type[]{typeof(System.String)};
+Client.Invoke("Test07_OutStringParameter",invokeOption,ref parameters,types);
+if(parameters!=null)
+{
+name=(System.String)parameters[0];
+}
+else
+{
+name=default(System.String);
+}
+}
+public  void Test08_RefStringParameter (ref System.String name,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{name};
+Type[] types = new Type[]{typeof(System.String)};
+Client.Invoke("Test08_RefStringParameter",invokeOption,ref parameters,types);
+if(parameters!=null)
+{
+name=(System.String)parameters[0];
+}
+}
+public System.Boolean Test09_Boolean (System.Boolean b,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{b};
+System.Boolean returnData=Client.Invoke<System.Boolean>("Test09_Boolean",invokeOption, parameters);
 return returnData;
 }
-public  async Task<RRQMRPC.RRQMTest.Test02> TestClass1AndClass2Async (RRQMRPC.RRQMTest.Test01 test01,InvokeOption invokeOption = null)
+public  async Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 return await Task.Run(() =>{
-return TestClass1AndClass2(test01,invokeOption);});
+return Test09_Boolean(b,invokeOption);});
 }
-public  void TestGetSocketClient (System.String iDToken,InvokeOption invokeOption = null)
+public System.String Test10_StringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-object[] parameters = new object[]{iDToken};
-Client.Invoke("TestGetSocketClient",invokeOption, parameters);
+object[] parameters = new object[]{s};
+System.String returnData=Client.Invoke<System.String>("Test10_StringDefaultNullValue",invokeOption, parameters);
+return returnData;
 }
-public  async void TestGetSocketClientAsync (System.String iDToken,InvokeOption invokeOption = null)
+public  async Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test10_StringDefaultNullValue(s,invokeOption);});
+}
+public System.String Test11_StringDefaultValue (System.String s="RRQM",InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{s};
+System.String returnData=Client.Invoke<System.String>("Test11_StringDefaultValue",invokeOption, parameters);
+return returnData;
+}
+public  async Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test11_StringDefaultValue(s,invokeOption);});
+}
+public System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{length};
+System.Collections.Generic.Dictionary<System.Int32,System.String> returnData=Client.Invoke<System.Collections.Generic.Dictionary<System.Int32,System.String>>("Test12_Dictionary",invokeOption, parameters);
+return returnData;
+}
+public  async Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test12_Dictionary(length,invokeOption);});
+}
+public  void Test13_Task (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{};
+Client.Invoke("Test13_Task",invokeOption, parameters);
+}
+public  async void Test13_TaskAsync (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 await Task.Run(() =>{
-TestGetSocketClient(iDToken,invokeOption);});
+Test13_Task(invokeOption);});
 }
-public  void TestCallBack (System.String id,InvokeOption invokeOption = null)
+public System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01> Test14_ListClass01 (System.Int32 length,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{length};
+System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01> returnData=Client.Invoke<System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01>>("Test14_ListClass01",invokeOption, parameters);
+return returnData;
+}
+public  async Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01>> Test14_ListClass01Async (System.Int32 length,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test14_ListClass01(length,invokeOption);});
+}
+public RRQMRPC.RRQMTest.Args Test15_ReturnArgs (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{};
+RRQMRPC.RRQMTest.Args returnData=Client.Invoke<RRQMRPC.RRQMTest.Args>("Test15_ReturnArgs",invokeOption, parameters);
+return returnData;
+}
+public  async Task<RRQMRPC.RRQMTest.Args> Test15_ReturnArgsAsync (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test15_ReturnArgs(invokeOption);});
+}
+public RRQMRPC.RRQMTest.Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{a,b,c};
+RRQMRPC.RRQMTest.Class04 returnData=Client.Invoke<RRQMRPC.RRQMTest.Class04>("Test16_ReturnClass4",invokeOption, parameters);
+return returnData;
+}
+public  async Task<RRQMRPC.RRQMTest.Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test16_ReturnClass4(a,b,c,invokeOption);});
+}
+public System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{a};
+System.Double returnData=Client.Invoke<System.Double>("Test17_DoubleDefaultValue",invokeOption, parameters);
+return returnData;
+}
+public  async Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test17_DoubleDefaultValue(a,invokeOption);});
+}
+public RRQMRPC.RRQMTest.Class01 Test18_Class1 (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{class01};
+RRQMRPC.RRQMTest.Class01 returnData=Client.Invoke<RRQMRPC.RRQMTest.Class01>("Test18_Class1",invokeOption, parameters);
+return returnData;
+}
+public  async Task<RRQMRPC.RRQMTest.Class01> Test18_Class1Async (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test18_Class1(class01,invokeOption);});
+}
+public  void Test19_CallBack (System.String id,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{id};
-Client.Invoke("TestCallBack",invokeOption, parameters);
+Client.Invoke("Test19_CallBack",invokeOption, parameters);
 }
-public  async void TestCallBackAsync (System.String id,InvokeOption invokeOption = null)
+public  async void Test19_CallBackAsync (System.String id,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 await Task.Run(() =>{
-TestCallBack(id,invokeOption);});
+Test19_CallBack(id,invokeOption);});
 }
-public String TestAsync (InvokeOption invokeOption = null)
+public System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-object[] parameters = new object[]{};
-String returnData=Client.Invoke<String>("TestAsync",invokeOption, parameters);
+object[] parameters = new object[]{param,a,b,args};
+System.String returnData=Client.Invoke<System.String>("Test20_XmlRpc",invokeOption, parameters);
 return returnData;
 }
-public  async Task<String> TestAsyncAsync (InvokeOption invokeOption = null)
+public  async Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 return await Task.Run(() =>{
-return TestAsync(invokeOption);});
+return Test20_XmlRpc(param,a,b,args,invokeOption);});
 }
-public  void TestTaskAsync (InvokeOption invokeOption = null)
+public RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{};
-Client.Invoke("TestTaskAsync",invokeOption, parameters);
-}
-public  async void TestTaskAsyncAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestTaskAsync(invokeOption);});
-}
-public System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01> TestReturnList (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01> returnData=Client.Invoke<System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01>>("TestReturnList",invokeOption, parameters);
+RRQMCore.XREF.Newtonsoft.Json.Linq.JObject returnData=Client.Invoke<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject>("Test21_JsonRpcReturnJObject",invokeOption, parameters);
 return returnData;
 }
-public  async Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.Test01>> TestReturnListAsync (InvokeOption invokeOption = null)
+public  async Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 return await Task.Run(() =>{
-return TestReturnList(invokeOption);});
+return Test21_JsonRpcReturnJObject(invokeOption);});
 }
-public System.Collections.Generic.Dictionary<System.Int32,System.String> TestReturnDic (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Collections.Generic.Dictionary<System.Int32,System.String> returnData=Client.Invoke<System.Collections.Generic.Dictionary<System.Int32,System.String>>("TestReturnDic",invokeOption, parameters);
-return returnData;
-}
-public  async Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> TestReturnDicAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return TestReturnDic(invokeOption);});
-}
-public  void TestStringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{s};
-Client.Invoke("TestStringDefaultNullValue",invokeOption, parameters);
-}
-public  async void TestStringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestStringDefaultNullValue(s,invokeOption);});
-}
-public  void TestStringDefaultValue (System.String s="123123123",InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{s};
-Client.Invoke("TestStringDefaultValue",invokeOption, parameters);
-}
-public  async void TestStringDefaultValueAsync (System.String s="123123123",InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestStringDefaultValue(s,invokeOption);});
-}
-public  void TestValueDefaultValue (System.Int32 a=1234,InvokeOption invokeOption = null)
+public System.Int32 Test22_IncludeCaller (System.Int32 a,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{a};
-Client.Invoke("TestValueDefaultValue",invokeOption, parameters);
-}
-public  async void TestValueDefaultValueAsync (System.Int32 a=1234,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestValueDefaultValue(a,invokeOption);});
-}
-public  void TestDoubleValueDefaultValue (System.Double a=1234.021,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{a};
-Client.Invoke("TestDoubleValueDefaultValue",invokeOption, parameters);
-}
-public  async void TestDoubleValueDefaultValueAsync (System.Double a=1234.021,InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-await Task.Run(() =>{
-TestDoubleValueDefaultValue(a,invokeOption);});
-}
-public System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel> TestFileModelList (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel> returnData=Client.Invoke<System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel>>("TestFileModelList",invokeOption, parameters);
+System.Int32 returnData=Client.Invoke<System.Int32>("Test22_IncludeCaller",invokeOption, parameters);
 return returnData;
 }
-public  async Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.FileModel>> TestFileModelListAsync (InvokeOption invokeOption = null)
+public  async Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 return await Task.Run(() =>{
-return TestFileModelList(invokeOption);});
+return Test22_IncludeCaller(a,invokeOption);});
 }
-public RRQMRPC.RRQMTest.ProxyClass1 GetProxyClass (InvokeOption invokeOption = null)
+public System.Int32 Test23_InvokeType (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
 object[] parameters = new object[]{};
-RRQMRPC.RRQMTest.ProxyClass1 returnData=Client.Invoke<RRQMRPC.RRQMTest.ProxyClass1>("GetProxyClass",invokeOption, parameters);
+System.Int32 returnData=Client.Invoke<System.Int32>("Test23_InvokeType",invokeOption, parameters);
 return returnData;
 }
-public  async Task<RRQMRPC.RRQMTest.ProxyClass1> GetProxyClassAsync (InvokeOption invokeOption = null)
+public  async Task<System.Int32> Test23_InvokeTypeAsync (InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
 return await Task.Run(() =>{
-return GetProxyClass(invokeOption);});
+return Test23_InvokeType(invokeOption);});
 }
 }
 }

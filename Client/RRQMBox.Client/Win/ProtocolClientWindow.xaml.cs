@@ -14,6 +14,7 @@ using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace RRQMBox.Client.Win
@@ -79,16 +80,8 @@ namespace RRQMBox.Client.Win
 
         private void Client_Received(short? arg1, ByteBlock byteBlock)
         {
-            if (arg1 == null)
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-                ShowMsg($"接收到无协议信息：ID={this.client.ID},信息：{mes}");
-            }
-            else
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2);
-                ShowMsg($"接收到协议信息：ID={this.client.ID},协议={arg1},信息：{mes}");
-            }
+            string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, byteBlock.Len - 2);
+            ShowMsg($"【接收】协议={arg1}，信息：{mes}");
         }
 
         private void TcpClient_DisconnectedService(object sender, MesEventArgs e)
@@ -128,8 +121,32 @@ namespace RRQMBox.Client.Win
             if (this.client != null)
             {
                 this.client.ResetID("MyClientID");
-                ShowMsg($"成功重置ID，当年ID={this.client.ID}");
+                ShowMsg($"成功重置ID，当前ID={this.client.ID}");
             }
+        }
+
+        Channel channel;
+        private async void CreateChannelButton_Click(object sender, RoutedEventArgs e)
+        {
+            channel = this.client.CreateChannel();
+            ShowMsg($"成功创建通道，ID={channel.ID}");
+
+            while (await channel.MoveNextAsync())
+            {
+                ShowMsg(Encoding.UTF8.GetString(channel.Current));
+            }
+            ShowMsg(channel.Status.ToString());
+        }
+
+        private void ChannelSendButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] data = Encoding.UTF8.GetBytes("RRQM");
+            channel.Write(data);
+        }
+
+        private void ChannelCompleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            channel.Complete();
         }
     }
 }

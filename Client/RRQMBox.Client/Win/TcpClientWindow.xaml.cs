@@ -238,16 +238,13 @@ namespace RRQMBox.Client.Win
             {
                 Task.Run(() =>
                 {
-                    while (true)
+                    try
                     {
-                        try
-                        {
-                            this.tcpClient.Send(new byte[1024]);
-                        }
-                        catch (Exception ex)
-                        {
-                            ShowMsg(ex.Message);
-                        }
+                        this.tcpClient.Send(new byte[102400]);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowMsg(ex.Message);
                     }
                 });
             }

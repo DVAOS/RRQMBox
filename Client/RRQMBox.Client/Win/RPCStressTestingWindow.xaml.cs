@@ -15,8 +15,8 @@ using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 
 namespace RRQMBox.Client.Win
@@ -29,12 +29,29 @@ namespace RRQMBox.Client.Win
         public RPCStressTestingWindow()
         {
             InitializeComponent();
+            Timer timer = new Timer(1000);
+            timer.Elapsed += this.Timer_Elapsed;
+            timer.Start();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (this.TestObjects!=null)
+            {
+                int len = this.TestObjects.Count;
+                for (int i = 0; i < len; i++)
+                {
+                    this.TestObjects[i].ShowInfo();
+                }
+            }
         }
 
         public RRQMList<RPCTestObject> TestObjects { get; set; }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            InvokeOption.WaitInvoke.InvokeType = RRQMSocket.RPC.InvokeType.CustomInstance;
+
             if (isTest)
             {
                 MessageBox.Show("测试已经在进行");
@@ -61,7 +78,7 @@ namespace RRQMBox.Client.Win
                     config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7700"))
                           .SetValue(TokenClientConfig.VerifyTokenProperty, "123RPC")
                           .SetValue(TcpRpcClientConfig.ProxyTokenProperty, "RPC")
-                          .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
+                          .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);
                     try
                     {
                         testObject.Client.Setup(config);
@@ -77,21 +94,8 @@ namespace RRQMBox.Client.Win
                         TestObjects.Add(testObject);
                     });
                 }
-                Thread.Sleep(3000);
+                System.Threading.Thread.Sleep(1000);
                 GroupSend();
-            });
-
-            Task.Run(async () =>
-            {
-                while (isTest)
-                {
-                    int len = this.TestObjects.Count;
-                    for (int i = 0; i < len; i++)
-                    {
-                        this.TestObjects[i].ShowInfo();
-                    }
-                    await Task.Delay(1000);
-                }
             });
         }
 
@@ -108,7 +112,7 @@ namespace RRQMBox.Client.Win
                 threadCount = this.TestObjects.Count / size + 1;
             }
 
-            ThreadPool.SetMinThreads(threadCount, threadCount);
+            System.Threading.ThreadPool.SetMinThreads(threadCount, threadCount);
             RPCTestObject[] allObjects = this.TestObjects.ToArray();
 
             for (int i = 0; i < threadCount; i++)
@@ -187,7 +191,7 @@ namespace RRQMBox.Client.Win
         {
             try
             {
-                Client.Invoke("PerformanceTest", InvokeOption.OnlySend, os);//14500
+                Client.Invoke("Test01_Performance", InvokeOption.WaitInvoke, os);//14500
                 this.send++;
             }
             catch (Exception)

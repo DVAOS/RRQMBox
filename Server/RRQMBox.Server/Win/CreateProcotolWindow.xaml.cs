@@ -16,6 +16,7 @@ using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace RRQMBox.Server.Win
@@ -54,6 +55,7 @@ namespace RRQMBox.Server.Win
         }
 
         private SimpleProtocolService protocolService;
+
         private RRQMList<SocketClient> onLineClient;
 
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
@@ -93,7 +95,6 @@ namespace RRQMBox.Server.Win
             config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
                 .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
                 .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_Token.Text);
 
@@ -152,16 +153,8 @@ namespace RRQMBox.Server.Win
 
         private void ProtocolService_Received(SimpleProtocolSocketClient arg1, short? arg2, ByteBlock byteBlock)
         {
-            if (arg2 == null)
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-                ShowMsg($"接收到无协议信息：ID={arg1.ID},信息：{mes}");
-            }
-            else
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, (int)byteBlock.Length - 2);
-                ShowMsg($"接收到协议信息：ID={arg1.ID},协议={arg2},信息：{mes}");
-            }
+            string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, byteBlock.Len - 2);
+            ShowMsg($"【接收】协议={arg2}，ID={arg1.ID},信息：{mes}");
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -186,6 +179,41 @@ namespace RRQMBox.Server.Win
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
             this.msgBox.Clear();
+        }
+        Channel channel;
+        private async void Bt_SubscribeChannel_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Lb_OnlineClient.SelectedItem is ProtocolSocketClient protocolSocketClient)
+            {
+                if (protocolSocketClient.TrySubscribeChannel(int.Parse(this.Tb_ChannelID.Text), out channel))
+                {
+                    ShowMsg("已连接通道");
+                    while (await channel.MoveNextAsync())
+                    {
+                        ShowMsg(Encoding.UTF8.GetString(channel.Current));
+                    }
+                    ShowMsg(channel.Status.ToString());
+                }
+                else
+                {
+                    ShowMsg("通道ID不存在");
+                }
+            }
+            else
+            {
+                ShowMsg("请先选择客户端列表");
+            }
+        }
+
+        private void Bt_ChannelSend_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] data = Encoding.UTF8.GetBytes("RRQM");
+            channel.WriteAsync(data);
+        }
+
+        private void Bt_ChannelComplete_Click(object sender, RoutedEventArgs e)
+        {
+            channel.Complete();
         }
     }
 }

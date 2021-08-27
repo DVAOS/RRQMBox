@@ -10,23 +10,69 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RpcArgsClassLib;
-using RRQMSocket;
+using RRQMCore.XREF.Newtonsoft.Json.Linq;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
 namespace RRQMBox.Server
 {
+    public enum MyEnum
+    {
+        T1 = 0,
+        T2 = 100,
+        T3 = 200
+    }
+
+    public class Args
+    {
+        public int P1 { get; set; }
+        public double P2 { get; set; }
+        public string P3 { get; set; }
+    }
+
+    public class Class01
+    {
+        public int Age { get; set; } = 1;
+        public string Name { get; set; }
+    }
+
+    public class Class02
+    {
+        public int Age { get; set; }
+        public List<int> list { get; set; }
+        public string Name { get; set; }
+        public int[] nums { get; set; }
+    }
+
+    public class Class03 : Class02
+    {
+        public int Length { get; set; }
+    }
+
+    public class Class04
+    {
+        public int P1 { get; set; }
+        public string P2 { get; set; }
+        public int P3 { get; set; }
+    }
+
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
     {
+        public static bool isStart;
+
+        public static Action<string> ShowMsgMethod;
+
+        private int a;
+
         public Server()
         {
             Timer timer = new Timer(1000);
@@ -34,31 +80,11 @@ namespace RRQMBox.Server
             timer.Start();
         }
 
-        public static bool isStart;
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (isStart)
-            {
-                this.ShowMsg($"PerformanceTest,处理{a}次");
-                a = 0;
-            }
-        }
-
-        private void ShowMsg(string msg)
-        {
-            ShowMsgMethod.Invoke(msg);
-        }
-
-        public static Action<string> ShowMsgMethod;
-
-        private int a;
-
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public void PerformanceTest()
+        public void Test01_Performance()
         {
             a++;
         }
@@ -67,100 +93,164 @@ namespace RRQMBox.Server
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public void TestNullReturnNullParameter()
+        public async Task<string> Test02_TaskString(string msg)
         {
-            ShowMsg($"TestNullReturnNullParameter,a={a}");
+            return await Task.Run(() =>
+            {
+                return msg;
+            });
         }
 
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public string TestStringReturnNullParameter()
+        public ProxyClass1 Test03_GetProxyClass()
         {
-            ShowMsg("TestStringReturnNullParameter");
-            return "若汝棋茗";
+            return new ProxyClass1() { P1 = 10, P2 = new ProxyClass2() { P1 = 100, P2 = new ProxyClass3() { P1 = 1000 } } };
         }
 
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public int TestIntReturnNullParameter()
+        public int Test04_In32DefaultValue(int a = 100)
         {
-            ShowMsg("TestIntReturnNullParameter");
-            return 10;
+            return a;
         }
 
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public bool TestReturnBoolean()
+        public void Test05_NoneReturnNoneParameter()
         {
-            ShowMsg("TestReturnBoolean");
-            return true;
-        }
-
-        [XmlRpc]
-        [JsonRpc]
-        [Route]
-        [RRQMRPC]
-        public void TestNullReturnStringParameter(string name)
-        {
-            ShowMsg($"TestNullReturnStringParameter,String:{name}");
         }
 
         [RRQMRPC]
-        public void TestNullReturnOutStringParameter(out string name)
+        public void Test06_OutParameters(out string name, out int age, out string occupation)
         {
-            ShowMsg($"TestNullReturnOutStringParameter");
             name = "若汝棋茗";
-        }
-
-        [RRQMRPC]
-        public string TestStringReturnOutStringParameter(out string name)
-        {
-            ShowMsg($"TestStringReturnOutStringParameter");
-            name = "若汝棋茗";
-            return name;
-        }
-
-        [RRQMRPC]
-        public void TestNullReturnRefStringParameter(ref string name)
-        {
-            ShowMsg($"TestStringReturnOutStringParameter,String:{name}");
-            name = "若汝棋茗";
-        }
-
-        [RRQMRPC]
-        public void TestNullReturnOutParameters(out string name, out int age, out string occupation)
-        {
-            ShowMsg($"TestNullReturnOutParameters");
-            name = "若汝棋茗";
-            age = 23;
+            age = 18;
             occupation = "搬砖工程师";
         }
 
+        [RRQMRPC]
+        public void Test07_OutStringParameter(out string name)
+        {
+            name = "若汝棋茗";
+        }
+
+        [RRQMRPC]
+        public void Test08_RefStringParameter(ref string name)
+        {
+            name = name + "ref";
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public bool Test09_Boolean(bool b)
+        {
+            return b;
+        }
+
         [XmlRpc]
         [JsonRpc]
         [RRQMRPC]
-        public Test02 TestClass1AndClass2(Test01 test01)
+        public string Test10_StringDefaultNullValue(string s = null)
         {
-            //throw new Exception("123");
-            Test02 test02 = new Test02();
-            return test02;
+            return s;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public string Test11_StringDefaultValue(string s = "RRQM")
+        {
+            return s;
+        }
+
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public Dictionary<int, string> Test12_Dictionary(int length)
+        {
+            Dictionary<int, string> valuePairs = new Dictionary<int, string>();
+            for (int i = 0; i < length; i++)
+            {
+                valuePairs.Add(i, i.ToString());
+            }
+
+            return valuePairs;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public async Task Test13_Task()
+        {
+            await Task.Run(() =>
+            {
+                ShowMsg("TestTaskAsync");
+            });
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public List<Class01> Test14_ListClass01(int length)
+        {
+            List<Class01> list = new List<Class01>();
+            for (int i = 0; i < length; i++)
+            {
+                list.Add(new Class01() { Age = i });
+            }
+            return list;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public Args Test15_ReturnArgs()
+        {
+            return new Args() { P1 = 10, P2 = 10.0, P3 = "RRQM" };
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public Class04 Test16_ReturnClass4(int a, string b, int c = 10)
+        {
+            return new Class04() { P1 = a, P2 = b, P3 = c };
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public double Test17_DoubleDefaultValue(double a = 3.1415926)
+        {
+            return a;
+        }
+
+        [XmlRpc]
+        [JsonRpc]
+        [Route]
+        [RRQMRPC]
+        public Class01 Test18_Class1(Class01 class01)
+        {
+            return class01;
         }
 
         [RRQMRPC]
-        public void TestGetSocketClient(string iDToken)
-        {
-            ISocketClient socketClient = ((TcpRpcParser)this.RPCService.RPCParsers["TcpParser"]).SocketClients[iDToken];
-            socketClient.Send(Encoding.UTF8.GetBytes("若汝棋茗"));
-        }
-
-        [RRQMRPC]
-        public void TestCallBack(string id)
+        public void Test19_CallBack(string id)
         {
             Task.Run(() =>
             {
@@ -185,195 +275,59 @@ namespace RRQMBox.Server
             });
         }
 
+
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public async Task<string> TestAsync()
+        public string Test20_XmlRpc(string param, int a, double b, Args[] args)
         {
-            return await Task.Run(() =>
-            {
-                ShowMsg("TestAsync");
-                return "若汝棋茗";
-            });
-        }
-
-        [RRQMRPC]
-        public async Task TestTaskAsync()
-        {
-            await Task.Run(() =>
-            {
-                ShowMsg("TestTaskAsync");
-            });
+            return "RRQM";
         }
 
         [XmlRpc]
         [JsonRpc]
         [Route]
         [RRQMRPC]
-        public List<Test01> TestReturnList()
+        public JObject Test21_JsonRpcReturnJObject()
         {
-            List<Test01> list = new List<Test01>();
-            list.Add(new Test01() { Age = 1 });
-            list.Add(new Test01() { Age = 2 });
-            list.Add(new Test01() { Age = 3 });
-            return list;
+            JObject jobj = new JObject();
+            jobj.Add("P1", "P1");
+            jobj.Add("P2", "P2");
+            jobj.Add("P3", "P3");
+            return jobj;
         }
 
         [JsonRpc]
-        [RRQMRPC]
-        public Dictionary<int, string> TestReturnDic()
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public int Test22_IncludeCaller(IServerCallContext  serverCallContext, int a)
         {
-            Dictionary<int, string> valuePairs = new Dictionary<int, string>();
-            valuePairs.Add(0, "0");
-            valuePairs.Add(1, "1");
-            valuePairs.Add(2, "2");
-            valuePairs.Add(3, "3");
-            return valuePairs;
+            if (serverCallContext is JsonRpcServerCallContext  jsonRpcServerCallContext)
+            {
+               
+            }
+            return a;
         }
 
-        [XmlRpc]
-        [JsonRpc]
-        [RRQMRPC]
-        public void TestStringDefaultNullValue(string s = null)
+        private int invokeCount;
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public int Test23_InvokeType(IServerCallContext serverCallContext) 
         {
+            return invokeCount++;
         }
 
-        [XmlRpc]
-        [JsonRpc]
-        [RRQMRPC]
-        public void TestStringDefaultValue(string s = "123123123")
+        private void ShowMsg(string msg)
         {
+            ShowMsgMethod?.Invoke(msg);
         }
 
-        [XmlRpc]
-        [JsonRpc]
-        [RRQMRPC]
-        public void TestValueDefaultValue(int a = 1234)
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (isStart)
+            {
+                this.ShowMsg($"PerformanceTest,处理{a}次");
+                a = 0;
+            }
         }
-
-        [XmlRpc]
-        [JsonRpc]
-        [RRQMRPC]
-        public void TestDoubleValueDefaultValue(double a = 1234.021)
-        {
-        }
-
-        [XmlRpc]
-        public string TestXmlRpc(string param, int a, double b, Args[] args)
-        {
-            ShowMsg("TestXmlRpc");
-            return "若汝棋茗";
-        }
-
-        [XmlRpc]
-        [JsonRpc]
-        public Args TestJsonRpc(int a, string b, int c = 10)
-        {
-            ShowMsg("TestJsonRpc");
-            return new Args() { P1 = 10, P2 = 10.0, P3 = "RRQM" };
-        }
-
-        [XmlRpc]
-        [JsonRpc]
-        public Args TestNullJsonRpc()
-        {
-            ShowMsg("TestNullJsonRpc");
-            return new Args() { P1 = 10, P2 = 10.0, P3 = "RRQM" };
-        }
-
-        [XmlRpc]
-        [JsonRpc]
-        [RRQMRPC]
-        public List<FileModel> TestFileModelList()
-        {
-            List<FileModel> fileModels = new List<FileModel>();
-            fileModels.Add(new FileModel());
-            fileModels.Add(new FileModel());
-            fileModels.Add(new FileModel());
-            return fileModels;
-        }
-
-
-        [RRQMRPC]
-        public ProxyClass1 GetProxyClass()
-        {
-            return new ProxyClass1();
-        }
-    }
-
-    [Serializable]
-    public class FileModel
-    {
-        /// <summary>
-        /// id
-        /// </summary>
-        private int id;
-        /// <summary>
-        /// 文件名
-        /// </summary>
-        private string fileName;
-        /// <summary>
-        /// 文件路径（相对路径=文件名）
-        /// </summary>
-        private string filePath;
-        /// <summary>
-        /// 服务器工作空间
-        /// </summary>
-        private string serverWorkspace;
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        private string updateDate;
-        /// <summary>
-        /// 大小
-        /// </summary>
-        private long size;
-        /// <summary>
-        /// 备注
-        /// </summary>
-        private string remarks;
-
-        public int Id { get => id; set => id = value; }
-        public string FileName { get => fileName; set => fileName = value; }
-        public string UpdateDate { get => updateDate; set => updateDate = value; }
-        public long Size { get => size; set => size = value; }
-        public string Remarks { get => remarks; set => remarks = value; }
-        public string FilePath { get => filePath; set => filePath = value; }
-        public string ServerWorkspace { get => serverWorkspace; set => serverWorkspace = value; }
-    }
-
-    public class Args
-    {
-        public int P1 { get; set; }
-        public double P2 { get; set; }
-        public string P3 { get; set; }
-    }
-
-    public class Test01
-    {
-        public int Age { get; set; } = 1;
-        public string Name { get; set; }
-    }
-
-    public class Test02
-    {
-        public int Age { get; set; }
-        public string Name { get; set; }
-        public List<int> list { get; set; }
-        public int[] nums { get; set; }
-    }
-
-    public class Test03 : Test02
-    {
-        public int Length { get; set; }
-    }
-
-    public enum MyEnum
-    {
-        T1 = 0,
-        T2 = 100,
-        T3 = 200
     }
 }

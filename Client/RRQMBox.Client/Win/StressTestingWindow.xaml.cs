@@ -70,7 +70,7 @@ namespace RRQMBox.Client.Win
                         config.SetValue(TcpClientConfig.OnlySendProperty, true)
                         .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7790"))
                         .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new FixedHeaderDataHandlingAdapter())
-                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
+                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);
 
                         testObject.Client.Setup(config);
                         testObject.Client.Connect();
