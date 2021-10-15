@@ -138,7 +138,7 @@ namespace RRQMBox.Client.Win
             ShowMsg($"正在使用{((TcpClient)sender).DataHandlingAdapter.GetType().Name}适配器");
         }
 
-        private void TcpDicConnectButton_Click(object sender, RoutedEventArgs e)
+        private void TcpDisConnectButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.Cb_IsToken.IsChecked == true)
             {
