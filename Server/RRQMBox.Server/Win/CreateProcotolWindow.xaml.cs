@@ -69,7 +69,8 @@ namespace RRQMBox.Server.Win
             {
                 try
                 {
-                    this.protocolService.ResetID("MyClientID", "MyServerID");
+                   
+                    this.protocolService.ResetID(new WaitSetID("MyClientID", "MyServerID") );
                     ShowMsg("修改成功");
                 }
                 catch (Exception ex)
