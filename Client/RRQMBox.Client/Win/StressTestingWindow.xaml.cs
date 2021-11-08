@@ -9,7 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
@@ -46,8 +46,8 @@ namespace RRQMBox.Client.Win
             TestObjects = new RRQMList<TestObject>();
             this.DG.ItemsSource = TestObjects;
 
-            byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
-            //byte[] data =new byte[1024*10];
+            //byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
+            byte[] data =new byte[1024];
 
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
@@ -70,7 +70,7 @@ namespace RRQMBox.Client.Win
                         config.SetValue(TcpClientConfig.OnlySendProperty, true)
                         .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7790"))
                         .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new FixedHeaderDataHandlingAdapter())
-                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);
+                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
 
                         testObject.Client.Setup(config);
                         testObject.Client.Connect();

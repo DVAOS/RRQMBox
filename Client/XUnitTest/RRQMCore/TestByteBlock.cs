@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace RRQMSocketXUnitTest.RRQMCore
+namespace RRQMSocketXUnitTest
 {
     public class TestByteBlock
     {

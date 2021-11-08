@@ -9,10 +9,12 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.Serialization;
 using RRQMRPC.RRQMTest;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System.Collections.Generic;
+using System.Threading;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC
@@ -177,9 +179,48 @@ namespace RRQMSocketXUnitTest.RPC
         {
             InvokeOption invokeOption = new InvokeOption();
             invokeOption.InvokeType = invokeType;
+            invokeOption.SerializationType = SerializationType.Json;
             invokeOption.FeedbackType = FeedbackType.WaitInvoke;
 
             return server.Test23_InvokeType(invokeOption);
+        }
+
+        public void Test25()
+        {
+            int result = server.Test25_TestStruct(new StructArgs() { P1 = 10 });
+            Assert.Equal(10, result);
+        }
+
+        public void Test26()
+        {
+            InvokeOption invokeOption1 = new InvokeOption()
+            {
+                InvokeType = InvokeType.GlobalInstance,
+                FeedbackType = FeedbackType.WaitInvoke,
+                SerializationType = SerializationType.RRQMBinary,
+                Timeout = 20 * 1000
+            };
+
+            int result = server.Test26_TestCancellationToken(invokeOption1);
+            Assert.Equal(1, result);
+
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+
+            InvokeOption invokeOption2 = new InvokeOption()
+            {
+                CancellationToken = tokenSource.Token,
+                InvokeType = InvokeType.GlobalInstance,
+                FeedbackType = FeedbackType.WaitInvoke,
+                SerializationType = SerializationType.RRQMBinary,
+                Timeout = 20 * 1000
+            };
+
+            RRQMCore.Run.EasyAction.DelayRun(2, () =>
+             {
+                 tokenSource.Cancel();
+             });
+            int result2 = server.Test26_TestCancellationToken(invokeOption2);
+            Assert.Equal(0, result2);
         }
     }
 }

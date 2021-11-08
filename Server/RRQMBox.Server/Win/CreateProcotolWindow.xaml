@@ -28,7 +28,8 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="Tb_ClientNum" Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center" Text="0" />
-                <ListBox x:Name="Lb_OnlineClient" Grid.Row="1" BorderThickness="0" Style="{DynamicResource CliectListBoxStyle}" />
+                <ListBox x:Name="Lb_OnlineClient" Grid.Row="1" BorderThickness="0"
+                         Style="{DynamicResource CliectListBoxStyle}" />
             </Grid>
         </GroupBox>
 
@@ -48,13 +49,19 @@
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Margin="10,0,0,0" Text="IPHost：" />
-                    <TextBox x:Name="Tb_iPHost" Width="150" Style="{DynamicResource inputBox}" Text="127.0.0.1:7789" />
+                    <TextBox x:Name="Tb_iPHost" Width="150"
+                             Style="{DynamicResource inputBox}"
+                             Text="127.0.0.1:7789" />
 
                     <TextBlock Margin="10,0,0,0" Text="多线程数量：" />
-                    <TextBox x:Name="Tb_ThreadCount" Width="40" Style="{DynamicResource inputBox}" Text="5" />
+                    <TextBox x:Name="Tb_ThreadCount" Width="40"
+                             Style="{DynamicResource inputBox}"
+                             Text="5" />
 
                     <TextBlock Margin="10,0,0,0" Text="最大连接：" />
-                    <TextBox x:Name="Tb_maxCount" Width="80" Style="{DynamicResource inputBox}" Text="10000" />
+                    <TextBox x:Name="Tb_maxCount" Width="80"
+                             Style="{DynamicResource inputBox}"
+                             Text="10000" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal">
                     <StackPanel.Resources>
@@ -63,14 +70,20 @@
                         </Style>
                     </StackPanel.Resources>
 
-                    <TextBlock Margin="20,0,0,0" Text="Token:" Visibility="{Binding ElementName=Tb_Token, Path=Visibility}" />
-                    <TextBox x:Name="Tb_Token" Width="80" Style="{DynamicResource inputBox}" />
+                    <TextBlock Margin="20,0,0,0" Text="Token:"
+                               Visibility="{Binding ElementName=Tb_Token, Path=Visibility}" />
+                    <TextBox x:Name="Tb_Token" Width="80"
+                             Style="{DynamicResource inputBox}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal">
-                    <controls:CorrugatedButton x:Name="Bt_Start" Click="Bt_Start_Click" Content="启动" Style="{DynamicResource button}" />
-                    <controls:CorrugatedButton x:Name="Bt_Stop" Click="Bt_Stop_Click" Content="停止" Style="{DynamicResource button}" />
-                    <controls:CorrugatedButton x:Name="Bt_Dispose" Click="Bt_Dispose_Click" Content="释放" Style="{DynamicResource button}" />
-                    <controls:CorrugatedButton x:Name="Bt_ResetID" Click="Bt_ResetID_Click" Content="重置ID" Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton x:Name="Bt_Start" Click="Bt_Start_Click" Content="启动"
+                                               Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton x:Name="Bt_Stop" Click="Bt_Stop_Click" Content="停止"
+                                               Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton x:Name="Bt_Dispose" Click="Bt_Dispose_Click" Content="释放"
+                                               Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton x:Name="Bt_ResetID" Click="Bt_ResetID_Click" Content="重置ID"
+                                               Style="{DynamicResource button}" />
                 </StackPanel>
                 <Grid Grid.Row="3" Margin="5">
                     <Grid.ColumnDefinitions>
@@ -78,16 +91,23 @@
                         <ColumnDefinition Width="80" />
                         <ColumnDefinition Width="60" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="Tb_TestMsg" Style="{DynamicResource inputBox}" Text="RRQM" />
+                    <TextBox x:Name="Tb_TestMsg"
+                             Style="{DynamicResource inputBox}"
+                             Text="RRQM" />
 
-                    <CheckBox x:Name="Cb_IsAsync" Grid.Column="1" VerticalContentAlignment="Center" Content="异步发送" Foreground="{DynamicResource foregroundColor}" />
+                    <CheckBox x:Name="Cb_IsAsync" Grid.Column="1" VerticalContentAlignment="Center" Content="异步发送"
+                              Foreground="{DynamicResource foregroundColor}" />
                     <controls:CorrugatedButton Grid.Column="2" Height="25" Margin="5,0" Click="SendButton_Click" Content="发送" />
                 </Grid>
                 <StackPanel Grid.Row="4" Margin="5" Orientation="Horizontal">
-                    <TextBox x:Name="Tb_ChannelID" Width="150" Style="{DynamicResource inputBox}" />
-                    <controls:CorrugatedButton  Click="Bt_SubscribeChannel_Click" Content="订阅通道" Style="{DynamicResource button}" />
-                    <controls:CorrugatedButton  Click="Bt_ChannelSend_Click" Content="通道发送" Style="{DynamicResource button}" />
-                    <controls:CorrugatedButton  Click="Bt_ChannelComplete_Click" Content="完成发送" Style="{DynamicResource button}" />
+                    <TextBox x:Name="Tb_ChannelID" Width="150"
+                             Style="{DynamicResource inputBox}" />
+                    <controls:CorrugatedButton Click="Bt_SubscribeChannel_Click" Content="订阅通道"
+                                               Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton Click="Bt_ChannelSend_Click" Content="通道发送"
+                                               Style="{DynamicResource button}" />
+                    <controls:CorrugatedButton Click="Bt_ChannelComplete_Click" Content="完成发送"
+                                               Style="{DynamicResource button}" />
                 </StackPanel>
             </Grid>
         </GroupBox>

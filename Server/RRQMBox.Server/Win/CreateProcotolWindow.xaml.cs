@@ -11,12 +11,12 @@
 //------------------------------------------------------------------------------
 using RRQMBox.Server.Common;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace RRQMBox.Server.Win
@@ -69,7 +69,7 @@ namespace RRQMBox.Server.Win
             {
                 try
                 {
-                    this.protocolService.ResetID("MyClientID", "MyServerID");
+                    this.protocolService.ResetID(new WaitSetID("MyClientID", "MyServerID"));
                     ShowMsg("修改成功");
                 }
                 catch (Exception ex)
@@ -87,7 +87,10 @@ namespace RRQMBox.Server.Win
                 //订阅事件
                 protocolService.ClientConnected += Service_ClientConnected;//订阅连接事件
                 protocolService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
-                protocolService.Received += this.ProtocolService_Received; ;
+                protocolService.Received += this.ProtocolService_Received;
+
+                protocolService.BeforeReceiveStream += ProtocolService_BeforeReceiveStream;
+                protocolService.ReceivedStream += ProtocolService_ReceivedStream;
             }
 
             //属性设置
@@ -103,6 +106,17 @@ namespace RRQMBox.Server.Win
             protocolService.Start();
             ShowMsg("绑定成功");
             ShowMsg($"请使用Token为{protocolService.VerifyToken}进行连接");
+        }
+
+        private void ProtocolService_ReceivedStream(IProtocolClient client, StreamStatusEventArgs e)
+        {
+            e.Bucket.Dispose();
+            ShowMsg("流接收完成");
+        }
+
+        private void ProtocolService_BeforeReceiveStream(IProtocolClient client, StreamOperationEventArgs e)
+        {
+            e.Bucket = File.Create(@"C:\Users\carywang\Desktop\新建文件夹\Window.rar");
         }
 
         private void Service_ClientDisconnected(object sender, MesEventArgs e)

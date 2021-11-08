@@ -18,7 +18,9 @@ using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -64,6 +66,12 @@ namespace RRQMBox.Server
         public int P3 { get; set; }
     }
 
+    public struct StructArgs
+    {
+        public int P1 { get; set; }
+    }
+
+
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
     {
@@ -75,7 +83,7 @@ namespace RRQMBox.Server
 
         public Server()
         {
-            Timer timer = new Timer(1000);
+            System.Timers.Timer timer = new System.Timers.Timer(1000);
             timer.Elapsed += this.Timer_Elapsed;
             timer.Start();
         }
@@ -84,6 +92,7 @@ namespace RRQMBox.Server
         [JsonRpc]
         [Route]
         [RRQMRPC]
+        [Description("性能测试")]
         public void Test01_Performance()
         {
             a++;
@@ -93,6 +102,7 @@ namespace RRQMBox.Server
         [JsonRpc]
         [Route]
         [RRQMRPC]
+        [Description("测试异步字符串")]
         public async Task<string> Test02_TaskString(string msg)
         {
             return await Task.Run(() =>
@@ -300,11 +310,11 @@ namespace RRQMBox.Server
 
         [JsonRpc]
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test22_IncludeCaller(IServerCallContext  serverCallContext, int a)
+        public int Test22_IncludeCaller(IServerCallContext serverCallContext, int a)
         {
-            if (serverCallContext is JsonRpcServerCallContext  jsonRpcServerCallContext)
+            if (serverCallContext is JsonRpcServerCallContext jsonRpcServerCallContext)
             {
-               
+
             }
             return a;
         }
@@ -314,6 +324,33 @@ namespace RRQMBox.Server
         public int Test23_InvokeType(IServerCallContext serverCallContext) 
         {
             return invokeCount++;
+        }
+
+        [RRQMRPC]
+        public int Test25_TestStruct(StructArgs structArgs)
+        {
+            return structArgs.P1;
+        }
+
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public int Test26_TestCancellationToken(IServerCallContext serverCallContext)
+        {
+            int i = 0;
+            serverCallContext.TokenSource.Token.Register(()=> 
+            {
+                this.ShowMsg($"任务已取消，i={i}");
+            });
+
+            for (; i < 500; i++)
+            {
+                if (serverCallContext.TokenSource.Token.IsCancellationRequested)
+                {
+                    return 10;
+                }
+                Thread.Sleep(20);
+            }
+           
+            return 1;
         }
 
         private void ShowMsg(string msg)

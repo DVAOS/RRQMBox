@@ -9,10 +9,13 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore;
 using RRQMCore.ByteManager;
+using RRQMCore.Run;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -147,6 +150,22 @@ namespace RRQMBox.Client.Win
         private void ChannelCompleteButton_Click(object sender, RoutedEventArgs e)
         {
             channel.Complete();
+        }
+
+        private async void StreamButton_Click(object sender, RoutedEventArgs e)
+        {
+            Metadata metadata = new Metadata();
+            metadata.Add("FilePath", @"D:\System\Windows.iso");
+            Stream stream = File.OpenRead(@"D:\System\Windows.iso");
+
+            StreamOperator  streamOperator = new StreamOperator();
+            LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (a) =>
+              {
+                  ShowMsg($"速度：{streamOperator.Speed()},进度：{streamOperator.Progress}");
+              });
+            _ = loopAction.RunAsync();
+            AsyncResult result = await this.client.SendStreamAsync(stream, streamOperator);
+            loopAction.Dispose();
         }
     }
 }

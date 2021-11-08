@@ -150,7 +150,7 @@ namespace RRQMSocketXUnitTest.Tools
                 }
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
             Assert.Equal(inputCount, outputCount);
         }
     }

@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
@@ -87,7 +87,7 @@ namespace RRQMBox.Server.Win
                 //订阅事件
                 tcpService.ClientConnected += Service_ClientConnected;//订阅连接事件
                 tcpService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tcpService.CreateSocketCliect += Service_CreatSocketCliect;
+                tcpService.CreateSocketClient += Service_CreatSocketCliect;
                 tcpService.Received += this.OnReceived;
             }
 
@@ -132,7 +132,7 @@ namespace RRQMBox.Server.Win
                 //订阅事件
                 tokenService.ClientConnected += Service_ClientConnected;//订阅连接事件
                 tokenService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tokenService.CreateSocketCliect += Service_CreatSocketCliect;
+                tokenService.CreateSocketClient += Service_CreatSocketCliect;
                 tokenService.Received += this.OnReceived;
             }
 
@@ -206,9 +206,7 @@ namespace RRQMBox.Server.Win
 
         private void OnReceived(SimpleSocketClient client, ByteBlock byteBlock, object obj)
         {
-            if (byteBlock.Length == 0)
-            {
-            }
+            //System.Threading.Thread.Sleep(10);
             if (isPerformanceTest)
             {
                 count++;
@@ -319,6 +317,20 @@ namespace RRQMBox.Server.Win
         private void CorrugatedButton_Click(object sender, RoutedEventArgs e)
         {
             this.msgBox.Clear();
+        }
+
+        private void Bt_DisposeConnected_Click(object sender, RoutedEventArgs e)
+        {
+            this.tcpService.Clear();
+
+            //string[] ids = this.tcpService.SocketClients.GetIDs();
+            //foreach (var item in ids)
+            //{
+            //    if (this.tcpService.TryGetSocketClient(item,out SimpleSocketClient socketClient))
+            //    {
+            //        socketClient.Dispose();
+            //    }
+            //}
         }
     }
 }

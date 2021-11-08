@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 using Microsoft.Win32;
 using RRQMBox.Client.Common;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
@@ -246,6 +246,7 @@ namespace RRQMBox.Client.Win
             }
             else
             {
+                //File.Delete(e.UrlFileInfo.FilePath);
                 ShowMsg(string.Format("文件：{0}上传完成", e.UrlFileInfo.FileName));
             }
         }
@@ -335,7 +336,6 @@ namespace RRQMBox.Client.Win
                         }
 
                         UrlFileInfo urlFileInfo = UrlFileInfo.CreateUpload(this.Tb_Url.Text, transferFlags);
-                        urlFileInfo.SaveFullPath = "123";
                         fileClient.RequestTransfer(urlFileInfo);
                     }
                     catch (Exception e)
@@ -382,7 +382,6 @@ namespace RRQMBox.Client.Win
                 config.RemoteIPHost = new IPHost(this.Tb_iPHost.Text);//服务器地址
                 config.VerifyToken = this.Tb_VerifyToken.Text;//连接验证令箭
                 config.BufferLength = 64 * 1024;//缓存池，该值太小会影响接收效率
-                config.PacketSize = 64 * 1024;//包尺寸，当网络比较差时，应该设置小点，最大值不能超过10Mb
                 config.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();//此处允许设置数据处理适配器，但是只能设置固定包头。
                 config.ReceiveDirectory = "Received";//此处可以设置默认下载文件目录，但是最终路径受UrlFileInfo.SaveFullPath决定。
                 config.Timeout = 10 * 1000;//设置默认单次请求最大等待时间。

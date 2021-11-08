@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
@@ -21,7 +21,6 @@ using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.IO;
 using System.Text;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -133,6 +132,9 @@ namespace RRQMBox.Server.Win
                 config.MaxUploadSpeed = 1024 * 1024 * 10L;
                 config.BufferLength = 1024 * 1024;
                 config.ClearInterval = 500*1000;//500秒后断开
+
+                //config.DownloadRoot = @"C:\Users\17516\Desktop\新建文件夹";
+                //config.UploadRoot = @"C:\Users\17516\Desktop\新建文件夹";
 
                 this.fileService.Setup(config);
                 this.fileService.Start();

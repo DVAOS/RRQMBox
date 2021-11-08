@@ -103,6 +103,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             remoteTest.Test17();
             remoteTest.Test18();
             remoteTest.Test22();
+            remoteTest.Test25();
         }
 
         [Fact]
@@ -180,6 +181,23 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 client.Dispose();
             }
 
+        }
+
+        [Fact]
+        public void ShouldSuccessfulCallCancellationToken()
+        {
+            TcpRpcClient client = new TcpRpcClient();
+            var config = new TcpRpcClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+            config.VerifyToken = "123RPC";
+            config.ProxyToken = "RPC";
+
+            client.Setup(config);
+            client.Connect();//此步骤可以省略
+            client.DiscoveryService();
+
+            RemoteTest remoteTest = new RemoteTest(client);
+            remoteTest.Test26();
         }
     }
 }

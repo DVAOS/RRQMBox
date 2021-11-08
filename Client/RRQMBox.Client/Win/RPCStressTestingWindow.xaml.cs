@@ -9,7 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
@@ -50,7 +50,7 @@ namespace RRQMBox.Client.Win
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            InvokeOption.WaitInvoke.InvokeType = RRQMSocket.RPC.InvokeType.CustomInstance;
+            InvokeOption.WaitInvoke.InvokeType = RRQMSocket.RPC.InvokeType.GlobalInstance;
 
             if (isTest)
             {

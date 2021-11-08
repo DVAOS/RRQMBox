@@ -76,6 +76,7 @@ namespace RRQMBox.Server.Win
             rpcService.AddRPCParser("JsonRpcParser_Tcp", CreateJsonRpcParser(7803, JsonRpcProtocolType.Tcp));
             rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
 
+            Server.ShowMsgMethod = ShowMsg;
             rpcService.RegisterServer<Server>();//注册服务
         }
         private IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
@@ -148,7 +149,7 @@ namespace RRQMBox.Server.Win
         {
             TcpRpcParser tcpRPCParser = new TcpRpcParser();
 
-            //CodeGenerator.AddProxyType(typeof(ProxyClass1));
+            CodeGenerator.AddProxyType(typeof(ProxyClass1));
             //创建配置
             var config = new TcpRpcParserConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };//监听一个IP地址
@@ -158,7 +159,6 @@ namespace RRQMBox.Server.Win
             config.VerifyToken = "123RPC";//令箭值
             config.ProxyToken = "RPC";//默认服务代理令箭
             config.NameSpace = "RRQMTest";//默认代理代码命名空间
-
             //载入配置
             tcpRPCParser.Setup(config);
 
@@ -208,7 +208,7 @@ namespace RRQMBox.Server.Win
                 arg1.Send(arg2);
             };
 
-            service.CreateSocketCliect += (SimpleSocketClient arg1, CreateOption arg2)=> 
+            service.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2)=> 
             {
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
@@ -253,7 +253,7 @@ namespace RRQMBox.Server.Win
             SimpleTcpService tcpService = new SimpleTcpService();
 
             //订阅初始化事件
-            tcpService.CreateSocketCliect += (SimpleSocketClient arg1, CreateOption arg2) =>
+            tcpService.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2) =>
             {
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//设置数据处理适配器
             };
