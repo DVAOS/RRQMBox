@@ -103,6 +103,7 @@ namespace RRQMBox.Server.Win
         {
             e.Row.Header = e.Row.GetIndex() + 1;
         }
+
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             if (fileService == null)
@@ -131,7 +132,7 @@ namespace RRQMBox.Server.Win
                 config.MaxDownloadSpeed = 1024 * 1024 * 10L;
                 config.MaxUploadSpeed = 1024 * 1024 * 10L;
                 config.BufferLength = 1024 * 1024;
-                config.ClearInterval = 500*1000;//500秒后断开
+                config.ClearInterval = 500 * 1000;//500秒后断开
 
                 //config.DownloadRoot = @"C:\Users\17516\Desktop\新建文件夹";
                 //config.UploadRoot = @"C:\Users\17516\Desktop\新建文件夹";
@@ -147,6 +148,7 @@ namespace RRQMBox.Server.Win
                 ShowMsg(ex.Message);
             }
         }
+
         private void SendMesButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.gdView.SelectedItem is FileSocketClient client)
@@ -209,7 +211,7 @@ namespace RRQMBox.Server.Win
 
             for (int i = 0; i < count; i++)
             {
-                if (this.clientItems[i].ID==client.ID)
+                if (this.clientItems[i].ID == client.ID)
                 {
                     this.clientItems[i].Dispose();
                     UIInvoke(() =>
@@ -237,6 +239,7 @@ namespace RRQMBox.Server.Win
         {
             ShowMsg(string.Format("收到发来的消息：{0}", e.Message));
         }
+
         #endregion 事件方法
     }
 

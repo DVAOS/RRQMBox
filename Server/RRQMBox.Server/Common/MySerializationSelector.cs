@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RRQMBox.Server.Common
 {
-    public class MySerializationSelector: SerializationSelector
+    public class MySerializationSelector : SerializationSelector
     {
         /// <summary>
         /// 反序列化

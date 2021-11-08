@@ -69,12 +69,7 @@ namespace RRQMBox.Server.Win
             {
                 try
                 {
-<<<<<<< HEAD
                     this.protocolService.ResetID(new WaitSetID("MyClientID", "MyServerID"));
-=======
-                   
-                    this.protocolService.ResetID(new WaitSetID("MyClientID", "MyServerID") );
->>>>>>> 9ab07d35e257705a2dff60c5b08a94a09a8f4fd6
                     ShowMsg("修改成功");
                 }
                 catch (Exception ex)
@@ -199,7 +194,9 @@ namespace RRQMBox.Server.Win
         {
             this.msgBox.Clear();
         }
-        Channel channel;
+
+        private Channel channel;
+
         private async void Bt_SubscribeChannel_Click(object sender, RoutedEventArgs e)
         {
             if (this.Lb_OnlineClient.SelectedItem is ProtocolSocketClient protocolSocketClient)

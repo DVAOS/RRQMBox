@@ -67,7 +67,8 @@ namespace RRQMBox.Server.Win
         }
 
         private RPCService rpcService;
-        TcpRpcParser tcpRPCParser;
+        private TcpRpcParser tcpRPCParser;
+
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             if (rpcService != null)
@@ -137,8 +138,8 @@ namespace RRQMBox.Server.Win
             jsonRpcConfig.ThreadCount = threadCount;//设置多线程数量
             jsonRpcConfig.ClearInterval = -1;//规定不清理无数据客户端
             jsonRpcConfig.ListenIPHosts = new IPHost[] { new IPHost(7705) };
-            jsonRpcConfig.ProtocolType =  JsonRpcProtocolType.Tcp;
-           
+            jsonRpcConfig.ProtocolType = JsonRpcProtocolType.Tcp;
+
             jsonRpcParser.Setup(jsonRpcConfig);
             jsonRpcParser.Start();
             ShowMsg("jsonRpcParser解析器添加完成");
@@ -151,7 +152,6 @@ namespace RRQMBox.Server.Win
 
             rpcService.RegisterServer<Server>();//注册服务
             rpcService.RegisterServer<MyOperation>();//注册服务
-
 
             ShowMsg("RPC启动完成");
             ShowMsg("使用浏览器访问以下连接测试WebApi");
@@ -228,7 +228,8 @@ namespace RRQMBox.Server.Win
             }
         }
 
-        string path = @"E:\CodeOpen\RRQMSocketFramework\TestDemo\Server\RpcArgsClassLib\bin\Debug\net461\RpcArgsClassLib.dll";
+        private string path = @"E:\CodeOpen\RRQMSocketFramework\TestDemo\Server\RpcArgsClassLib\bin\Debug\net461\RpcArgsClassLib.dll";
+
         private void AddServerButton_Click(object sender, RoutedEventArgs e)
         {
             byte[] data = File.ReadAllBytes(path);

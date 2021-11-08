@@ -38,18 +38,12 @@
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <HintPath>..\packages\CookComputing.XmlRPCv2.2.5.0\lib\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="RRQMCore, Version=5.7.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMCore.5.7.1\lib\net461\RRQMCore.dll</HintPath>
-=======
-    <Reference Include="RRQMCore, Version=5.7.0.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.5.7.0\lib\net461\RRQMCore.dll</HintPath>
->>>>>>> 9ab07d35e257705a2dff60c5b08a94a09a8f4fd6
     </Reference>
     <Reference Include="RRQMSkin, Version=3.4.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSkin.3.4.0\lib\net461\RRQMSkin.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="RRQMSocket, Version=5.7.2.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.5.7.2\lib\net461\RRQMSocket.dll</HintPath>
     </Reference>
@@ -70,31 +64,6 @@
     </Reference>
     <Reference Include="RRQMSocket.RPC.XmlRpc, Version=5.7.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.5.7.1\lib\net461\RRQMSocket.RPC.XmlRpc.dll</HintPath>
-=======
-    <Reference Include="RRQMSkin, Version=3.3.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSkin.3.3.0\lib\net461\RRQMSkin.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.5.7.0\lib\net461\RRQMSocket.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.5.7.0\lib\net461\RRQMSocket.FileTransfer.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.Http, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.5.7.0\lib\net461\RRQMSocket.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.5.7.0\lib\net461\RRQMSocket.RPC.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.5.7.0\lib\net461\RRQMSocket.RPC.JsonRpc.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.5.7.0\lib\net461\RRQMSocket.RPC.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=5.7.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.5.7.0\lib\net461\RRQMSocket.RPC.XmlRpc.dll</HintPath>
->>>>>>> 9ab07d35e257705a2dff60c5b08a94a09a8f4fd6
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

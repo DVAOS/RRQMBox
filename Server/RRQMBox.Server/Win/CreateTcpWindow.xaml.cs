@@ -97,10 +97,10 @@ namespace RRQMBox.Server.Win
             var config = new TcpServiceConfig();
             config.MaxCount = 100000;
             config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Receive|ClearType.Send)
+                .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Receive | ClearType.Send)
                 .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000*1000)//10秒无数据交互将被清理
+                .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000 * 1000)//10秒无数据交互将被清理
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
                 .SetValue(ServiceConfig.SeparateThreadReceiveProperty, false);
 
@@ -147,7 +147,6 @@ namespace RRQMBox.Server.Win
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
                 .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_Token.Text)
                 .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Send | ClearType.Receive);
-
 
             //TcpServiceConfig config = new TcpServiceConfig();
             //config.ListenIPHosts = new IPHost[] { new IPHost(7789) };
@@ -300,7 +299,7 @@ namespace RRQMBox.Server.Win
             }
         }
 
-        private bool isPerformanceTest=true;
+        private bool isPerformanceTest = true;
 
         private void TestCheckBox_Click(object sender, RoutedEventArgs e)
         {
