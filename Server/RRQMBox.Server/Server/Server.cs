@@ -19,6 +19,7 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -69,6 +70,7 @@ namespace RRQMBox.Server
     {
         public int P1 { get; set; }
     }
+
 
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
@@ -283,6 +285,7 @@ namespace RRQMBox.Server
             });
         }
 
+
         [XmlRpc]
         [JsonRpc]
         [Route]
@@ -311,14 +314,14 @@ namespace RRQMBox.Server
         {
             if (serverCallContext is JsonRpcServerCallContext jsonRpcServerCallContext)
             {
+
             }
             return a;
         }
 
         private int invokeCount;
-
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test23_InvokeType(IServerCallContext serverCallContext)
+        public int Test23_InvokeType(IServerCallContext serverCallContext) 
         {
             return invokeCount++;
         }
@@ -333,7 +336,7 @@ namespace RRQMBox.Server
         public int Test26_TestCancellationToken(IServerCallContext serverCallContext)
         {
             int i = 0;
-            serverCallContext.TokenSource.Token.Register(() =>
+            serverCallContext.TokenSource.Token.Register(()=> 
             {
                 this.ShowMsg($"任务已取消，i={i}");
             });
@@ -346,7 +349,7 @@ namespace RRQMBox.Server
                 }
                 Thread.Sleep(20);
             }
-
+           
             return 1;
         }
 

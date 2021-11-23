@@ -63,8 +63,8 @@ namespace RRQMBox.Client.Win
                 return;
             }
             client = new SimpleProtocolClient();
-            client.ConnectedService += this.TcpClient_ConnectedService;
-            client.DisconnectedService += this.TcpClient_DisconnectedService;
+            client.Connected+= this.TcpClient_ConnectedService;
+            client.Disconnected += this.TcpClient_DisconnectedService;
             client.Received += this.Client_Received;
             try
             {
@@ -81,7 +81,7 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private void Client_Received(short? arg1, ByteBlock byteBlock)
+        private void Client_Received(SimpleProtocolClient protocolClient,short? arg1, ByteBlock byteBlock)
         {
             string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, byteBlock.Len - 2);
             ShowMsg($"【接收】协议={arg1}，信息：{mes}");
@@ -136,7 +136,8 @@ namespace RRQMBox.Client.Win
 
             while (await channel.MoveNextAsync())
             {
-                ShowMsg(Encoding.UTF8.GetString(channel.Current));
+                byte[] data = channel.GetCurrent();
+                ShowMsg(Encoding.UTF8.GetString(data));
             }
             ShowMsg(channel.Status.ToString());
         }
@@ -155,17 +156,25 @@ namespace RRQMBox.Client.Win
         private async void StreamButton_Click(object sender, RoutedEventArgs e)
         {
             Metadata metadata = new Metadata();
-            metadata.Add("FilePath", @"D:\System\Windows.iso");
-            Stream stream = File.OpenRead(@"D:\System\Windows.iso");
+            metadata.Add("FilePath", @"D:\系统\Windows.iso");
+            Stream stream = File.OpenRead(@"D:\系统\Windows.iso");
 
             StreamOperator  streamOperator = new StreamOperator();
+            streamOperator.PackageSize = 1024 * 512;
+            streamOperator.MaxSpeed = 1024 * 1024 * 1000;
+
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (a) =>
               {
+                  if (streamOperator.Status != ChannelStatus.Default)
+                  {
+                      ShowMsg("结束");
+                      a.Dispose();
+                  }
                   ShowMsg($"速度：{streamOperator.Speed()},进度：{streamOperator.Progress}");
               });
             _ = loopAction.RunAsync();
             AsyncResult result = await this.client.SendStreamAsync(stream, streamOperator);
-            loopAction.Dispose();
+          
         }
     }
 }

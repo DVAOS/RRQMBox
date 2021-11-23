@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMSkin.MVVM;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
@@ -21,6 +21,7 @@ using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.IO;
 using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -103,15 +104,14 @@ namespace RRQMBox.Server.Win
         {
             e.Row.Header = e.Row.GetIndex() + 1;
         }
-
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             if (fileService == null)
             {
                 fileService = new FileService();
 
-                fileService.ClientConnected += FileService_ClientConnected;
-                fileService.ClientDisconnected += FileService_ClientDisconnected;
+                fileService.Connected += FileService_ClientConnected;
+                fileService.Disconnected += FileService_ClientDisconnected;
                 fileService.BeforeFileTransfer += this.FileService_BeforeFileTransfer;
                 fileService.FinishedFileTransfer += this.FileService_FinishedFileTransfer;
                 fileService.Received += this.FileService_Received;
@@ -132,7 +132,7 @@ namespace RRQMBox.Server.Win
                 config.MaxDownloadSpeed = 1024 * 1024 * 10L;
                 config.MaxUploadSpeed = 1024 * 1024 * 10L;
                 config.BufferLength = 1024 * 1024;
-                config.ClearInterval = 500 * 1000;//500秒后断开
+                config.ClearInterval = 500*1000;//500秒后断开
 
                 //config.DownloadRoot = @"C:\Users\17516\Desktop\新建文件夹";
                 //config.UploadRoot = @"C:\Users\17516\Desktop\新建文件夹";
@@ -148,7 +148,6 @@ namespace RRQMBox.Server.Win
                 ShowMsg(ex.Message);
             }
         }
-
         private void SendMesButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.gdView.SelectedItem is FileSocketClient client)
@@ -211,7 +210,7 @@ namespace RRQMBox.Server.Win
 
             for (int i = 0; i < count; i++)
             {
-                if (this.clientItems[i].ID == client.ID)
+                if (this.clientItems[i].ID==client.ID)
                 {
                     this.clientItems[i].Dispose();
                     UIInvoke(() =>
@@ -239,7 +238,6 @@ namespace RRQMBox.Server.Win
         {
             ShowMsg(string.Format("收到发来的消息：{0}", e.Message));
         }
-
         #endregion 事件方法
     }
 

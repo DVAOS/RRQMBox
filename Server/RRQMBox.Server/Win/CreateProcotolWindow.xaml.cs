@@ -11,12 +11,13 @@
 //------------------------------------------------------------------------------
 using RRQMBox.Server.Common;
 using RRQMCore.ByteManager;
-using RRQMSkin.MVVM;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace RRQMBox.Server.Win
@@ -85,8 +86,8 @@ namespace RRQMBox.Server.Win
             {
                 protocolService = new SimpleProtocolService();
                 //订阅事件
-                protocolService.ClientConnected += Service_ClientConnected;//订阅连接事件
-                protocolService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
+                protocolService.Connected += Service_ClientConnected;//订阅连接事件
+                protocolService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
                 protocolService.Received += this.ProtocolService_Received;
 
                 protocolService.BeforeReceiveStream += ProtocolService_BeforeReceiveStream;
@@ -110,13 +111,21 @@ namespace RRQMBox.Server.Win
 
         private void ProtocolService_ReceivedStream(IProtocolClient client, StreamStatusEventArgs e)
         {
-            e.Bucket.Dispose();
-            ShowMsg("流接收完成");
+            if (e.Status == ChannelStatus.Completed)
+            {
+                ShowMsg("流接收完成");
+                e.Bucket.Dispose();
+            }
+            else
+            {
+                ShowMsg(e.Status.ToString());
+            }
+
         }
 
         private void ProtocolService_BeforeReceiveStream(IProtocolClient client, StreamOperationEventArgs e)
         {
-            e.Bucket = File.Create(@"C:\Users\carywang\Desktop\新建文件夹\Window.rar");
+            e.Bucket = File.Create(@"C:\Users\17516\Desktop\新建文件夹\Window.iso");
         }
 
         private void Service_ClientDisconnected(object sender, MesEventArgs e)
@@ -194,9 +203,7 @@ namespace RRQMBox.Server.Win
         {
             this.msgBox.Clear();
         }
-
-        private Channel channel;
-
+        Channel channel;
         private async void Bt_SubscribeChannel_Click(object sender, RoutedEventArgs e)
         {
             if (this.Lb_OnlineClient.SelectedItem is ProtocolSocketClient protocolSocketClient)
@@ -206,7 +213,8 @@ namespace RRQMBox.Server.Win
                     ShowMsg("已连接通道");
                     while (await channel.MoveNextAsync())
                     {
-                        ShowMsg(Encoding.UTF8.GetString(channel.Current));
+                        byte[] data = channel.GetCurrent();
+                        ShowMsg(Encoding.UTF8.GetString(data));
                     }
                     ShowMsg(channel.Status.ToString());
                 }

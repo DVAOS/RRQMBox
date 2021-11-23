@@ -29,11 +29,11 @@ namespace RRQMSocketXUnitTest.Protocol
 
             bool connected = false;
             int disconnectCount = 0;
-            client.ConnectedService += (object sender, MesEventArgs e) =>
+            client.Connected += (client, e) =>
             {
                 connected = true;
             };
-            client.DisconnectedService += (object sender, MesEventArgs e) =>
+            client.Disconnected += (client, e) =>
             {
                 disconnectCount++;
                 connected = false;
@@ -41,7 +41,7 @@ namespace RRQMSocketXUnitTest.Protocol
 
             int receivedCount = 0;
             string newID = null;
-            client.Received += (short? arg1, ByteBlock arg2) =>
+            client.Received += (SimpleProtocolClient protocolClient,short? arg1, ByteBlock arg2) =>
             {
                 if (arg1 == 10)
                 {

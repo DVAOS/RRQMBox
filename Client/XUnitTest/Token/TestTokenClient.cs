@@ -29,18 +29,18 @@ namespace RRQMSocketXUnitTest.Token
 
             bool connected = false;
             int disconnectCount = 0;
-            client.ConnectedService += (object sender, MesEventArgs e) =>
+            client.Connected += (client, e) =>
             {
                 connected = true;
             };
-            client.DisconnectedService += (object sender, MesEventArgs e) =>
+            client.Disconnected += (client, e) =>
             {
                 disconnectCount++;
                 connected = false;
             };
 
             int receivedCount = 0;
-            client.Received += (ByteBlock arg1, object arg2) =>
+            client.Received += (SimpleTokenClient tokenClient,ByteBlock arg1, object arg2) =>
             {
                 receivedCount++;
             };

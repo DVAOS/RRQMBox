@@ -38,8 +38,7 @@ namespace RRQMSocketXUnitTest.TCP
 
             service.Start();
             Assert.NotNull(service);
-            Assert.Equal(2, service.ListenIPHosts.Length);
-            Assert.Equal(2, service.ListenSockets.Length);
+            Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
             Assert.Equal(10, service.MaxCount);
@@ -48,21 +47,18 @@ namespace RRQMSocketXUnitTest.TCP
             service.Stop();
             Assert.NotNull(service);
             Assert.Equal(ServerState.Stopped, service.ServerState);
-            Assert.Null(service.ListenIPHosts);
-            Assert.Null(service.ListenSockets);
+            Assert.Null(service.Monitors);
 
             service.Start();
             Assert.NotNull(service);
-            Assert.Equal(2, service.ListenIPHosts.Length);
-            Assert.Equal(2, service.ListenSockets.Length);
+            Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
             Assert.Equal(10, service.MaxCount);
             Assert.Equal(300, service.ClearInterval);
 
             service.Dispose();
-            Assert.Null(service.ListenIPHosts);
-            Assert.Null(service.ListenSockets);
+            Assert.Null(service.Monitors);
             Assert.Equal(ServerState.Disposed, service.ServerState);
 
             Assert.ThrowsAny<Exception>(() =>

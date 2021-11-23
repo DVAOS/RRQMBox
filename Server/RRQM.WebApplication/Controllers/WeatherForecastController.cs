@@ -16,6 +16,7 @@ using RRQMSocket.RPC.JsonRpc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RRQM.WebApplication.Controllers
 {
@@ -54,16 +55,19 @@ namespace RRQM.WebApplication.Controllers
         [NonAction]
         public void RPCEnter(IRPCParser parser, MethodInvoker methodInvoker, MethodInstance methodInstance)
         {
+
         }
 
         [NonAction]
         public void RPCError(IRPCParser parser, MethodInvoker methodInvoker, MethodInstance methodInstance)
         {
+
         }
 
         [NonAction]
         public void RPCLeave(IRPCParser parser, MethodInvoker methodInvoker, MethodInstance methodInstance)
         {
+
         }
     }
 }

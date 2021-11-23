@@ -42,7 +42,6 @@ namespace RRQMSocketXUnitTest.UDP
             Assert.Equal("RRQMUdpServer",udpSession.ServerName);
             Assert.Equal(2048,udpSession.BufferLength);
             Assert.Equal("127.0.0.1:10086", udpSession.DefaultRemotePoint.ToString());
-            Assert.Equal("127.0.0.1:10087", udpSession.Name);
 
             udpSession.Stop();
             Assert.Equal(ServerState.Stopped, udpSession.ServerState);
@@ -52,7 +51,6 @@ namespace RRQMSocketXUnitTest.UDP
             Assert.Equal("RRQMUdpServer", udpSession.ServerName);
             Assert.Equal(2048, udpSession.BufferLength);
             Assert.Equal("127.0.0.1:10086", udpSession.DefaultRemotePoint.ToString());
-            Assert.Equal("127.0.0.1:10087", udpSession.Name);
 
             udpSession.Dispose();
             Assert.Equal(ServerState.Disposed, udpSession.ServerState);
@@ -96,7 +94,7 @@ namespace RRQMSocketXUnitTest.UDP
 
             udpSession.SendAsync(BitConverter.GetBytes(4));
             byte[] data_5 = BitConverter.GetBytes(5);
-            udpSession.SendTo(data_5,0,data_5.Length, new IPHost($"127.0.0.1:7790").EndPoint);
+            udpSession.Send(new IPHost($"127.0.0.1:7790").EndPoint,data_5,0,data_5.Length);
 
         }
     }

@@ -75,8 +75,8 @@ namespace RRQMBox.Client.Win
                 return;
             }
             tcpClient = new SimpleTcpClient();
-            tcpClient.ConnectedService += this.TcpClient_ConnectedService;//订阅连接成功事件
-            tcpClient.DisconnectedService += this.TcpClient_DisconnectedService;//订阅断开连接事件
+            tcpClient.Connected+= this.TcpClient_ConnectedService;//订阅连接成功事件
+            tcpClient.Disconnected += this.TcpClient_DisconnectedService;//订阅断开连接事件
             tcpClient.Received += this.TcpClient_Received;
             try
             {
@@ -102,8 +102,8 @@ namespace RRQMBox.Client.Win
                 return;
             }
             tokenClient = new SimpleTokenClient();
-            tokenClient.ConnectedService += this.TcpClient_ConnectedService;
-            tokenClient.DisconnectedService += this.TcpClient_DisconnectedService;
+            tokenClient.Connected += this.TcpClient_ConnectedService;
+            tokenClient.Disconnected+= this.TcpClient_DisconnectedService;
             tokenClient.Received += this.TcpClient_Received;
             try
             {
@@ -121,7 +121,7 @@ namespace RRQMBox.Client.Win
             }
         }
 
-        private void TcpClient_Received(RRQMCore.ByteManager.ByteBlock arg2, object arg3)
+        private void TcpClient_Received(ITcpClient client,RRQMCore.ByteManager.ByteBlock arg2, object arg3)
         {
             string msg = Encoding.UTF8.GetString(arg2.Buffer, 0, (int)arg2.Length);
             ShowMsg($"{this.tcpClient.GetType().Name}收到消息：{msg}");

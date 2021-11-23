@@ -18,7 +18,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="rectangle" Width="8" Height="{TemplateBinding Height}" CornerRadius="4" SnapsToDevicePixels="True" />
+                    <Border x:Name="rectangle" Width="8"
+                            Height="{TemplateBinding Height}"
+                            CornerRadius="4" SnapsToDevicePixels="True" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Opacity" Value="1" />
@@ -52,7 +54,8 @@
                         </Grid.RowDefinitions>
                         <Border Width="8" Background="Transparent" BorderThickness="0" />
 
-                        <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}">
+                        <Track x:Name="PART_Track" IsDirectionReversed="true"
+                               IsEnabled="{TemplateBinding IsMouseOver}">
                             <Track.Thumb>
                                 <Thumb Style="{StaticResource ScrollBarThumbVertical}" />
                             </Track.Thumb>
@@ -101,7 +104,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Custom:RRQMWindow}">
-                    <Border x:Name="mainBorder" Background="{StaticResource backgroundColor}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border x:Name="mainBorder"
+                            Background="{StaticResource backgroundColor}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -120,10 +126,13 @@
                                     <Image x:Name="ico" Width="20" Height="20" Margin="3,0" HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Source="{TemplateBinding Icon}" />
-                                    <ContentPresenter Grid.Column="1" Margin="3,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Content="{TemplateBinding TitleContent}" />
+                                    <ContentPresenter Grid.Column="1" Margin="3,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                                      Content="{TemplateBinding TitleContent}" />
                                 </Grid>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Button x:Name="minButton" Command="{Binding MinWindowCommand, RelativeSource={RelativeSource TemplatedParent}}" Content="&#xE622;">
+                                    <Button x:Name="minButton"
+                                            Command="{Binding MinWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Content="&#xE622;">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="FontFamily" Value="/RRQMSkin;component/Fonts/#iconfont" />
@@ -133,7 +142,9 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type Button}">
                                                             <Border x:Name="border" Width="25" Height="25" Margin="3,0" BorderThickness="1">
-                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" />
+                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="{TemplateBinding Foreground}"
+                                                                           Text="{TemplateBinding Content}" />
                                                             </Border>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
@@ -161,7 +172,9 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type Button}">
                                                             <Border x:Name="border" Width="25" Height="25" Margin="3,0" BorderThickness="1">
-                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" />
+                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="{TemplateBinding Foreground}"
+                                                                           Text="{TemplateBinding Content}" />
                                                             </Border>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
@@ -179,7 +192,9 @@
                                             </Style>
                                         </Button.Style>
                                     </Button>
-                                    <Button x:Name="closeButton" Command="{Binding CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}" Content="&#xE62C;">
+                                    <Button x:Name="closeButton"
+                                            Command="{Binding CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Content="&#xE62C;">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="FontFamily" Value="/RRQMSkin;component/Fonts/#iconfont" />
@@ -189,7 +204,9 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type Button}">
                                                             <Border x:Name="border" Width="25" Height="25" Margin="3,0" BorderThickness="1">
-                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" />
+                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="{TemplateBinding Foreground}"
+                                                                           Text="{TemplateBinding Content}" />
                                                             </Border>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
@@ -280,7 +297,8 @@
                                                 <ColumnDefinition />
                                                 <ColumnDefinition Width="160" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Margin="5" VerticalAlignment="Center" FontSize="20" Text="{Binding Name}" />
+                                            <TextBlock Margin="5" VerticalAlignment="Center" FontSize="20"
+                                                       Text="{Binding Name}" />
                                             <Grid Grid.Column="1" Margin="5,0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition />

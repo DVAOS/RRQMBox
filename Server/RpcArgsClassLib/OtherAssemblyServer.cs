@@ -11,6 +11,11 @@
 //------------------------------------------------------------------------------
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RpcArgsClassLib
 {
@@ -25,11 +30,11 @@ namespace RpcArgsClassLib
         [RRQMRPC]
         public ClassOne GetClassOne()
         {
-            return new ClassOne() { P1 = 10, P2 = "RRQM" };
+            return new ClassOne() {P1=10,P2="RRQM" };
         }
     }
 
-    [RRQMRPCMember]
+   [RRQMRPCMember]
     public class ClassOne
     {
         public int P1 { get; set; }

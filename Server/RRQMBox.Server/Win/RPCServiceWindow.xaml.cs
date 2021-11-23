@@ -10,7 +10,8 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RpcArgsClassLib;
-using RRQMSkin.MVVM;
+using RRQMCore.XREF.Newtonsoft.Json;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
@@ -21,6 +22,7 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -67,8 +69,7 @@ namespace RRQMBox.Server.Win
         }
 
         private RPCService rpcService;
-        private TcpRpcParser tcpRPCParser;
-
+        TcpRpcParser tcpRPCParser;
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             if (rpcService != null)
@@ -81,8 +82,8 @@ namespace RRQMBox.Server.Win
             CodeGenerator.AddProxyType(typeof(ProxyClass1));
 
             tcpRPCParser = new TcpRpcParser();
-            tcpRPCParser.ClientConnected += this.TcpRPCParser_ClientConnected;
-            tcpRPCParser.ClientDisconnected += this.TcpRPCParser_ClientDisconnected;
+            tcpRPCParser.Connected += this.TcpRPCParser_ClientConnected;
+            tcpRPCParser.Disconnected += this.TcpRPCParser_ClientDisconnected;
             var config = new TcpRpcParserConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost(7700) };//监听一个IP地址
             config.ThreadCount = threadCount;//设置多线程数量
@@ -138,8 +139,8 @@ namespace RRQMBox.Server.Win
             jsonRpcConfig.ThreadCount = threadCount;//设置多线程数量
             jsonRpcConfig.ClearInterval = -1;//规定不清理无数据客户端
             jsonRpcConfig.ListenIPHosts = new IPHost[] { new IPHost(7705) };
-            jsonRpcConfig.ProtocolType = JsonRpcProtocolType.Tcp;
-
+            jsonRpcConfig.ProtocolType =  JsonRpcProtocolType.Tcp;
+           
             jsonRpcParser.Setup(jsonRpcConfig);
             jsonRpcParser.Start();
             ShowMsg("jsonRpcParser解析器添加完成");
@@ -153,12 +154,13 @@ namespace RRQMBox.Server.Win
             rpcService.RegisterServer<Server>();//注册服务
             rpcService.RegisterServer<MyOperation>();//注册服务
 
+
             ShowMsg("RPC启动完成");
             ShowMsg("使用浏览器访问以下连接测试WebApi");
 
             foreach (var url in webApiParser.RouteMap.Urls)
             {
-                ShowMsg($"http://127.0.0.1:{webApiParser.ListenIPHosts[0].Port}{url}");
+                ShowMsg($"http://127.0.0.1:{webApiParser.Monitors[0].IPHost.Port}{url}");
             }
         }
 
@@ -228,8 +230,7 @@ namespace RRQMBox.Server.Win
             }
         }
 
-        private string path = @"E:\CodeOpen\RRQMSocketFramework\TestDemo\Server\RpcArgsClassLib\bin\Debug\net461\RpcArgsClassLib.dll";
-
+        string path = @"E:\CodeOpen\RRQMSocketFramework\TestDemo\Server\RpcArgsClassLib\bin\Debug\net461\RpcArgsClassLib.dll";
         private void AddServerButton_Click(object sender, RoutedEventArgs e)
         {
             byte[] data = File.ReadAllBytes(path);
@@ -251,12 +252,12 @@ namespace RRQMBox.Server.Win
 
         private void UpdateServerButton_Click(object sender, RoutedEventArgs e)
         {
-            //byte[] data = File.ReadAllBytes(path);
-            //Assembly assembly = Assembly.Load(data);
-            //Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
+            byte[] data = File.ReadAllBytes(path);
+            Assembly assembly = Assembly.Load(data);
+            Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
 
-            //rpcService.UpdateRegisteredServer(serverType);
-            //ShowMsg("服务更新成功");
+            rpcService.UpdateRegisteredServer(serverType);
+            ShowMsg("服务更新成功");
         }
 
         private void CompilerButton_Click(object sender, RoutedEventArgs e)

@@ -27,6 +27,12 @@ namespace RRQMBox.Server.Win
         public CreateUdpWindow()
         {
             InitializeComponent();
+            this.Loaded += CreateUdpWindow_Loaded;
+        }
+
+        private void CreateUdpWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.ShowMsg("请再启动一个窗口，并且设置监听和目标地址后进行测试。");
         }
 
         private void ShowMsg(string msg)
@@ -52,19 +58,34 @@ namespace RRQMBox.Server.Win
                 this.udpSession = new SimpleUdpSession();
             }
             var config = new UdpSessionConfig();//UDP配置
-            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost(this.Tb_TargetIPHost.Text).EndPoint);//设置默认终结点
-            if ((bool)this.Cb_UseBind.IsChecked)
-            {
-                config.SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定
-                    .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })//绑定的IP，udp只能绑定一个地址。
-                    .SetValue(UdpSessionConfig.SeparateThreadReceiveProperty, false)
-                    .SetValue(UdpSessionConfig.ThreadCountProperty, 5);
-            }
-
+            
+            config.ListenIPHosts = new IPHost[] { new IPHost(this.Tb_iPHost.Text) };//绑定的IP，udp只能绑定一个地址。
+            
+            //设置默认终结点,方便在调用Send时直接发送。一般作为服务器时不用设置。
+            //config.DefaultRemotePoint = new IPHost(this.Tb_TargetIPHost.Text).EndPoint;
+            
+            config.BufferLength = 1024 * 64;//缓存池容量
+            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
+            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
+            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
+            config.ServerName = "RRQMService";//服务名称
+            config.UseBind = true;//启动监听
+            config.ListenIPHosts = new IPHost[] { new IPHost(this.Tb_iPHost.Text) };
+            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
+            config.ThreadCount = 5;//多线程数量
+           
             this.udpSession.Setup(config);//加载配置
-            this.udpSession.Start();//启动
-            this.udpSession.Received += this.UdpSession_Received;
-            ShowMsg("服务已启动");
+
+            try
+            {
+                this.udpSession.Start();//启动
+                this.udpSession.Received += this.UdpSession_Received;
+                ShowMsg("服务已启动");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private int count = 0;
@@ -77,7 +98,7 @@ namespace RRQMBox.Server.Win
             }
             else
             {
-                ShowMsg($"收到信息：{Encoding.UTF8.GetString(e.Buffer, 0, (int)e.Length)}");
+                ShowMsg($"从{endpoint.ToString()}收到信息：{Encoding.UTF8.GetString(e.Buffer, 0, (int)e.Length)}");
             }
         }
 
@@ -108,11 +129,11 @@ namespace RRQMBox.Server.Win
             {
                 if ((bool)this.Cb_IsAsync.IsChecked)
                 {
-                    this.udpSession.Send(Encoding.UTF8.GetBytes("RRQM"));
+                    this.udpSession.Send(new IPHost(this.Tb_TargetIPHost.Text).EndPoint,Encoding.UTF8.GetBytes("RRQM"));
                 }
                 else
                 {
-                    this.udpSession.SendAsync(Encoding.UTF8.GetBytes("RRQM"));
+                    this.udpSession.SendAsync(new IPHost(this.Tb_TargetIPHost.Text).EndPoint,Encoding.UTF8.GetBytes("RRQM"));
                 }
             }
         }

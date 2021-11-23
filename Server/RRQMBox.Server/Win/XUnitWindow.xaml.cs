@@ -67,7 +67,7 @@ namespace RRQMBox.Server.Win
             rpcService.AddRPCParser("tcpRPCParser", CreateRRQMTcpParser(7794));
 
             rpcService.AddRPCParser("udpRPCParser", CreateRRQMUdpParser(7797));
-
+          
             rpcService.AddRPCParser("webApiParser_Xml", CreateWebApiParser(7800, new XmlDataConverter()));
             rpcService.AddRPCParser("webApiParser_Json", CreateWebApiParser(7801, new JsonDataConverter()));
 
@@ -79,7 +79,6 @@ namespace RRQMBox.Server.Win
             Server.ShowMsgMethod = ShowMsg;
             rpcService.RegisterServer<Server>();//注册服务
         }
-
         private IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
         {
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
@@ -108,7 +107,7 @@ namespace RRQMBox.Server.Win
 
             xmlRpcParser.Setup(config);
             xmlRpcParser.Start();
-
+          
             ShowMsg($"xmlRpcParser解析器添加完成，端口号：{port}");
             return xmlRpcParser;
         }
@@ -127,7 +126,6 @@ namespace RRQMBox.Server.Win
             ShowMsg($"webApiParser解析器添加完成，端口号：{port}，序列化器：{dataConverter.GetType().Name}");
             return webApiParser;
         }
-
         private IRPCParser CreateRRQMUdpParser(int port)
         {
             UdpRpcParser udpRPCParser = new UdpRpcParser();
@@ -210,7 +208,7 @@ namespace RRQMBox.Server.Win
                 arg1.Send(arg2);
             };
 
-            service.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2) =>
+            service.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2)=> 
             {
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
@@ -229,6 +227,7 @@ namespace RRQMBox.Server.Win
             service.Start();
             ShowMsg($"TokenService已启动,端口：{port}");
         }
+
 
         private void CreateUdpService(int bindPort, int targetPort)
         {
@@ -260,7 +259,7 @@ namespace RRQMBox.Server.Win
             };
 
             //订阅连接事件
-            tcpService.ClientConnected += (object sender, MesEventArgs e) =>
+            tcpService.Connected += (SimpleSocketClient client, MesEventArgs e) =>
             {
                 ShowMsg("客户端已连接到TcpService");
             };
@@ -272,7 +271,7 @@ namespace RRQMBox.Server.Win
             };
 
             //订阅断开连接事件
-            tcpService.ClientDisconnected += (object sender, MesEventArgs e) =>
+            tcpService.Disconnected += (SimpleSocketClient client, MesEventArgs e) =>
             {
                 ShowMsg("客户端已断开");
             };

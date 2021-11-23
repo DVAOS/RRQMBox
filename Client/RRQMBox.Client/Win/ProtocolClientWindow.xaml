@@ -60,12 +60,12 @@
                               Foreground="{DynamicResource foregroundColor}" />
                     <controls:CorrugatedButton Grid.Column="2" Width="60" Margin="10,0" Click="TcpSendButton_Click" Content="发送" />
                 </Grid>
-                <StackPanel Grid.Row="2" Margin="10,0" VerticalAlignment="Center" Orientation="Horizontal">
+                <WrapPanel Grid.Row="2" Margin="10,0" VerticalAlignment="Center" Orientation="Horizontal">
                     <controls:CorrugatedButton Width="90" Height="25" Margin="10,0" Click="CreateChannelButton_Click" Content="创建通道" />
                     <controls:CorrugatedButton Width="90" Height="25" Margin="10,0" Click="ChannelSendButton_Click" Content="通道发送" />
                     <controls:CorrugatedButton Width="90" Height="25" Margin="10,0" Click="ChannelCompleteButton_Click" Content="完成发送" />
                     <controls:CorrugatedButton Width="90" Height="25" Margin="10,0" Click="StreamButton_Click" Content="发送流数据" />
-                </StackPanel>
+                </WrapPanel>
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="3" Margin="3" Header="日志输出">

@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMSkin.MVVM;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
@@ -85,10 +85,19 @@ namespace RRQMBox.Server.Win
             {
                 tcpService = new SimpleTcpService();
                 //订阅事件
-                tcpService.ClientConnected += Service_ClientConnected;//订阅连接事件
-                tcpService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
+                tcpService.Connected += Service_ClientConnected;//订阅连接事件
+                tcpService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
                 tcpService.CreateSocketClient += Service_CreatSocketCliect;
                 tcpService.Received += this.OnReceived;
+
+                //string[] ids = tcpService.SocketClients.GetIDs();//获取目前在线的所有ID
+                //foreach (var id in ids)//遍历ID
+                //{
+                //    if (tcpService.TryGetSocketClient(id, out SimpleSocketClient socketClient))
+                //    {
+                //        socketClient.Send(new byte[] { 0 });//回发
+                //    }
+                //}
             }
 
             this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
@@ -130,8 +139,8 @@ namespace RRQMBox.Server.Win
             {
                 tokenService = new SimpleTokenService();
                 //订阅事件
-                tokenService.ClientConnected += Service_ClientConnected;//订阅连接事件
-                tokenService.ClientDisconnected += Service_ClientDisconnected;//订阅断开连接事件
+                tokenService.Connected += Service_ClientConnected;//订阅连接事件
+                tokenService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
                 tokenService.CreateSocketClient += Service_CreatSocketCliect;
                 tokenService.Received += this.OnReceived;
             }
@@ -147,6 +156,7 @@ namespace RRQMBox.Server.Win
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
                 .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_Token.Text)
                 .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Send | ClearType.Receive);
+
 
             //TcpServiceConfig config = new TcpServiceConfig();
             //config.ListenIPHosts = new IPHost[] { new IPHost(7789) };

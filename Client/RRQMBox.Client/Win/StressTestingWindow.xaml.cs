@@ -188,7 +188,7 @@ namespace RRQMBox.Client.Win
             set
             {
                 client = value;
-                client.DisconnectedService += this.Client_DisconnectedService;
+                client.Disconnected+= this.Client_DisconnectedService;
             }
         }
 

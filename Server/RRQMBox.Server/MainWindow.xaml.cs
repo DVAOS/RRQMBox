@@ -12,6 +12,7 @@
 using RRQMBox.Server.Model;
 using RRQMBox.Server.Win;
 using RRQMSkin.Windows;
+using System.Diagnostics;
 using System.Windows;
 
 namespace RRQMBox.Server

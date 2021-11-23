@@ -369,8 +369,8 @@ namespace RRQMBox.Client.Win
                 fileClient.TransferFileError += this.FileClient_TransferFileError;
                 fileClient.BeforeFileTransfer += this.FileClient_BeforeFileTransfer; ;
                 fileClient.FinishedFileTransfer += this.FileClient_FinishedFileTransfer; ;
-                fileClient.DisconnectedService += this.FileClient_DisConnectedService;
-                fileClient.ConnectedService += this.FileClient_ConnectedService;
+                fileClient.Disconnected += this.FileClient_DisConnectedService;
+                fileClient.Connected += this.FileClient_ConnectedService;
                 fileClient.FileTransferCollectionChanged += this.FileClient_FileTransferCollectionChanged;
                 fileClient.Received += this.FileClient_Received;
             }

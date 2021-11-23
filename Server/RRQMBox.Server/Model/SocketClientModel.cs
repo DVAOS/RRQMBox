@@ -9,7 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSkin.MVVM;
+using RRQMMVVM;
 using RRQMSocket.FileTransfer;
 using System;
 using System.IO;
@@ -50,7 +50,7 @@ namespace RRQMBox.Server.Model
         {
             get { return fileSocketClient.Name; }
         }
-
+        
         public string Progress
         {
             get { return progress; }
@@ -70,19 +70,20 @@ namespace RRQMBox.Server.Model
 
         public int MaxUploadSpeed
         {
-            get { return (int)(this.fileSocketClient.MaxUploadSpeed / (1024 * 1024.0)); }
-            set { this.fileSocketClient.MaxUploadSpeed = value * 1024 * 1024L; OnPropertyChanged(); }
+            get { return (int)(this.fileSocketClient.MaxUploadSpeed/ (1024 * 1024.0)); }
+            set { this.fileSocketClient.MaxUploadSpeed = value*1024*1024L; OnPropertyChanged(); }
         }
 
         public int MaxDownloadSpeed
         {
             get { return (int)(this.fileSocketClient.MaxDownloadSpeed / (1024 * 1024.0)); }
-            set
-            {
+            set 
+            { 
                 this.fileSocketClient.MaxDownloadSpeed = value * 1024 * 1024L;
-                OnPropertyChanged();
+                OnPropertyChanged(); 
             }
         }
+
 
         public void Begin()
         {
