@@ -10,8 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RpcArgsClassLib;
-using RRQMCore.XREF.Newtonsoft.Json;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
@@ -22,7 +21,6 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -252,12 +250,12 @@ namespace RRQMBox.Server.Win
 
         private void UpdateServerButton_Click(object sender, RoutedEventArgs e)
         {
-            byte[] data = File.ReadAllBytes(path);
-            Assembly assembly = Assembly.Load(data);
-            Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
+            //byte[] data = File.ReadAllBytes(path);
+            //Assembly assembly = Assembly.Load(data);
+            //Type serverType = assembly.GetType("RpcArgsClassLib.OtherAssemblyServer");
 
-            rpcService.UpdateRegisteredServer(serverType);
-            ShowMsg("服务更新成功");
+            //rpcService.UpdateRegisteredServer(serverType);
+            //ShowMsg("服务更新成功");
         }
 
         private void CompilerButton_Click(object sender, RoutedEventArgs e)

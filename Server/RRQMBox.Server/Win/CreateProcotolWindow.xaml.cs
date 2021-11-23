@@ -11,13 +11,12 @@
 //------------------------------------------------------------------------------
 using RRQMBox.Server.Common;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace RRQMBox.Server.Win

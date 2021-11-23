@@ -44,8 +44,8 @@
     <Reference Include="RRQMSkin, Version=3.3.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSkin.3.3.0\lib\net461\RRQMSkin.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.5.8.1\lib\net461\RRQMSocket.dll</HintPath>
+    <Reference Include="RRQMSocket, Version=5.8.2.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.5.8.2\lib\net461\RRQMSocket.dll</HintPath>
     </Reference>
     <Reference Include="RRQMSocket.FileTransfer, Version=5.8.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.FileTransfer.5.8.0\lib\net461\RRQMSocket.FileTransfer.dll</HintPath>

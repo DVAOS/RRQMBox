@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RRQMSocket" Version="5.8.1" />
+    <PackageReference Include="RRQMSocket" Version="5.8.2" />
     <PackageReference Include="RRQMSocket.FileTransfer" Version="5.8.0" />
     <PackageReference Include="RRQMSocket.RPC" Version="5.8.0" />
     <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="5.8.0" />
