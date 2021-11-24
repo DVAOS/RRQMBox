@@ -10,7 +10,8 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RpcArgsClassLib;
-using RRQMSkin.MVVM;
+using RRQMCore.XREF.Newtonsoft.Json;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using RRQMSocket.RPC;
@@ -21,6 +22,7 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;

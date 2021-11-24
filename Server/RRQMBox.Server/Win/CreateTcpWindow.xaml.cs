@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMSkin.MVVM;
+using RRQMMVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
@@ -87,7 +87,7 @@ namespace RRQMBox.Server.Win
                 //订阅事件
                 tcpService.Connected += Service_ClientConnected;//订阅连接事件
                 tcpService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tcpService.CreateSocketClient += Service_CreatSocketCliect;
+                tcpService.Connecting += Service_Connecting;
                 tcpService.Received += this.OnReceived;
 
                 //string[] ids = tcpService.SocketClients.GetIDs();//获取目前在线的所有ID
@@ -141,7 +141,7 @@ namespace RRQMBox.Server.Win
                 //订阅事件
                 tokenService.Connected += Service_ClientConnected;//订阅连接事件
                 tokenService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tokenService.CreateSocketClient += Service_CreatSocketCliect;
+                tokenService.Connecting += Service_Connecting;
                 tokenService.Received += this.OnReceived;
             }
 
@@ -173,7 +173,7 @@ namespace RRQMBox.Server.Win
 
         private int adapterIndex;
 
-        private void Service_CreatSocketCliect(SimpleSocketClient arg1, CreateOption arg2)
+        private void Service_Connecting(SimpleSocketClient arg1, ClientOperationEventArgs arg2)
         {
             switch (this.adapterIndex)
             {

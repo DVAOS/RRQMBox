@@ -203,12 +203,12 @@ namespace RRQMBox.Server.Win
         private void CreateTokenService(int port)
         {
             SimpleTokenService service = new SimpleTokenService();
-            service.Received += (SimpleSocketClient arg1, ByteBlock arg2, object arg3) =>
+            service.Received += ( arg1,  arg2, arg3) =>
             {
                 arg1.Send(arg2);
             };
 
-            service.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2)=> 
+            service.Connecting += ( arg1, arg2)=> 
             {
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
@@ -253,7 +253,7 @@ namespace RRQMBox.Server.Win
             SimpleTcpService tcpService = new SimpleTcpService();
 
             //订阅初始化事件
-            tcpService.CreateSocketClient += (SimpleSocketClient arg1, CreateOption arg2) =>
+            tcpService.Connecting += (arg1, arg2) =>
             {
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//设置数据处理适配器
             };

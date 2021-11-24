@@ -35,6 +35,7 @@ namespace TcpServiceDemo
 
             service.Connected += (client, e) =>
             {
+                client.Send(Encoding.UTF8.GetBytes("来了，老弟"));
                 //有客户端连接
             };
 
@@ -43,11 +44,12 @@ namespace TcpServiceDemo
                 //有客户端断开连接
             };
 
-            service.CreateSocketClient += (client, e) =>
+            service.Connecting += (client, e) =>
             {
                 //为初始化配置
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
+            
 
             service.Received += (client, byteBlock ,obj) =>
             {
@@ -101,6 +103,13 @@ namespace TcpServiceDemo
                 //有客户端连接
             };
 
+            service.Connecting += (client, e) =>
+            {
+                client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
+                //client.Send(Encoding.UTF8.GetBytes("滚"));
+                //e.IsPermitOperation = false;//是否允许连接
+            };
+
             service.Disconnected += (client, e) =>
             {
                 //有客户端断开连接
@@ -142,9 +151,13 @@ namespace TcpServiceDemo
 
     public class MyTcpService : TcpService<MySocketClient>
     {
-        protected override void OnCreateSocketClient(MySocketClient socketClient, CreateOption createOption)
+        protected override void OnConnecting(MySocketClient socketClient, ClientOperationEventArgs e)
         {
-            socketClient.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//普通TCP报文处理器
+            //socketClient.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//普通TCP报文处理器
+            //或
+            e.DataHandlingAdapter = new NormalDataHandlingAdapter();
+
+            base.OnConnecting(socketClient, e);
         }
     }
 

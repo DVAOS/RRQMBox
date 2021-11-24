@@ -71,7 +71,7 @@ namespace ProtocolServiceDemo
         {
             SimpleProtocolService protocolService = CreateSimpleProtocolService();
 
-            protocolService.CreateSocketClient += (client, createOption) =>
+            protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
@@ -122,7 +122,7 @@ namespace ProtocolServiceDemo
         {
             SimpleProtocolService protocolService = CreateSimpleProtocolService();
 
-            protocolService.CreateSocketClient += (client, createOption) =>
+            protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
@@ -149,7 +149,7 @@ namespace ProtocolServiceDemo
         {
             SimpleProtocolService protocolService = CreateSimpleProtocolService();
 
-            protocolService.CreateSocketClient += (client, createOption) =>
+            protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
@@ -174,7 +174,7 @@ namespace ProtocolServiceDemo
         private static void Test_SimpleProtocolService()
         {
             SimpleProtocolService protocolService = CreateSimpleProtocolService();
-            protocolService.CreateSocketClient += (client, createOption) =>
+            protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
@@ -186,7 +186,7 @@ namespace ProtocolServiceDemo
         {
             SimpleProtocolService protocolService = CreateSimpleProtocolService();
 
-            protocolService.CreateSocketClient += (client, e) =>
+            protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //在测试流接收时，因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。

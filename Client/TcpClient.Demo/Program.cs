@@ -48,6 +48,7 @@ namespace TcpClientDemo
             {
                 //客户端接收信息
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
+                Console.WriteLine($"接收：{mes}");
             };
 
             //声明配置
@@ -66,6 +67,8 @@ namespace TcpClientDemo
             tcpClient.Setup(config);
 
             tcpClient.Connect();
+
+            tcpClient.Send(Encoding.UTF8.GetBytes("RRQM"));
 
             Console.WriteLine("输入信息，回车发送");
             while (true)

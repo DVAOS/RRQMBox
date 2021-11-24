@@ -43,7 +43,7 @@ namespace TokenServiceDemo
                 //有客户端断开连接
             };
 
-            service.CreateSocketClient += (client, e) =>
+            service.Connecting += (client, e) =>
             {
                 //为初始化配置
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
@@ -150,10 +150,12 @@ namespace TokenServiceDemo
 
     public class MyTokenService : TokenService<MyTokenSocketClient>
     {
-        protected override void OnCreateSocketClient(MyTokenSocketClient socketClient, CreateOption createOption)
+        protected override void OnConnecting(MyTokenSocketClient socketClient, ClientOperationEventArgs e)
         {
             socketClient.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//普通TCP报文处理器
+            base.OnConnecting(socketClient, e);
         }
+
         protected override void OnVerifyToken(VerifyOption verifyOption)
         {
             if (verifyOption.Token == this.VerifyToken)
