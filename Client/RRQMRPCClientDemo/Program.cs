@@ -26,7 +26,6 @@ namespace RRQMRPCClientDemo
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            config.VerifyToken = "123RPC";
             config.ProxyToken = "RPC";
 
             client.Setup(config);
