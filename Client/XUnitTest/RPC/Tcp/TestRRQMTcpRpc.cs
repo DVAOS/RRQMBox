@@ -27,11 +27,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.VerifyToken = "123RPC";
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect();//此步骤可以省略
+            client.Connect("123RPC");//此步骤可以省略
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -44,11 +43,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.VerifyToken = "123RPC";
             config.ProxyToken = "error";
 
             client.Setup(config);
-            client.Connect();//此步骤可以省略
+            client.Connect("123RPC");//此步骤可以省略
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -64,11 +62,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.VerifyToken = "123RPC";
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect();//此步骤可以省略
+            client.Connect("123RPC");//此步骤可以省略
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -114,11 +111,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.VerifyToken = "123RPC";
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect();//此步骤可以省略
+                client.Connect("123RPC");//此步骤可以省略
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -137,11 +133,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.VerifyToken = "123RPC";
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect();//此步骤可以省略
+                client.Connect("123RPC");//此步骤可以省略
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -164,11 +159,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.VerifyToken = "123RPC";
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect();//此步骤可以省略
+                client.Connect("123RPC");//此步骤可以省略
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -189,11 +183,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.VerifyToken = "123RPC";
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect();//此步骤可以省略
+            client.Connect("123RPC");//此步骤可以省略
             client.DiscoveryService();
 
             RemoteTest remoteTest = new RemoteTest(client);

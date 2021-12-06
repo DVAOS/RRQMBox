@@ -46,7 +46,6 @@ namespace RRQMSocketXUnitTest.TCP
             var config = new TcpClientConfig();
             config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7789"))//远程IPHost
                 .SetValue(TcpClientConfig.SeparateThreadSendProperty, false)//独立线程发送
-                .SetValue(TcpClientConfig.SeparateThreadReceiveProperty, false)
                 .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new NormalDataHandlingAdapter());//数据处理适配器
 
             client.Setup(config);//载入配置

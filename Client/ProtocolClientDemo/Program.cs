@@ -166,13 +166,13 @@ namespace ProtocolClientDemo
 
             StreamOperator streamOperator = new StreamOperator();
             streamOperator.PackageSize = 1024 * 64;//分包长度
-            streamOperator.MaxSpeed = 1024 * 1024 * 5;//最大传输值
+            streamOperator.SetMaxSpeed(1024 * 1024 * 5) ;//最大传输值
             
             //streamOperator.Cancel();//随时取消传输
             
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (a) =>
             {
-                if (streamOperator.Status != ChannelStatus.Default)
+                if (streamOperator.Result.ResultCode !=  ResultCode.Default)
                 {
                     a.Dispose();
                 }
@@ -185,8 +185,8 @@ namespace ProtocolClientDemo
             metadata.Add("2", "2");
 
             //该方法会阻塞，直到结束
-            AsyncResult asyncResult = protocolClient.SendStream(stream, streamOperator, metadata);
-            Console.WriteLine($"状态：{asyncResult.IsSuccess}，信息：{asyncResult.Message}");
+            Result result = protocolClient.SendStream(stream, streamOperator, metadata);
+            Console.WriteLine(result);
 
         }
 
@@ -242,14 +242,9 @@ namespace ProtocolClientDemo
             config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
             config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
             config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
             config.DataHandlingAdapter = adapter;//设置数据处理适配器
             config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
             config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
-            //继承TokenClient配置
-            config.VerifyToken = "Token";//连接验证令箭
-            config.VerifyTimeout = 3 * 1000;//验证3秒超时
 
             //从Protocpl配置
             config.HeartbeatFrequency = 5000;//每5秒心跳

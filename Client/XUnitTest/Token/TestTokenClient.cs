@@ -24,7 +24,7 @@ namespace RRQMSocketXUnitTest.Token
         [Fact]
         public void ShouldCanConnectAndReceive()
         {
-            int waitTime = 100;
+            int waitTime = 1000;
             SimpleTokenClient client = new SimpleTokenClient();
 
             bool connected = false;
@@ -47,11 +47,10 @@ namespace RRQMSocketXUnitTest.Token
 
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7792");
-            config.VerifyToken = "XUnitTest";
-            config.VerifyTimeout = 3000;
+            config.DataHandlingAdapter = new NormalDataHandlingAdapter();
 
             client.Setup(config);//载入配置
-            client.Connect();//连接
+            client.Connect("XUnitTest");//连接
             Thread.Sleep(waitTime);
 
             Assert.True(client.Online);
@@ -73,7 +72,7 @@ namespace RRQMSocketXUnitTest.Token
             Assert.True(!connected);
             Assert.Equal(1, disconnectCount);
 
-            client.Connect();
+            client.Connect("XUnitTest");
             Thread.Sleep(waitTime);
             Assert.True(client.Online);
             Assert.Equal("127.0.0.1", client.IP);
@@ -96,7 +95,7 @@ namespace RRQMSocketXUnitTest.Token
 
             Assert.ThrowsAny<Exception>(() =>
             {
-                client.Connect();
+                client.Connect("XUnitTest");
             });
 
             Thread.Sleep(waitTime);
@@ -108,14 +107,12 @@ namespace RRQMSocketXUnitTest.Token
         {
             SimpleTokenClient client = new SimpleTokenClient();
             var config = new TcpClientConfig();
-            config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7792"))//连接地址
-                .SetValue(TokenClientConfig.VerifyTokenProperty, "Error")//连接验证令箭
-                .SetValue(TokenClientConfig.VerifyTimeoutProperty, 3000);//验证等待时间
+            config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7792"));//连接地址
 
             client.Setup(config);
             Assert.Throws<RRQMTokenVerifyException>(() =>
             {
-                client.Connect();
+                client.Connect("Error");
             });
         }
     }

@@ -38,35 +38,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RRQMCore, Version=5.8.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.5.8.0\lib\net461\RRQMCore.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMMVVM, Version=2.1.2.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMMVVM.2.1.2\lib\net45\RRQMMVVM.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSkin, Version=2.1.3.0, Culture=neutral, PublicKeyToken=1691c0176f5d64c0, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSkin.2.1.3\lib\net45\RRQMSkin.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket, Version=5.8.6.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.5.8.6\lib\net461\RRQMSocket.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.5.8.1\lib\net461\RRQMSocket.FileTransfer.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.Http, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.5.8.1\lib\net461\RRQMSocket.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.5.8.1\lib\net461\RRQMSocket.RPC.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.5.8.1\lib\net461\RRQMSocket.RPC.JsonRpc.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=5.7.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.5.7.1\lib\net461\RRQMSocket.RPC.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.5.8.1\lib\net461\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSkin, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSkin.3.6.0\lib\net461\RRQMSkin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -89,69 +62,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\MsgLog.cs" />
-    <Compile Include="Common\MySerializationSelector.cs" />
-    <Compile Include="Common\SpeedConverter.cs" />
-    <Compile Include="Model\SocketClientModel.cs" />
-    <Compile Include="TestClass.cs" />
     <Compile Include="Model\AdapterType.cs" />
-    <Compile Include="Model\CreateType.cs" />
-    <Compile Include="Msg.cs" />
-    <Compile Include="Server\Server.cs" />
-    <Compile Include="Win\CreateUdpWindow.xaml.cs">
-      <DependentUpon>CreateUdpWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\CreateProcotolWindow.xaml.cs">
-      <DependentUpon>CreateProcotolWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Win\CreateTcpWindow.xaml.cs">
       <DependentUpon>CreateTcpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win\FileServiceWindow.xaml.cs">
-      <DependentUpon>FileServiceWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\RPCServiceWindow.xaml.cs">
-      <DependentUpon>RPCServiceWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\XUnitWindow.xaml.cs">
-      <DependentUpon>XUnitWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resource\MainDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Win\CreateUdpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\CreateProcotolWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Win\CreateTcpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\FileServiceWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\RPCServiceWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\XUnitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,9 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />

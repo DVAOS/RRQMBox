@@ -1,11 +1,26 @@
-﻿using RRQMSocket;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RPCServiceDemo
@@ -18,16 +33,10 @@ namespace RPCServiceDemo
             RPCService rpcService = new RPCService();
 
             //添加解析器，解析器根据传输协议，序列化方式的不同，调用RPC服务
-            rpcService.AddRPCParser("tcpRpcParser", CreateRRQMTcpParser(7794));
-            rpcService.AddRPCParser("udpRpcParser", CreateRRQMUdpParser(7797));
-            rpcService.AddRPCParser("webApiParser_Xml", CreateWebApiParser(7800, new XmlDataConverter()));
-            rpcService.AddRPCParser("webApiParser_Json", CreateWebApiParser(7801, new JsonDataConverter()));
-            rpcService.AddRPCParser("xmlRpcParser", CreateXmlRpcParser(7802));
-            rpcService.AddRPCParser("JsonRpcParser_Tcp", CreateJsonRpcParser(7803, JsonRpcProtocolType.Tcp));
-            rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
+            rpcService.AddRPCParser("qosTcpRpcParser", CreateRRQMTcpParser(7794));
 
             //注册服务
-            rpcService.RegisterServer<MyRpcServer>();
+            rpcService.RegisterAllServer();
 
             //注册当前程序集的所有服务
             //rpcService.RegisterAllServer();
@@ -36,7 +45,7 @@ namespace RPCServiceDemo
             Console.WriteLine("按任意键显示代理代码");
             Console.ReadKey();
 
-            if (rpcService.TryGetRPCParser("tcpRpcParser", out IRPCParser parser))
+            if (rpcService.TryGetRPCParser("qosTcpRpcParser", out IRPCParser parser))
             {
                 if (parser is TcpRpcParser tcpRpcParser)
                 {
@@ -45,7 +54,7 @@ namespace RPCServiceDemo
                     {
                         Console.WriteLine(item.Code);
 
-                        File.WriteAllText(item.Name+".cs",item.Code);
+                        File.WriteAllText(item.Name + ".cs", item.Code);
                     }
 
                     tcpRpcParser.CompilerProxy();
@@ -57,72 +66,10 @@ namespace RPCServiceDemo
 
         }
 
-        private static IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
-        {
-            JsonRpcParser jsonRpcParser = new JsonRpcParser();
 
-            var config = new JsonRpcParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.ProtocolType = protocolType;
-
-            jsonRpcParser.Setup(config);
-            jsonRpcParser.Start();
-            Console.WriteLine($"jsonRpcParser解析器添加完成，端口号：{port}，协议：{protocolType}");
-            return jsonRpcParser;
-        }
-        private static IRPCParser CreateXmlRpcParser(int port)
-        {
-            XmlRpcParser xmlRpcParser = new XmlRpcParser();
-            var config = new XmlRpcParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-
-            xmlRpcParser.Setup(config);
-            xmlRpcParser.Start();
-
-            Console.WriteLine($"xmlRpcParser解析器添加完成，端口号：{port}");
-            return xmlRpcParser;
-        }
-        private static IRPCParser CreateWebApiParser(int port, ApiDataConverter dataConverter)
-        {
-            WebApiParser webApiParser = new WebApiParser();
-            var config = new WebApiParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.ApiDataConverter = dataConverter;
-            webApiParser.Setup(config);
-            webApiParser.Start();
-            Console.WriteLine($"webApiParser解析器添加完成，端口号：{port}，序列化器：{dataConverter.GetType().Name}");
-            return webApiParser;
-        }
-        private static IRPCParser CreateRRQMUdpParser(int port)
-        {
-            UdpRpcParser udpRPCParser = new UdpRpcParser();
-            var config = new UdpRpcParserConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.UseBind = true;
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;
-            config.ProxyToken = "RPC";
-            config.NameSpace = "RRQMTest";
-
-            udpRPCParser.Setup(config);
-
-            udpRPCParser.Start();
-
-            Console.WriteLine($"UDP解析器添加完成，端口号：{port}，ProxyToken={udpRPCParser.ProxyToken}");
-            return udpRPCParser;
-        }
         private static IRPCParser CreateRRQMTcpParser(int port)
         {
-            TcpRpcParser tcpRPCParser = new TcpRpcParser();
+            QosTcpRpcParser qosTcpRpcParser = new QosTcpRpcParser();
 
             //声明配置
             var config = new TcpRpcParserConfig();
@@ -134,7 +81,6 @@ namespace RPCServiceDemo
             config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
             config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
             config.ServerName = "RRQMService";//服务名称
-            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
             config.ThreadCount = 5;//多线程数量，当SeparateThreadReceive为false时，该值只决定BytePool的数量。
             config.Backlog = 30;
             config.ClearInterval = 60 * 1000;//60秒无数据交互会清理客户端
@@ -154,31 +100,112 @@ namespace RPCServiceDemo
             config.ProxyToken = "RPC";//代理令箭，当客户端获取代理文件,或服务时需验证令箭
 
             //载入配置
-            tcpRPCParser.Setup(config);
+            qosTcpRpcParser.Setup(config);
 
             //启动服务
-            tcpRPCParser.Start();
+            qosTcpRpcParser.Start();
 
-            Console.WriteLine($"TCP解析器添加完成，端口号：{port}，VerifyToken={tcpRPCParser.VerifyToken}，ProxyToken={tcpRPCParser.ProxyToken}");
-            return tcpRPCParser;
+            Console.WriteLine($"TCP解析器添加完成，端口号：{port}，VerifyToken={qosTcpRpcParser.VerifyToken}，ProxyToken={qosTcpRpcParser.ProxyToken}");
+            return qosTcpRpcParser;
         }
     }
 
+    class QosTcpRpcParser : TcpRpcParser
+    {
+        /// <summary>
+        /// 在获取代理时筛选，
+        /// 仅筛选代理代码功能，并不能决定服务能不能调用
+        /// </summary>
+        /// <param name="proxyToken"></param>
+        /// <param name="caller"></param>
+        /// <returns></returns>
+        public override RpcProxyInfo GetProxyInfo(string proxyToken, ICaller caller)
+        {
+            RpcProxyInfo rpcProxy= base.GetProxyInfo(proxyToken, caller);
+            if (proxyToken.StartsWith("RPC"))
+            {
+                RpcProxyInfo proxyInfo = new RpcProxyInfo()
+                {
+                    AssemblyName=this.NameSpace+".dll",
+                    Status = 1,//1表示成功，2表示失败
+                    Version = this.RPCVersion.ToString()
+                };
+
+                string ser = proxyToken.Replace("RPC", string.Empty);
+
+                proxyInfo.Codes = new List<CellCode>(this.Codes.Where(a =>a.CodeType== CodeType.ClassArgs|| a.Name.Contains(ser)));
+
+                return proxyInfo;
+            }
+            else
+            {
+                return new RpcProxyInfo() { Status = 2, Message = "你不配拥有代理文件" };//1表示成功，2表示失败
+            }
+        }
+
+        /// <summary>
+        /// 在客户端发现服务时调用，
+        /// 决定该客户端能不能调用某个服务（或服务函数）
+        /// </summary>
+        /// <param name="proxyToken"></param>
+        /// <param name="caller"></param>
+        /// <returns></returns>
+        public override List<MethodItem> GetRegisteredMethodItems(string proxyToken, ICaller caller)
+        {
+            if (proxyToken.StartsWith("RPC"))
+            {
+                string ser = proxyToken.Replace("RPC", string.Empty);
+
+                //全部服务
+                List<MethodItem> methodItems = this.MethodStore.GetAllMethodItem();
+
+                return new List<MethodItem>(methodItems.Where(m => m.ServerName.Contains(ser)));
+            }
+            else
+            {
+                return new List<MethodItem>();
+            }
+        }
+    }
 
     public class MyRpcServer : ServerProvider
     {
+        [Description("测试同步调用")]
         [RRQMRPC]
         public string TestOne(int id)//同步服务
         {
             return $"若汝棋茗,id={id}";
         }
 
+        [Description("测试TestTwo")]
+        [RRQMRPC]
+        public string TestTwo(int id)//同步服务
+        {
+            return $"若汝棋茗,id={id}";
+        }
+
+        [Description("测试重载调用")]
         [RRQMRPC("TestOne_Name")]//在重载服务时需要重新设定服务唯一键
         public string TestOne(int id, string name)
         {
             return $"若汝棋茗,Name={name},id={id}";
         }
 
+        [Description("测试Out")]
+        [RRQMRPC]
+        public void TestOut(out int id)
+        {
+            id = 10;
+        }
+
+        [Description("测试Ref")]
+        [RRQMRPC]
+        public void TestRef(ref int id)
+        {
+            id += 1;
+        }
+
+        [Description("测试异步")]
         [RRQMRPC]
         public Task<string> AsyncTestOne(int id)//异步服务,尽量不要用Async结尾，不然生成的异步代码方法将出现两个Async
         {
@@ -186,6 +213,62 @@ namespace RPCServiceDemo
             {
                 return $"若汝棋茗,id={id}";
             });
+        }
+    }
+
+    public class PerformanceRpcServer : ServerProvider
+    {
+        [Description("测试性能")]
+        [RRQMRPC]
+        public string Performance()//同步服务
+        {
+            return "若汝棋茗";
+        }
+    }
+
+    public class ElapsedTimeRpcServer : ServerProvider
+    {
+        [Description("测试可取消的调用")]
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public bool DelayInvoke(IServerCallContext serverCallContext, int tick)//同步服务
+        {
+
+            for (int i = 0; i < tick; i++)
+            {
+                Thread.Sleep(100);
+                if (serverCallContext.TokenSource.IsCancellationRequested)
+                {
+                    Console.WriteLine("客户端已经取消该任务！");
+                    return false;//实际上在取消时，客户端得不到该值
+                }
+            }
+            return true;
+        }
+    }
+
+    public class InstanceRpcServer : ServerProvider
+    {
+        public int Count { get; set; }
+
+        [Description("测试调用实例")]
+        [RRQMRPC]
+        public int Increment()//同步服务
+        {
+            return ++Count;
+        }
+    }
+
+    public class GetCallerRpcServer : ServerProvider
+    {
+        [Description("测试调用上下文")]
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public string GetCallerID(IServerCallContext callContext)
+        {
+            if (callContext.Caller is RpcSocketClient socketClient)
+            {
+                return socketClient.ID;
+            }
+            return null;
         }
     }
 }

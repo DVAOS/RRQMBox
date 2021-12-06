@@ -1,7 +1,21 @@
-﻿using RRQMCore.ByteManager;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore.ByteManager;
+using RRQMCore.Run;
 using RRQMSocket;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TcpClientDemo
 {
@@ -11,7 +25,9 @@ namespace TcpClientDemo
         {
             Console.WriteLine("选择服务类型");
             Console.WriteLine("1.普通TCP客户端");
-            Console.WriteLine("2.简单TCP客户端");
+            Console.WriteLine("2.TCP性能连接");
+            Console.WriteLine("3.BIO单线程拥塞TCP客户端");
+            Console.WriteLine("4.发送流量测试");
 
             switch (Console.ReadLine())
             {
@@ -22,15 +38,82 @@ namespace TcpClientDemo
                     }
                 case "2":
                     {
-                        CreateSimpleTcpClient();
+                        TestConnectPerformance();
+                        break;
+                    } 
+                case "3":
+                    {
+                        CreateBIOTcpClient();
+                        break;
+                    }
+                case "4":
+                    {
+                        CreateFlowPerformance();
                         break;
                     }
                 default:
                     break;
             }
+            Console.ReadKey();
         }
 
-        private static void CreateSimpleTcpClient()
+        private static void CreateFlowPerformance()
+        {
+            Console.WriteLine("测试之前，请确认服务器不处理接收数据，不然无法测试真实水平");
+            Console.ReadKey();
+
+            SimpleTcpClient tcpClient = new SimpleTcpClient();
+
+            tcpClient.Connected += (client, e) =>
+            {
+                //成功连接到服务器
+            };
+
+            tcpClient.Disconnected += (client, e) =>
+            {
+                //从服务器断开连接，当连接不成功时不会触发。
+            };
+
+            //声明配置
+            var config = new TcpClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
+            config.BufferLength = 1024 * 64;//缓存池容量
+            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
+            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
+            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
+            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
+            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
+            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
+            config.ReceiveType = ReceiveType.BIO;//拥塞接收
+            //载入配置
+            tcpClient.Setup(config);
+
+            tcpClient.Connect();
+
+            byte[] data = new byte[1024*1000];
+            new Random().NextBytes(data);
+
+            long flow = 0;
+
+            LoopAction loopAction = LoopAction.CreateLoopAction(-1,1000,(loop)=> 
+            {
+                Console.WriteLine($"已发送：{(flow/(1024*1024.0)).ToString("0.00")}Mb");
+                flow = 0;
+            });
+
+            loopAction.RunAsync();
+
+            Task.Run(()=> 
+            {
+                while (true)
+                {
+                    tcpClient.Send(data);
+                    flow += data.Length;
+                }
+            });
+        }
+
+        private static void CreateBIOTcpClient()
         {
             SimpleTcpClient tcpClient = new SimpleTcpClient();
 
@@ -58,11 +141,10 @@ namespace TcpClientDemo
             config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
             config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
             config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
             config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
             config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
             config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
+            config.ReceiveType = ReceiveType.BIO;//拥塞接收
             //载入配置
             tcpClient.Setup(config);
 
@@ -75,6 +157,40 @@ namespace TcpClientDemo
             {
                 tcpClient.Send(Encoding.UTF8.GetBytes(Console.ReadLine()));
             }
+        }
+
+        private static void TestConnectPerformance()
+        {
+            int count = 1000;
+            Console.WriteLine($"即将进行{count}次连接");
+            List<SimpleTcpClient> clients = new List<SimpleTcpClient>();
+            TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    SimpleTcpClient tcpClient = new SimpleTcpClient();
+
+                    clients.Add(tcpClient);
+
+                    //声明配置
+                    var config = new TcpClientConfig();
+                    config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
+                    config.BufferLength = 1024 * 64;//缓存池容量
+                    config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
+                    config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
+                    config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
+                    config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
+                    config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
+                    config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
+
+                    //载入配置
+                    tcpClient.Setup(config);
+
+                    tcpClient.Connect();
+                }
+            });
+
+            Console.WriteLine($"测试完成，用时:{timeSpan}");
         }
 
         private static void CreateNormalTcpClient()
@@ -99,7 +215,6 @@ namespace TcpClientDemo
             config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
             config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
             config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
             config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
             config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
             config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送

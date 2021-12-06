@@ -12,7 +12,7 @@
 using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
 using RRQMCore.ByteManager;
-using RRQMMVVM;
+using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
 using System;
@@ -27,17 +27,11 @@ namespace RRQMBox.Server.Win
     /// </summary>
     public partial class CreateTcpWindow : RRQMWindow
     {
-        public CreateTcpWindow(CreateType createType)
+        public CreateTcpWindow()
         {
             InitializeComponent();
 
             this.Loaded += this.CreatTcpWindow_Loaded;
-            this.createType = createType;
-            if (createType == CreateType.TCP)
-            {
-                this.Tb_Token.Visibility = Visibility.Collapsed;
-                this.Tb_iPHost.Text = "127.0.0.1:7790";
-            }
             timer = new Timer(1000);
             timer.Elapsed += this.Timer_Elapsed;
             timer.Start();
@@ -62,21 +56,12 @@ namespace RRQMBox.Server.Win
             this.Lb_OnlineClient.ItemsSource = this.onLineClient;
         }
 
-        private CreateType createType;
         private RRQMList<SocketClient> onLineClient;
         private SimpleTcpService tcpService;
-        private SimpleTokenService tokenService;
-
+       
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
-            if (createType == CreateType.TCP)
-            {
-                CreateTcp();
-            }
-            else if (createType == CreateType.Token)
-            {
-                CreateTokenTcp();
-            }
+            CreateTcp();
         }
 
         private void CreateTcp()
@@ -110,8 +95,7 @@ namespace RRQMBox.Server.Win
                 .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000 * 1000)//10秒无数据交互将被清理
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(ServiceConfig.SeparateThreadReceiveProperty, false);
+                .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。;
 
             //载入配置
             tcpService.Setup(config);
@@ -131,44 +115,6 @@ namespace RRQMBox.Server.Win
             tcpService.Start();
 
             ShowMsg("绑定成功");
-        }
-
-        private void CreateTokenTcp()
-        {
-            if (tokenService == null)
-            {
-                tokenService = new SimpleTokenService();
-                //订阅事件
-                tokenService.Connected += Service_ClientConnected;//订阅连接事件
-                tokenService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tokenService.Connecting += Service_Connecting;
-                tokenService.Received += this.OnReceived;
-            }
-
-            this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
-
-            //属性设置
-            var config = new ServiceConfig();
-            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
-                .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TokenServiceConfig.VerifyTokenProperty, this.Tb_Token.Text)
-                .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Send | ClearType.Receive);
-
-
-            //TcpServiceConfig config = new TcpServiceConfig();
-            //config.ListenIPHosts = new IPHost[] { new IPHost(7789) };
-            //config.ClearInterval = 30;
-            //config.ClearType =  ClearType.Receive|ClearType.Send;
-            //config.ServerName = "MyServer";
-
-            //方法
-            this.tokenService.Setup(config);
-            this.tokenService.Start();
-            this.ShowMsg("绑定成功");
-            this.ShowMsg($"请使用Token为{tokenService.VerifyToken}进行连接");
         }
 
         private int adapterIndex;

@@ -97,8 +97,6 @@
         </Setter>
     </Style>
 
-    <common:SpeedConverter x:Key="speedConverter" />
-
     <Style x:Key="RRQMWindowStyle" TargetType="{x:Type Custom:RRQMWindow}">
         <Setter Property="Foreground" Value="{StaticResource foregroundColor}" />
         <Setter Property="Template">

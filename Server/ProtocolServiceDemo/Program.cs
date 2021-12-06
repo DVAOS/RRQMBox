@@ -200,16 +200,25 @@ namespace ProtocolServiceDemo
                 Metadata metadata = e.Metadata;//获取元数据
                 StreamOperator streamOperator = e.StreamOperator;//获取操作器，可用于取消任务，获取进度等。
 
+                Console.WriteLine("设置最大传输速度为1024byte");
+                streamOperator.SetMaxSpeed(1024);
+
+                Console.WriteLine("5秒后设置为5Mb");
+                RRQMCore.Run.EasyAction.DelayRun(5, () =>
+                 {
+                     streamOperator.SetMaxSpeed(1024 * 1024 * 5);
+                 });
+
                 Task.Run(async () =>
                 {
-                    while (streamOperator.Status == ChannelStatus.Default)
+                    while (streamOperator.Result.ResultCode ==  ResultCode.Default)
                     {
                         Console.WriteLine($"速度={streamOperator.Speed()},进度={streamOperator.Progress}");
 
                         await Task.Delay(1000);
                     }
 
-                    Console.WriteLine($"从循环传输结束,状态={streamOperator.Status}");
+                    Console.WriteLine($"从循环传输结束,状态={streamOperator.Result}");
                 });
                 Console.WriteLine("开始接收流数据");
             };
@@ -219,12 +228,12 @@ namespace ProtocolServiceDemo
             {
                 //此处不管传输成功与否，都会执行，具体状态通过e.Status判断。
 
-                if (e.Status== ChannelStatus.Completed)
+                if (e.Result.ResultCode ==  ResultCode.Success)
                 {
                     e.Bucket.Dispose();//必须手动释放流数据。
                 }
-               
-                Console.WriteLine($"从ReceivedStream传输结束,状态={e.Status}");
+
+                Console.WriteLine($"从ReceivedStream传输结束,状态={e.Result}");
             };
         }
 
@@ -270,7 +279,6 @@ namespace ProtocolServiceDemo
             config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
             config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
             config.ServerName = "RRQMService";//服务名称
-            config.SeparateThreadReceive = false;//独立线程接收，当为true时可能会发生内存池暴涨的情况
             config.ThreadCount = 5;//多线程数量，当SeparateThreadReceive为false时，该值只决定BytePool的数量。
             config.Backlog = 30;
             config.ClearInterval = 60 * 1000;//60秒无数据交互会清理客户端

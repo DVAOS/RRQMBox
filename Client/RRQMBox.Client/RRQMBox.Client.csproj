@@ -38,32 +38,11 @@
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <HintPath>..\packages\CookComputing.XmlRPCv2.2.5.0\lib\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMCore, Version=5.8.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.5.8.0\lib\net461\RRQMCore.dll</HintPath>
-    </Reference>
     <Reference Include="RRQMSkin, Version=3.3.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSkin.3.3.0\lib\net461\RRQMSkin.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=5.8.6.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.5.8.6\lib\net461\RRQMSocket.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.5.8.1\lib\net461\RRQMSocket.FileTransfer.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.Http, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.5.8.1\lib\net461\RRQMSocket.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.5.8.1\lib\net461\RRQMSocket.RPC.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.5.8.1\lib\net461\RRQMSocket.RPC.JsonRpc.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=5.7.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.5.7.1\lib\net461\RRQMSocket.RPC.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=5.8.1.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.5.8.1\lib\net461\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSocketFramework">
+      <HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -93,40 +72,11 @@
     <Compile Include="Views\SaveDialog.xaml.cs">
       <DependentUpon>SaveDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win\FileClientWindow.xaml.cs">
-      <DependentUpon>FileClientWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\IDRPCWindow.xaml.cs">
-      <DependentUpon>IDRPCWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\ProtocolClientWindow.xaml.cs">
-      <DependentUpon>ProtocolClientWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\RPCStressTestingWindow.xaml.cs">
-      <DependentUpon>RPCStressTestingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\RPCWindow.xaml.cs">
-      <DependentUpon>RPCWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Win\StressTestingWindow.xaml.cs">
       <DependentUpon>StressTestingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win\TcpClientWindow.xaml.cs">
-      <DependentUpon>TcpClientWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Win\UDPStressWindow.xaml.cs">
-      <DependentUpon>UDPStressWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resource\MainDictionary.xaml">
@@ -137,35 +87,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Win\FileClientWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\IDRPCWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\ProtocolClientWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\RPCStressTestingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\RPCWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Win\StressTestingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Win\TcpClientWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Win\UDPStressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

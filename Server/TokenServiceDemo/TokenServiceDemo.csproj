@@ -5,13 +5,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="RRQMSocket" Version="5.8.6" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="5.8.1" />
-    <PackageReference Include="RRQMSocket.RPC" Version="5.8.1" />
-    <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="5.8.1" />
-    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="5.7.1" />
-    <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="5.8.1" />
-  </ItemGroup>
-
 </Project>

@@ -56,11 +56,10 @@ namespace RRQMSocketXUnitTest.Protocol
 
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7793");
-            config.VerifyToken = "XUnitTest";
-            config.VerifyTimeout = 3000;
+            config.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
 
             client.Setup(config);//载入配置
-            client.Connect();//连接
+            client.Connect("XUnitTest");//连接
             Thread.Sleep(waitTime);
 
             Assert.True(client.Online);
@@ -90,7 +89,7 @@ namespace RRQMSocketXUnitTest.Protocol
             Assert.True(!connected);
             Assert.Equal(1, disconnectCount);
 
-            client.Connect();
+            client.Connect("XUnitTest");
             Thread.Sleep(waitTime);
             Assert.True(client.Online);
             Assert.Equal("127.0.0.1", client.IP);
@@ -113,7 +112,7 @@ namespace RRQMSocketXUnitTest.Protocol
 
             Assert.ThrowsAny<Exception>(() =>
             {
-                client.Connect();
+                client.Connect("XUnitTest");
             });
 
             Thread.Sleep(1000);
