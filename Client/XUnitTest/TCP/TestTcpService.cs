@@ -25,7 +25,7 @@ namespace RRQMSocketXUnitTest.TCP
 
             //注入配置
             var config = new ServiceConfig();
-            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:8848"), new IPHost($"127.0.0.1:8849") })
+            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:8848"), new IPHost($"127.0.0.1:8849") })
                 .SetValue(ServiceConfig.LoggerProperty, new Log())//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理

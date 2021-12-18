@@ -83,7 +83,8 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button Width="70" Height="30" Margin="5,0" Click="Button_Click_1" Content="Push" />
-                    <Button Width="70" Height="30" Margin="5,0,5,2" Click="Button_Click_2" Content="Pull" VerticalAlignment="Bottom" />
+                    <Button Width="70" Height="30" Margin="5,0,5,2" VerticalAlignment="Bottom" Click="Button_Click_2"
+                            Content="Pull" />
                 </StackPanel>
             </Grid>
 
@@ -102,7 +103,8 @@
         </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="2" Margin="5" Header="当前队列">
-            <ListBox x:Name="ListBox_LocalTransfer" SelectionChanged="ListBox_SelectionChanged" Style="{StaticResource ListBox_Transfer}" />
+            <ListBox x:Name="ListBox_LocalTransfer" SelectionChanged="ListBox_SelectionChanged"
+                     Style="{StaticResource ListBox_Transfer}" />
         </GroupBox>
 
         <GroupBox Grid.Row="2" Grid.Column="2" Margin="5" Header="远程队列">

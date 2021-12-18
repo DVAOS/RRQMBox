@@ -28,12 +28,10 @@ namespace RRQMSocketXUnitTest.UDP
             Assert.Equal(ServerState.None, udpSession.ServerState);
 
             var config = new UdpSessionConfig();//UDP配置
-            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost("127.0.0.1:10086").EndPoint)//设置默认终结点，用于发送
-            .SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定，一般作为接收端时需要绑定
-            .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost("127.0.0.1:10087") })//绑定的IPHost，udp只能绑定一个地址。
-            .SetValue(UdpSessionConfig.BufferLengthProperty,2048)//设置缓存
-            .SetValue(UdpSessionConfig.ServerNameProperty,"RRQMUdpServer");//设置服务名称
-
+            config.RemoteIPHost = new IPHost("127.0.0.1:10086");
+            config.BindIPHost = new IPHost("127.0.0.1:10087");
+            config.ServerName = "RRQMUdpServer";
+            config.BufferLength = 2048;
 
             udpSession.Setup(config);//加载配置
             udpSession.Start();//启动
@@ -41,7 +39,7 @@ namespace RRQMSocketXUnitTest.UDP
             Assert.Equal(ServerState.Running, udpSession.ServerState);
             Assert.Equal("RRQMUdpServer",udpSession.ServerName);
             Assert.Equal(2048,udpSession.BufferLength);
-            Assert.Equal("127.0.0.1:10086", udpSession.DefaultRemotePoint.ToString());
+            Assert.Equal("127.0.0.1:10086", udpSession.RemoteIPHost.ToString());
 
             udpSession.Stop();
             Assert.Equal(ServerState.Stopped, udpSession.ServerState);
@@ -50,7 +48,7 @@ namespace RRQMSocketXUnitTest.UDP
             Assert.Equal(ServerState.Running, udpSession.ServerState);
             Assert.Equal("RRQMUdpServer", udpSession.ServerName);
             Assert.Equal(2048, udpSession.BufferLength);
-            Assert.Equal("127.0.0.1:10086", udpSession.DefaultRemotePoint.ToString());
+            Assert.Equal("127.0.0.1:10086", udpSession.RemoteIPHost.ToString());
 
             udpSession.Dispose();
             Assert.Equal(ServerState.Disposed, udpSession.ServerState);
@@ -73,11 +71,8 @@ namespace RRQMSocketXUnitTest.UDP
                 Assert.Equal(count,BitConverter.ToInt32(e.Buffer,0));
             };
             var config = new UdpSessionConfig();//UDP配置
-            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost($"127.0.0.1:7790").EndPoint)//设置默认终结点，用于发送
-            .SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定，一般作为接收端时需要绑定
-            .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:7791") })//绑定的IPHost，udp只能绑定一个地址。
-            .SetValue(UdpSessionConfig.BufferLengthProperty, 2048)//设置缓存
-            .SetValue(UdpSessionConfig.ServerNameProperty, "RRQMUdpServer");//设置服务名称
+            config.RemoteIPHost = new IPHost("127.0.0.1:7790");
+            config.BindIPHost = new IPHost("127.0.0.1:7791");
 
             udpSession.Setup(config);//加载配置
             udpSession.Start();//启动
@@ -87,7 +82,7 @@ namespace RRQMSocketXUnitTest.UDP
             byte[] data_2 = BitConverter.GetBytes(2);
             udpSession.Send(data_2,0,data_2.Length);
 
-            ByteBlock byteBlock = BytePool.Default.GetByteBlock(4);
+            ByteBlock byteBlock = BytePool.GetByteBlock(4);
             byteBlock.Write(BitConverter.GetBytes(3));
             udpSession.Send(byteBlock);
             byteBlock.Dispose();

@@ -90,7 +90,7 @@ namespace RRQMBox.Server.Win
             //注入配置
             var config = new TcpServiceConfig();
             config.MaxCount = 100000;
-            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
                 .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Receive | ClearType.Send)
                 .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量

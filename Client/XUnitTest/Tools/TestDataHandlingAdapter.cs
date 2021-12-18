@@ -32,7 +32,6 @@ namespace RRQMSocketXUnitTest.Tools
                 //此处模拟接收
                 outputCount++;
             },
-             new Log(), //设置日志
              bufferLength);//用BufferLength模拟粘包，分包
 
             byte[] data = Encoding.UTF8.GetBytes("RRQM");
@@ -50,8 +49,6 @@ namespace RRQMSocketXUnitTest.Tools
         }
 
         [Theory]
-        [InlineData(10000, 10)]
-        [InlineData(10000, 100)]
         [InlineData(10000, 1000)]
         public void FixedSizeShouldBeOk(int inputCount, int bufferLength)
         {
@@ -61,7 +58,6 @@ namespace RRQMSocketXUnitTest.Tools
                 //此处模拟接收
                 outputCount++;
             },
-             new Log(), //设置日志
              bufferLength);//用BufferLength模拟粘包，分包
 
             byte[] data = Encoding.UTF8.GetBytes("RRQM");
@@ -73,7 +69,7 @@ namespace RRQMSocketXUnitTest.Tools
                     tester.SimSend(data);//此处模拟发送
                 }
             }
-            Thread.Sleep(2000);
+            Thread.Sleep(20000);
             Assert.Equal(inputCount, outputCount);
         }
 
@@ -89,7 +85,6 @@ namespace RRQMSocketXUnitTest.Tools
                 //此处模拟接收
                 outputCount++;
             },
-             new Log(), //设置日志
              bufferLength);//用BufferLength模拟粘包，分包
 
             byte[] data = Encoding.UTF8.GetBytes("RRQM");
@@ -120,10 +115,9 @@ namespace RRQMSocketXUnitTest.Tools
                 //此处模拟接收
                 outputCount++;
             },
-             new Log(), //设置日志
              bufferLength);//用BufferLength模拟粘包，分包
 
-            ByteBlock byteBlock = BytePool.Default.GetByteBlock(1024);
+            ByteBlock byteBlock = BytePool.GetByteBlock(1024);
             switch (httpType)
             {
                 case HttpType.Server:

@@ -9,40 +9,15 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMSocket;
-using RRQMSocket.FileTransfer;
 using System;
 
-namespace FileServiceDemo
+namespace TestCustomDataHandleAdapterClient
 {
     class Program
     {
         static void Main(string[] args)
         {
-            CreateFileServicePro();
-            Console.ReadKey();
-        }
-
-        static void CreateFileServicePro()
-        {
-            FileService fileService = new FileService();
-
-            //声明配置
-            var config = new FileServiceConfig();
-
-            //继承TcpService配置
-            config.ListenIPHosts = new IPHost[] { new IPHost(7790) };//同时监听两个地址
-            config.VerifyToken = "FileServer";//连接验证令箭，可实现多租户模式
-            try
-            {
-                fileService.Setup(config);
-                fileService.Start();
-                Console.WriteLine("启动成功");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            Console.WriteLine("Hello World!");
         }
     }
 }

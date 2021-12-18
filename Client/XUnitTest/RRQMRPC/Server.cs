@@ -1,14 +1,3 @@
-//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  CSDN博客：https://blog.csdn.net/qq_40374647
-//  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  Gitee源代码仓库：https://gitee.com/RRQM_Home
-//  Github源代码仓库：https://github.com/RRQM
-//  交流QQ群：234762506
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
@@ -19,9 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 namespace RRQMRPC.RRQMTest
 {
-public interface IServer
+public interface IServer:IRemoteServer
 {
-IRpcClient Client{get;}
 ///<summary>
 ///性能测试
 ///</summary>
@@ -38,134 +26,48 @@ void Test01_PerformanceAsync (InvokeOption invokeOption = null);
 ///测试异步字符串
 ///</summary>
 Task<String> Test02_TaskStringAsync (System.String msg,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  RRQMRPC.RRQMTest.ProxyClass1 Test03_GetProxyClass (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<RRQMRPC.RRQMTest.ProxyClass1> Test03_GetProxyClassAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Int32 Test04_In32DefaultValue (System.Int32 a=100,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test05_NoneReturnNoneParameter (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 void Test05_NoneReturnNoneParameterAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test07_OutStringParameter (out System.String name,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test08_RefStringParameter (ref System.String name,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Boolean Test09_Boolean (System.Boolean b,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.String Test10_StringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.String Test11_StringDefaultValue (System.String s="RRQM",InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test13_Task (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 void Test13_TaskAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01> Test14_ListClass01 (System.Int32 length,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Collections.Generic.List<RRQMRPC.RRQMTest.Class01>> Test14_ListClass01Async (System.Int32 length,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  RRQMRPC.RRQMTest.Args Test15_ReturnArgs (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<RRQMRPC.RRQMTest.Args> Test15_ReturnArgsAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  RRQMRPC.RRQMTest.Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<RRQMRPC.RRQMTest.Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  RRQMRPC.RRQMTest.Class01 Test18_Class1 (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<RRQMRPC.RRQMTest.Class01> Test18_Class1Async (RRQMRPC.RRQMTest.Class01 class01,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
   void Test19_CallBack (System.String id,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 void Test19_CallBackAsync (System.String id,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,RRQMRPC.RRQMTest.Args[] args,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Int32 Test22_IncludeCaller (System.Int32 a,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Int32 Test23_InvokeType (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Int32> Test23_InvokeTypeAsync (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Int32 Test25_TestStruct (RRQMRPC.RRQMTest.StructArgs structArgs,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Int32> Test25_TestStructAsync (RRQMRPC.RRQMTest.StructArgs structArgs,InvokeOption invokeOption = null);
-///<summary>
-///</summary>
  System.Int32 Test26_TestCancellationToken (InvokeOption invokeOption = null);
-///<summary>
-///</summary>
 Task<System.Int32> Test26_TestCancellationTokenAsync (InvokeOption invokeOption = null);
 }
 public class Server :IServer

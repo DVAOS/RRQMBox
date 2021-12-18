@@ -16,14 +16,14 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace RRQMSocketXUnitTest
+namespace RRQMCoreXUnitTest
 {
     public class TestByteBlock
     {
         [Fact]
         public void ShouldCanWriteAndRead()
         {
-            ByteBlock byteBlock = BytePool.Default.GetByteBlock(1024 * 1024);
+            ByteBlock byteBlock = BytePool.GetByteBlock(1024 * 1024);
 
             //开始写
 
@@ -93,7 +93,7 @@ namespace RRQMSocketXUnitTest
             ByteBlock.Ratio = 1.5f;
 
             //测试申请内存
-            ByteBlock byteBlock = BytePool.Default.GetByteBlock(10,true);
+            ByteBlock byteBlock = BytePool.GetByteBlock(10,true);
 
             Assert.NotNull(byteBlock);
             Assert.Equal(0,byteBlock.Pos);

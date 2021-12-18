@@ -64,15 +64,6 @@ namespace TokenClientDemo
                       //声明配置
                       var config = new TokenClientConfig();
                       config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-                      config.BufferLength = 1024 * 64;//缓存池容量
-                      config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-                      config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-                      config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-                      config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-                      config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-                      config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
-
                       //载入配置
                       tokenClient.Setup(config);
 
@@ -107,15 +98,6 @@ namespace TokenClientDemo
             //声明配置
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
-
             //载入配置
             tokenClient.Setup(config);
 
@@ -147,14 +129,6 @@ namespace TokenClientDemo
             //声明配置
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
             //载入配置
             tokenClient.Setup(config);
 

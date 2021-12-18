@@ -21,19 +21,12 @@ namespace RRQMSocketXUnitTest.TCP
         {
             int bufferLength = 1024;
             Log logger = new Log();
-            int bytePoolMaxBlockSize = 1024;
-            long bytePoolMaxSize = 1024 * 10;
-
             RRQMConfig config = new RRQMConfig();
             config.SetValue(RRQMConfig.BufferLengthProperty, bufferLength)
-                .SetValue(RRQMConfig.LoggerProperty, logger)
-                .SetValue(RRQMConfig.BytePoolMaxBlockSizeProperty, bytePoolMaxBlockSize)
-                .SetValue(RRQMConfig.BytePoolMaxSizeProperty, bytePoolMaxSize);
+                .SetValue(RRQMConfig.LoggerProperty, logger);
 
             Assert.Equal(bufferLength, config.BufferLength);
             Assert.Equal(logger, config.Logger);
-            Assert.Equal(bytePoolMaxBlockSize, config.BytePoolMaxBlockSize);
-            Assert.Equal(bytePoolMaxSize, config.BytePoolMaxSize);
         }
     }
 }

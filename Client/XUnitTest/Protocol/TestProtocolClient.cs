@@ -29,6 +29,9 @@ namespace RRQMSocketXUnitTest.Protocol
 
             bool connected = false;
             int disconnectCount = 0;
+            //client.Connecting += (client, e) =>
+            //{
+            //};
             client.Connected += (client, e) =>
             {
                 connected = true;
@@ -56,7 +59,6 @@ namespace RRQMSocketXUnitTest.Protocol
 
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7793");
-            config.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();
 
             client.Setup(config);//载入配置
             client.Connect("XUnitTest");//连接

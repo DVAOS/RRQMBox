@@ -79,7 +79,7 @@ namespace FileClientGUI.Models
                       {
                           this.Status = new BitmapImage(new Uri("Resources/Images/完成.png", UriKind.RelativeOrAbsolute));
                       });
-
+                      this.Progress = 1;
                       loop.Dispose();
                   }
                   else

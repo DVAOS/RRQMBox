@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{5603A631-B66E-4F34-A07A-A65F23058178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtocolServiceDemo", "ProtocolServiceDemo\ProtocolServiceDemo.csproj", "{BB3A4B8C-F758-41C0-B706-15261419C906}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtocolServiceDemo", "ProtocolServiceDemo\ProtocolServiceDemo.csproj", "{BB3A4B8C-F758-41C0-B706-15261419C906}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServiceGUI", "FileServiceGUI\FileServiceGUI.csproj", "{90AA598C-B403-42DE-9CD6-99FDF3DA0D1A}"
 EndProject
@@ -48,6 +48,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewLifeRPCServiceDemo", "NewLifeRPCServiceDemo\NewLifeRPCServiceDemo.csproj", "{D8004B74-4D3E-414C-B585-73C441CE1FB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRQMRPCServiceDemo", "RRQMRPCServiceDemo\RRQMRPCServiceDemo.csproj", "{1A4508C8-C17B-40E2-99D9-2487DE131009}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UDP服务器", "UDP服务器", "{E8098994-20DA-43D7-9FA8-F2DC5E9D154C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdpSessionDemo", "UdpSessionDemo\UdpSessionDemo.csproj", "{BC936DE1-BD5F-4088-8346-F755AF5917D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "自定义数据处理适配器", "自定义数据处理适配器", "{35875D6C-F5AE-497B-9ED2-CBDA82DDBDE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCustomDataHandleAdapterService", "TestCustomDataHandleAdapterService\TestCustomDataHandleAdapterService.csproj", "{5243C32A-2368-48FA-BDDC-96A2449FF048}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +123,14 @@ Global
 		{1A4508C8-C17B-40E2-99D9-2487DE131009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A4508C8-C17B-40E2-99D9-2487DE131009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A4508C8-C17B-40E2-99D9-2487DE131009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC936DE1-BD5F-4088-8346-F755AF5917D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC936DE1-BD5F-4088-8346-F755AF5917D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC936DE1-BD5F-4088-8346-F755AF5917D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC936DE1-BD5F-4088-8346-F755AF5917D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5243C32A-2368-48FA-BDDC-96A2449FF048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5243C32A-2368-48FA-BDDC-96A2449FF048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5243C32A-2368-48FA-BDDC-96A2449FF048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5243C32A-2368-48FA-BDDC-96A2449FF048}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +148,8 @@ Global
 		{90AA598C-B403-42DE-9CD6-99FDF3DA0D1A} = {98EBB253-77F3-4AD6-B390-3F4FEE4CFA6A}
 		{D8004B74-4D3E-414C-B585-73C441CE1FB7} = {7A334BFC-ACD8-421F-9CFF-C5A1834E3668}
 		{1A4508C8-C17B-40E2-99D9-2487DE131009} = {7A334BFC-ACD8-421F-9CFF-C5A1834E3668}
+		{BC936DE1-BD5F-4088-8346-F755AF5917D1} = {E8098994-20DA-43D7-9FA8-F2DC5E9D154C}
+		{5243C32A-2368-48FA-BDDC-96A2449FF048} = {35875D6C-F5AE-497B-9ED2-CBDA82DDBDE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BB08AC0-8102-4AFB-BA22-F13EDD701E07}

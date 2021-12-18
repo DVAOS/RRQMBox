@@ -28,6 +28,7 @@ namespace InvokeRpcFromProxy
             Console.WriteLine("1.调用MyRpcServer所有方法");
             Console.WriteLine("2.测试调用实例类型");
             Console.WriteLine("3.测试可取消任务的执行");
+            Console.WriteLine("4.测试并发性能");
 
             switch (Console.ReadLine())
             {
@@ -45,10 +46,15 @@ namespace InvokeRpcFromProxy
                     {
                         Test_InstanceRpcServer();
                         break;
-                    } 
+                    }
                 case "3":
                     {
                         Test_ElapsedTimeRpcServer();
+                        break;
+                    }
+                case "4":
+                    {
+                        Test_ConPerformance();
                         break;
                     }
                 default:
@@ -64,7 +70,6 @@ namespace InvokeRpcFromProxy
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
             config.ProxyToken = "RPC";
-
             client.Setup(config);
 
             try
@@ -79,6 +84,40 @@ namespace InvokeRpcFromProxy
             return client;
         }
 
+        private static void Test_ConPerformance()
+        {
+            TcpRpcClient tcpRpcClient = GetTcpRpcClient();
+
+            PerformanceRpcServer rpcServer = new PerformanceRpcServer(tcpRpcClient);
+
+            /*
+             并发性能测试内容为，同时多个异步调用同一个方法，
+             然后检测其返回值。
+             */
+            for (int i = 0; i < 5; i++)
+            {
+                Task.Run(() =>
+                {
+                    for (int j = 0; j < 100000; j++)
+                    {
+                        int result = rpcServer.ConPerformance(j);
+                        if (result != j + 1)
+                        {
+                            Console.WriteLine($"测试不通过。应当返回{j + 1},实际={result}");
+                        }
+
+                        if (j%1000==0)
+                        {
+                            Console.WriteLine($"已调用{j}次");
+                        }
+                    }
+                    Console.WriteLine("测试结束。");
+                });
+            }
+
+            Console.ReadKey();
+        }
+
         private static void Test_ElapsedTimeRpcServer()
         {
             TcpRpcClient tcpRpcClient = GetTcpRpcClient();
@@ -91,7 +130,7 @@ namespace InvokeRpcFromProxy
             Console.WriteLine("按任意键取消任务。");
 
             CancellationTokenSource tokenSource = new CancellationTokenSource();
-            Task.Run(()=> 
+            Task.Run(() =>
             {
                 InvokeOption invokeOption = new InvokeOption();
                 invokeOption.Timeout = 1000 * 60;

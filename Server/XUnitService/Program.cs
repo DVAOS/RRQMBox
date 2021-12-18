@@ -38,6 +38,8 @@ namespace XUnitService
         {
             RPCService rpcService = new RPCService();
 
+            CodeGenerator.AddProxyType<RpcArgsClassLib.ProxyClass1>();
+
             rpcService.AddRPCParser("tcpRPCParser", CreateRRQMTcpParser(7794));
 
             rpcService.AddRPCParser("udpRPCParser", CreateRRQMUdpParser(7797));
@@ -102,8 +104,7 @@ namespace XUnitService
         {
             UdpRpcParser udpRPCParser = new UdpRpcParser();
             var config = new UdpRpcParserConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.UseBind = true;
+            config.BindIPHost = new IPHost(port);
             config.BufferLength = 1024;
             config.ThreadCount = 1;
             config.ProxyToken = "RPC";
@@ -158,7 +159,7 @@ namespace XUnitService
 
             //属性设置
             var config = new ServiceConfig();
-            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
+            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300 * 1000)//300秒无数据交互将被清理
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
@@ -186,7 +187,7 @@ namespace XUnitService
 
             //属性设置
             var config = new ServiceConfig();
-            config.SetValue(ServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
+            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300 * 1000)//300秒无数据交互将被清理
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
@@ -205,14 +206,10 @@ namespace XUnitService
             SimpleUdpSession udpSession = new SimpleUdpSession();
             udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
             {
-                udpSession.Send(e);//将接收到的数据发送至默认终端
+                udpSession.Send(endpoint, e);//将接收到的数据发送至默认终端
             };
             var config = new UdpSessionConfig();//UDP配置
-            config.SetValue(UdpSessionConfig.DefaultRemotePointProperty, new IPHost($"127.0.0.1:{targetPort}").EndPoint)//设置默认终结点，用于发送
-            .SetValue(UdpSessionConfig.UseBindProperty, true)//是否执行绑定，一般作为接收端时需要绑定
-            .SetValue(UdpSessionConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:{bindPort}") })//绑定的IPHost，udp只能绑定一个地址。
-            .SetValue(UdpSessionConfig.BufferLengthProperty, 2048)//设置缓存
-            .SetValue(UdpSessionConfig.ServerNameProperty, "RRQMUdpServer");//设置服务名称
+            config.BindIPHost = new IPHost($"127.0.0.1:{bindPort}");
 
             udpSession.Setup(config);//加载配置
             udpSession.Start();//启动

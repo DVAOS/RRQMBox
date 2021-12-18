@@ -90,12 +90,9 @@ namespace FileServiceGUI
             fileService.Connected += this.FileService_Connected;
             fileService.Disconnected += this.FileService_Disconnected;
             fileService.BeforeFileTransfer += this.FileService_BeforeFileTransfer;
-            var config = new FileServiceConfig()
-            {
-                ListenIPHosts = new IPHost[] { new IPHost(7789) },
-                VerifyToken = "FileService",
-                ClearInterval=300*1000
-            };
+            var config = new FileServiceConfig();
+            config.ListenIPHosts = new IPHost[] { new IPHost(7789) };
+            config.VerifyToken = "FileService";
 
             try
             {

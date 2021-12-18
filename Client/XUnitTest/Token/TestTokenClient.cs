@@ -47,7 +47,6 @@ namespace RRQMSocketXUnitTest.Token
 
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7792");
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();
 
             client.Setup(config);//载入配置
             client.Connect("XUnitTest");//连接

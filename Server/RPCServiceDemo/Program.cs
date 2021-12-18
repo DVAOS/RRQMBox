@@ -11,10 +11,7 @@
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using RRQMSocket.RPC;
-using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMSocket.RPC.WebApi;
-using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -76,17 +73,6 @@ namespace RPCServiceDemo
 
             //继承TcpService配置
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };//同时监听两个地址
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.ServerName = "RRQMService";//服务名称
-            config.ThreadCount = 5;//多线程数量，当SeparateThreadReceive为false时，该值只决定BytePool的数量。
-            config.Backlog = 30;
-            config.ClearInterval = 60 * 1000;//60秒无数据交互会清理客户端
-            config.ClearType = ClearType.Receive | ClearType.Send;//清理统计
-            config.MaxCount = 10000;//最大连接数
-
             //继承TokenService配置
             config.VerifyToken = "123RPC";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
@@ -223,6 +209,13 @@ namespace RPCServiceDemo
         public string Performance()//同步服务
         {
             return "若汝棋茗";
+        }
+
+        [Description("测试并发性能")]
+        [RRQMRPC]
+        public Task<int> ConPerformance(int num)
+        {
+            return Task.FromResult(++num);
         }
     }
 

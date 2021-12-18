@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-    <PackageReference Include="RRQMSocket" Version="6.0.0" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="6.0.0" />
-    <PackageReference Include="RRQMSocket.RPC" Version="6.0.0" />
-    <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="6.0.0" />
-    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="5.7.1" />
-    <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="6.0.0" />
+    <PackageReference Include="RRQMSocket" Version="6.1.0" />
+    <PackageReference Include="RRQMSocket.FileTransfer" Version="6.1.0" />
+    <PackageReference Include="RRQMSocket.RPC" Version="6.1.0" />
+    <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="6.1.0" />
+    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="6.1.0" />
+    <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="6.1.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

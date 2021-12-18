@@ -46,8 +46,8 @@ namespace RRQMBox.Client.Win
             TestObjects = new RRQMList<TestObject>();
             this.DG.ItemsSource = TestObjects;
 
-            //byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
-            byte[] data =new byte[1024];
+            byte[] data = Encoding.UTF8.GetBytes(this.Tb_TestContent.Text);
+            //byte[] data =new byte[1024];
 
             TestObject.IsAsync = (bool)this.Cb_IsAsync.IsChecked;
             Task.Run(() =>
@@ -68,12 +68,13 @@ namespace RRQMBox.Client.Win
 
                         var config = new TcpClientConfig();
                         config.SetValue(TcpClientConfig.OnlySendProperty, true)
-                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7790"))
-                        .SetValue(TcpClientConfig.DataHandlingAdapterProperty, new FixedHeaderDataHandlingAdapter())
-                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, true);
+                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7789"))
+                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);
 
                         testObject.Client.Setup(config);
                         testObject.Client.Connect();
+                        testObject.Client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+
                         testObject.Status = "连接成功";
                     }
                     catch (Exception ex)
@@ -105,7 +106,7 @@ namespace RRQMBox.Client.Win
 
         private void GroupSend()
         {
-            int size = Math.Min(this.TestObjects.Count, 5);//每个线程托管的客户端
+            int size = Math.Min(this.TestObjects.Count, 100);//每个线程托管的客户端
             int threadCount;
             if (this.TestObjects.Count % size == 0)
             {

@@ -9,12 +9,15 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore;
 using RRQMCore.ByteManager;
+using RRQMCore.Exceptions;
 using RRQMCore.Run;
 using RRQMSocket;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TcpClientDemo
@@ -28,6 +31,7 @@ namespace TcpClientDemo
             Console.WriteLine("2.TCP性能连接");
             Console.WriteLine("3.BIO单线程拥塞TCP客户端");
             Console.WriteLine("4.发送流量测试");
+            Console.WriteLine("5.测试同步发送与接收");
 
             switch (Console.ReadLine())
             {
@@ -40,7 +44,7 @@ namespace TcpClientDemo
                     {
                         TestConnectPerformance();
                         break;
-                    } 
+                    }
                 case "3":
                     {
                         CreateBIOTcpClient();
@@ -49,6 +53,11 @@ namespace TcpClientDemo
                 case "4":
                     {
                         CreateFlowPerformance();
+                        break;
+                    }
+                case "5":
+                    {
+                        CreateSendThenReturnTcpClient();
                         break;
                     }
                 default:
@@ -77,33 +86,26 @@ namespace TcpClientDemo
             //声明配置
             var config = new TcpClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
             config.ReceiveType = ReceiveType.BIO;//拥塞接收
             //载入配置
             tcpClient.Setup(config);
 
             tcpClient.Connect();
 
-            byte[] data = new byte[1024*1000];
+            byte[] data = new byte[1024 * 1000];
             new Random().NextBytes(data);
 
             long flow = 0;
 
-            LoopAction loopAction = LoopAction.CreateLoopAction(-1,1000,(loop)=> 
-            {
-                Console.WriteLine($"已发送：{(flow/(1024*1024.0)).ToString("0.00")}Mb");
-                flow = 0;
-            });
+            LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
+              {
+                  Console.WriteLine($"已发送：{(flow / (1024 * 1024.0)).ToString("0.00")}Mb");
+                  flow = 0;
+              });
 
             loopAction.RunAsync();
 
-            Task.Run(()=> 
+            Task.Run(() =>
             {
                 while (true)
                 {
@@ -137,13 +139,6 @@ namespace TcpClientDemo
             //声明配置
             var config = new TcpClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
             config.ReceiveType = ReceiveType.BIO;//拥塞接收
             //载入配置
             tcpClient.Setup(config);
@@ -175,14 +170,6 @@ namespace TcpClientDemo
                     //声明配置
                     var config = new TcpClientConfig();
                     config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-                    config.BufferLength = 1024 * 64;//缓存池容量
-                    config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-                    config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-                    config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-                    config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-                    config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-                    config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
                     //载入配置
                     tcpClient.Setup(config);
 
@@ -211,14 +198,6 @@ namespace TcpClientDemo
             //声明配置
             var config = new TcpClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new NormalDataHandlingAdapter();//设置数据处理适配器
-            config.OnlySend = false;//仅发送，即不开启接收线程，同时不会感知断开操作。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
             //载入配置
             tcpClient.Setup(config);
 
@@ -230,6 +209,26 @@ namespace TcpClientDemo
                 tcpClient.Send(Encoding.UTF8.GetBytes(Console.ReadLine()));
             }
         }
+
+        private static void CreateSendThenReturnTcpClient()
+        {
+            SendThenReturnTcpClient tcpClient = new SendThenReturnTcpClient();
+
+            //声明配置
+            var config = new TcpClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
+            //载入配置
+            tcpClient.Setup(config);
+
+            tcpClient.Connect();
+
+            Console.WriteLine("输入信息，回车发送");
+            while (true)
+            {
+                byte[] data = tcpClient.SendThenReturn(Encoding.UTF8.GetBytes(Console.ReadLine()));
+                Console.WriteLine($"同步收到：{Encoding.UTF8.GetString(data)}");
+            }
+        }
     }
     class MyTcpClient : RRQMSocket.TcpClient
     {
@@ -237,6 +236,156 @@ namespace TcpClientDemo
         {
             string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
             Console.WriteLine($"接收到信息：{mes}");
+        }
+    }
+
+    /// <summary>
+    /// 发送，然后同步等待返回
+    /// </summary>
+    class SendThenReturnTcpClient : TcpClient, IWaitSender
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public SendThenReturnTcpClient()
+        {
+            this.waitData = new WaitData<byte[]>();
+        }
+        WaitData<byte[]> waitData;
+
+        private int timeout = 60 * 1000;
+
+        /// <summary>
+        /// 超时设置
+        /// </summary>
+        public int Timeout
+        {
+            get { return timeout; }
+            set
+            {
+                if (value < 1)
+                {
+                    value = 1;
+                }
+                timeout = value;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public byte[] SendThenReturn(byte[] buffer, int offset, int length, CancellationToken token = default)
+        {
+            lock (this)
+            {
+                waitData.Reset();
+                this.Send(buffer, offset, length);
+                this.waitData.SetCancellationToken(token);
+                switch (this.waitData.Wait(this.timeout))
+                {
+
+                    case WaitDataStatus.SetRunning:
+                        return waitData.WaitResult;
+                    case WaitDataStatus.Overtime:
+                        throw new RRQMTimeoutException();
+                    case WaitDataStatus.Canceled:
+                        {
+                            return default;
+                        }
+                    case WaitDataStatus.Default:
+                    case WaitDataStatus.Disposed:
+                    default:
+                        throw new RRQMException(RRQMCore.ResType.UnknownError.GetResString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public byte[] SendThenReturn(byte[] buffer, CancellationToken token = default)
+        {
+            return this.SendThenReturn(buffer, 0, buffer.Length, token);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="byteBlock"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public byte[] SendThenReturn(ByteBlock byteBlock, CancellationToken token = default)
+        {
+            return this.SendThenReturn(byteBlock.Buffer, 0, byteBlock.Len, token);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public Task<byte[]> SendThenReturnAsync(byte[] buffer, int offset, int length, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                return this.SendThenReturn(buffer, offset, length, token);
+            });
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public Task<byte[]> SendThenReturnAsync(byte[] buffer, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                return this.SendThenReturn(buffer, token);
+            });
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="byteBlock"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public Task<byte[]> SendThenReturnAsync(ByteBlock byteBlock, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                return this.SendThenReturn(byteBlock, token);
+            });
+        }
+
+        /// <summary>
+        /// 处理数据
+        /// </summary>
+        /// <param name="byteBlock"></param>
+        /// <param name="obj"></param>
+        protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
+        {
+            if (this.waitData.Status == WaitDataStatus.Default)
+            {
+                this.waitData.Set(byteBlock.ToArray());
+            }
+            else
+            {
+                //处理数据
+            }
         }
     }
 }

@@ -29,6 +29,14 @@ public interface IPerformanceRpcServer:IRemoteServer
 ///测试性能
 ///</summary>
 Task<System.String> PerformanceAsync (InvokeOption invokeOption = null);
+///<summary>
+///测试并发性能
+///</summary>
+ System.Int32 ConPerformance (System.Int32 num,InvokeOption invokeOption = null);
+///<summary>
+///测试并发性能
+///</summary>
+Task<System.Int32> ConPerformanceAsync (System.Int32 num,InvokeOption invokeOption = null);
 }
 public class PerformanceRpcServer :IPerformanceRpcServer
 {
@@ -61,6 +69,31 @@ throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值"
 }
 return await Task.Run(() =>{
 return Performance(invokeOption);});
+}
+///<summary>
+///<inheritdoc/>
+///</summary>
+public System.Int32 ConPerformance (System.Int32 num,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{num};
+System.Int32 returnData=Client.Invoke<System.Int32>("ConPerformance",invokeOption, parameters);
+return returnData;
+}
+///<summary>
+///<inheritdoc/>
+///</summary>
+public  async Task<System.Int32> ConPerformanceAsync (System.Int32 num,InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return ConPerformance(num,invokeOption);});
 }
 }
 }

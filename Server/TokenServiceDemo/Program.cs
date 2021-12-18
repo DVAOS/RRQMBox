@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.ByteManager;
+using RRQMCore.Dependency;
 using RRQMCore.Run;
 using RRQMSocket;
 using System;
@@ -82,16 +83,6 @@ namespace TokenServiceDemo
             //声明配置
             var config = new TokenServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.ServerName = "RRQMService";//服务名称
-            config.ThreadCount = 5;//多线程数量，当SeparateThreadReceive为false时，该值只决定BytePool的数量。
-            config.Backlog = 30;
-            config.ClearInterval = 60 * 1000;//60秒无数据交互会清理客户端
-            config.ClearType = ClearType.Receive | ClearType.Send;//清理统计
-            config.MaxCount = 10000;//最大连接数
             config.ReceiveType = ReceiveType.IOCP;
 
             //继承TokenService配置
@@ -133,16 +124,6 @@ namespace TokenServiceDemo
             //声明配置
             var config = new TokenServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.ServerName = "RRQMService";//服务名称
-            config.ThreadCount = 5;//多线程数量，当SeparateThreadReceive为false时，该值只决定BytePool的数量。
-            config.Backlog = 30;
-            config.ClearInterval = 60 * 1000;//60秒无数据交互会清理客户端
-            config.ClearType = ClearType.Receive | ClearType.Send;//清理统计
-            config.MaxCount = 10000;//最大连接数
 
             //继承TokenService配置
             config.VerifyToken = "Token";//连接验证令箭，可实现多租户模式
@@ -184,7 +165,7 @@ namespace TokenServiceDemo
             else if (verifyOption.Token.StartsWith("T"))//以T为标识示例，标识为租户
             {
                 verifyOption.Accept = true;
-                verifyOption.Flag = "租户";
+                client.Flag = "租户";//此处可以对MyTokenSocketClient对象进行操作
             }
             else
             {
@@ -196,6 +177,19 @@ namespace TokenServiceDemo
 
     public class MyTokenSocketClient : TokenSocketClient
     {
+
+        public string Flag
+        {
+            get { return (string)GetValue(FlagProperty); }
+            set { SetValue(FlagProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Flag.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FlagProperty =
+            DependencyProperty.Register("Flag", typeof(string), typeof(MyTokenSocketClient), null);
+
+
+
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
             string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);

@@ -27,9 +27,8 @@ namespace RRQMSocketXUnitTest.RPC.Udp
         {
             UdpRpcClient client = new UdpRpcClient();
             var config = new UdpRpcClientConfig();
-            config.DefaultRemotePoint = new IPHost(ipHost).EndPoint;
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.UseBind = true;
+            config.RemoteIPHost = new IPHost(ipHost);
+            config.BindIPHost = new IPHost(port);
             config.ProxyToken = "RPC";
 
             client.Setup(config);

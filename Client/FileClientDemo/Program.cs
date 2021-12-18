@@ -15,6 +15,7 @@ using RRQMCore.Run;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileClientDemo
@@ -27,7 +28,7 @@ namespace FileClientDemo
             Console.WriteLine("2.测试推送文件");
             switch (Console.ReadLine())
             {
-                case "1": 
+                case "1":
                     {
                         TestPullFile();
                         break;
@@ -58,6 +59,7 @@ namespace FileClientDemo
 
             FileOperator fileOperator = new FileOperator();
 
+            /*片段代码的作用是实时获取传输进度*/
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
             {
                 if (fileOperator.Result.ResultCode != ResultCode.Default)
@@ -69,17 +71,39 @@ namespace FileClientDemo
             });
 
             loopAction.RunAsync();
+            /*片段代码的作用是实时获取传输进度*/
 
-            fileOperator.SetMaxSpeed(1024);
 
-            RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
-            {
-                fileOperator.SetMaxSpeed(1024*1024);
-            });
+            //Task.Run(async () => //上述代码片功能可以用该代码片段代替
+            //{
+            //    while (true)
+            //    {
+            //        if (fileOperator.Result.ResultCode != ResultCode.Default)
+            //        {
+            //            break;
+            //        }
+            //        Console.WriteLine($"进度：{fileOperator.Progress}，速度：{fileOperator.Speed()}");
+            //        await Task.Delay(1000);
+            //    }
+            //});
 
+            //fileOperator.SetMaxSpeed(1024);
+
+            //RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
+            //{
+            //    fileOperator.SetMaxSpeed(1024 * 1024);
+            //});
+
+            //此代码功能为取消传输任务
+            //fileOperator.SetCancellationTokenSource(new CancellationTokenSource());
+            //fileOperator.Cancel();
+
+            //传入元数据
             Metadata metadata = new Metadata();
             metadata.Add("1", "1");
             metadata.Add("2", "2");
+
+
             IResult result = fileClient.PushFile(fileRequest, fileOperator, metadata);
             Console.WriteLine(result);
         }
@@ -92,13 +116,13 @@ namespace FileClientDemo
             FileClient fileClient = CreateFileClientPro();
 
             FileRequest fileRequest = new FileRequest(@"D:\360Downloads\360极速浏览器.exe", $@"C:\Users\carywang\Desktop\新建文件夹\Test.exe");
-            fileRequest.Overwrite = true;
+            fileRequest.Overwrite = true;//是否覆盖
+            fileRequest.FileCheckerType = FileCheckerType.MD5;//进行MD5校验
+            fileRequest.Flags = TransferFlags.BreakpointResume;//尝试断点续传
 
-            fileRequest.FileCheckerType = FileCheckerType.MD5;
-            fileRequest.Flags = TransferFlags.BreakpointResume;
+            FileOperator fileOperator = new FileOperator();//实例化本次传输的控制器，用于获取传输进度、速度、状态等。
 
-            FileOperator fileOperator = new FileOperator();
-
+            //此处的作用相当于Timer，定时每秒输出当前的传输进度和速度。
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
             {
                 if (fileOperator.Result.ResultCode != ResultCode.Default)
@@ -111,16 +135,18 @@ namespace FileClientDemo
 
             loopAction.RunAsync();
 
-            fileOperator.SetMaxSpeed(1024);
+            fileOperator.SetMaxSpeed(1024);//开源版不支持该操作
 
             RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
             {
                 fileOperator.SetMaxSpeed(int.MaxValue);
             });
 
-            Metadata metadata = new Metadata();
+            Metadata metadata = new Metadata();//传递到服务器的元数据
             metadata.Add("1", "1");
             metadata.Add("2", "2");
+
+            //此方法会阻塞，直到传输结束，也可以使用PullFileAsync
             IResult result = fileClient.PullFile(fileRequest, fileOperator, metadata);
             Console.WriteLine(result);
         }
@@ -129,41 +155,26 @@ namespace FileClientDemo
         {
             FileClient fileClient = new FileClient();
 
-            fileClient.Connected += (client, e) =>
-            {
-                //成功连接到服务器
-            };
-
-            fileClient.Disconnected += (client, e) =>
-            {
-                //从服务器断开连接，当连接不成功时不会触发。
-            };
-
-
             //声明配置
             var config = new FileClientConfig();
 
             //继承TcpClient配置
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.BytePool = BytePool.Default;//设置内存池实例。
-            config.BufferLength = 1024 * 64;//缓存池容量
-            config.BytePoolMaxSize = 512 * 1024 * 1024;//单个线程内存池容量
-            config.BytePoolMaxBlockSize = 20 * 1024 * 1024;//单个线程内存块限制
-            config.Logger = new Log();//日志记录器，可以自行实现ILog接口。
-            config.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter();//设置数据处理适配器,此处只能设置FixedHeaderDataHandlingAdapter类
-            config.OnlySend = false;//仅发送，即不开启接收线程（此设置严谨开启）。
-            config.SeparateThreadSend = false;//在异步发送时，使用独立线程发送
-
-            //继承TcpRpcParser配置，以实现RPC交互
-            config.ProxyToken = "FileServerRPC";//代理令箭，用于获取代理文件,或服务时需验证令箭
 
             //注入配置
             fileClient.Setup(config);
 
-            //连接服务器
-            fileClient.Connect("FileServer");
-            //fileClient.DiscoveryService();//需要RPC交互时需要发现服务。
-            Console.WriteLine("连接成功");
+            try
+            {
+                //连接服务器
+                fileClient.Connect("FileServer");
+                Console.WriteLine("连接成功");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
 
             return fileClient;
         }

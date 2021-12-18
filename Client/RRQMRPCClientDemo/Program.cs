@@ -29,7 +29,7 @@ namespace RRQMRPCClientDemo
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect();
+            client.Connect("123RPC");
             client.DiscoveryService();
 
             switch (Console.ReadLine())
