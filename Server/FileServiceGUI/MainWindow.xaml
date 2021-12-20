@@ -87,7 +87,6 @@
                             Content="Pull" />
                 </StackPanel>
             </Grid>
-
         </GroupBox>
         <GroupBox Grid.Column="1" Margin="5" Header="传输控制">
             <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">

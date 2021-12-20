@@ -67,7 +67,7 @@
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -85,9 +85,10 @@
                     <Button Width="70" Height="30" Margin="5,0" Click="ConButton_Click" Content="连接" />
                     <Button Width="70" Height="30" Margin="5,0" Click="Button_Click_1" Content="Push" />
                     <Button Width="70" Height="30" Margin="5,0" Click="Button_Click_2" Content="Pull" />
+                    <Button Width="70" Height="30" Margin="5,0" Click="Button_Click_3" Content="PushDir" />
+                    <Button Width="70" Height="30" Margin="5,0" Click="Button_Click_4" Content="PullDir" />
                 </StackPanel>
             </Grid>
-
         </GroupBox>
         <GroupBox Grid.Column="1" Margin="5" Header="传输控制">
             <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">

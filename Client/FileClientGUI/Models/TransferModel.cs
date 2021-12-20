@@ -32,7 +32,6 @@ namespace FileClientGUI.Models
             set { SetProperty(ref speed, value); }
         }
 
-
         private float progress;
 
         public float Progress
@@ -49,7 +48,6 @@ namespace FileClientGUI.Models
             set { SetProperty(ref status, value); }
         }
 
-
         public FileOperator FileOperator { get; set; }
 
         public TransferType TransferType { get; set; }
@@ -62,12 +60,10 @@ namespace FileClientGUI.Models
             set { SetProperty(ref mes, value); }
         }
 
-
         public void Start()
         {
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
               {
-                 
                   if (this.FileOperator.Result.ResultCode == RRQMCore.ResultCode.Default)
                   {
                       this.Progress = this.FileOperator.Progress;

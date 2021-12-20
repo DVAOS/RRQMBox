@@ -10,19 +10,8 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket.FileTransfer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FileClientGUI.Win
 {
@@ -35,6 +24,7 @@ namespace FileClientGUI.Win
         {
             InitializeComponent();
         }
+
         public bool SelectRequest(out FileRequest fileRequest)
         {
             this.ShowDialog();
@@ -47,8 +37,9 @@ namespace FileClientGUI.Win
             this.tb2.Text = System.IO.Path.GetFileName(this.tb1.Text);
         }
 
-        FileRequest fileRequest;
-        bool go;
+        private FileRequest fileRequest;
+        private bool go;
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             fileRequest = new FileRequest()

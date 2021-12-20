@@ -11,19 +11,7 @@
 //------------------------------------------------------------------------------
 using Microsoft.Win32;
 using RRQMSocket.FileTransfer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FileServiceGUI.Win
 {
@@ -43,8 +31,10 @@ namespace FileServiceGUI.Win
             fileRequest = this.fileRequest;
             return this.go;
         }
-        FileRequest fileRequest;
-        bool go;
+
+        private FileRequest fileRequest;
+        private bool go;
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             fileRequest = new FileRequest()

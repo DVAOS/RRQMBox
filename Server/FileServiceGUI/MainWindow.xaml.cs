@@ -11,26 +11,13 @@
 //------------------------------------------------------------------------------
 using FileServiceGUI.Models;
 using FileServiceGUI.Win;
-using Microsoft.Win32;
-using RRQMCore.Run;
 using RRQMSkin.MVVM;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FileServiceGUI
 {
@@ -78,7 +65,8 @@ namespace FileServiceGUI
             });
         }
 
-        FileService fileService;
+        private FileService fileService;
+
         private void Start()
         {
             //启动
@@ -118,10 +106,12 @@ namespace FileServiceGUI
                     model.FilePath = e.FileRequest.SavePath;
                     model.FileLength = FileUtility.ToFileLengthString(e.FileInfo.FileLength);
                     break;
+
                 case TransferType.Pull:
                     model.FilePath = e.FileRequest.Path;
                     model.FileLength = FileUtility.ToFileLengthString(new FileInfo(e.FileRequest.Path).Length);
                     break;
+
                 default:
                     break;
             }
@@ -149,7 +139,7 @@ namespace FileServiceGUI
             });
         }
 
-        TransferModel transferModel;
+        private TransferModel transferModel;
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -202,7 +192,6 @@ namespace FileServiceGUI
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
             //Push
             if (this.ListBox_Clients.SelectedItem is FileSocketClient client)
             {

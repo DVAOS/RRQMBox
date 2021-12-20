@@ -15,20 +15,9 @@ using RRQMSkin.MVVM;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FileClientGUI
 {
@@ -51,6 +40,7 @@ namespace FileClientGUI
             this.ListBox_RemoteTransfer.ItemsSource = this.remoteModels;
             this.ListBox_LocalTransfer.ItemsSource = this.localModels;
         }
+
         private RRQMList<TransferModel> remoteModels;
         private RRQMList<TransferModel> localModels;
 
@@ -70,7 +60,8 @@ namespace FileClientGUI
             });
         }
 
-        FileClient fileClient;
+        private FileClient fileClient;
+
         private void ConButton_Click(object sender, RoutedEventArgs e)
         {
             fileClient = new FileClient();
@@ -80,7 +71,7 @@ namespace FileClientGUI
 
             //继承TcpClient配置
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-           
+
             fileClient.Setup(config);
 
             try
@@ -93,12 +84,10 @@ namespace FileClientGUI
             {
                 ShowMsg(ex.Message);
             }
-           
         }
 
         private void FileClient_BeforeFileTransfer(FileClient client, FileOperationEventArgs e)
         {
-
             TransferModel model = new TransferModel();
             model.FileOperator = e.FileOperator;
             model.TransferType = e.TransferType;
@@ -109,10 +98,12 @@ namespace FileClientGUI
                     model.FilePath = e.FileRequest.SavePath;
                     model.FileLength = FileUtility.ToFileLengthString(e.FileInfo.FileLength);
                     break;
+
                 case TransferType.Pull:
                     model.FilePath = e.FileRequest.Path;
                     model.FileLength = FileUtility.ToFileLengthString(new FileInfo(e.FileRequest.Path).Length);
                     break;
+
                 default:
                     break;
             }
@@ -124,7 +115,8 @@ namespace FileClientGUI
             });
         }
 
-        TransferModel transferModel;
+        private TransferModel transferModel;
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((ListBox)sender).SelectedItem is TransferModel transferModel)
@@ -226,6 +218,16 @@ namespace FileClientGUI
             {
                 ShowMsg(ex.Message);
             }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        { 
+        
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
