@@ -10,16 +10,11 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RRQM.WebApplication.Controllers;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RRQM.WebApplication
 {
@@ -27,7 +22,6 @@ namespace RRQM.WebApplication
     {
         public static void Main(string[] args)
         {
-
             RPCService rpcService = new RPCService();
 
             JsonRpcParser jsonRpcParser = new JsonRpcParser();

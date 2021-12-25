@@ -19,7 +19,6 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -70,7 +69,6 @@ namespace XUnitService
     {
         public int P1 { get; set; }
     }
-
 
     [Route("/[controller]/[action]")]
     public class Server : ControllerBase
@@ -274,7 +272,7 @@ namespace XUnitService
                     //}
 
                     //或者这样直接调
-                    string mes = ((TcpRpcParser)this.RPCService.RPCParsers["TcpParser"]).CallBack<string>(id, 1000, InvokeOption.WaitInvoke, 10);
+                    string mes = ((TcpRpcParser)this.RPCService.RPCParsers["tcpRPCParser"]).CallBack<string>(id, 1000, InvokeOption.WaitInvoke, 10);
 
                     ShowMsg($"TestCallBack，mes={mes}");
                 }
@@ -284,7 +282,6 @@ namespace XUnitService
                 }
             });
         }
-
 
         [XmlRpc]
         [JsonRpc]
@@ -314,14 +311,14 @@ namespace XUnitService
         {
             if (serverCallContext is JsonRpcServerCallContext jsonRpcServerCallContext)
             {
-
             }
             return a;
         }
 
         private int invokeCount;
+
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test23_InvokeType(IServerCallContext serverCallContext) 
+        public int Test23_InvokeType(IServerCallContext serverCallContext)
         {
             return invokeCount++;
         }
@@ -336,7 +333,7 @@ namespace XUnitService
         public int Test26_TestCancellationToken(IServerCallContext serverCallContext)
         {
             int i = 0;
-            serverCallContext.TokenSource.Token.Register(()=> 
+            serverCallContext.TokenSource.Token.Register(() =>
             {
                 this.ShowMsg($"任务已取消，i={i}");
             });
@@ -349,7 +346,7 @@ namespace XUnitService
                 }
                 Thread.Sleep(20);
             }
-           
+
             return 1;
         }
 

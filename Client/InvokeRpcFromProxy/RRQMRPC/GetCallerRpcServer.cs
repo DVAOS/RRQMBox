@@ -9,58 +9,61 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMCore.Exceptions;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
+
 namespace RRQMRPC.RRQMTest
 {
-public interface IGetCallerRpcServer:IRemoteServer
-{
-///<summary>
-///测试调用上下文
-///</summary>
- System.String GetCallerID (InvokeOption invokeOption = null);
-///<summary>
-///测试调用上下文
-///</summary>
-Task<System.String> GetCallerIDAsync (InvokeOption invokeOption = null);
-}
-public class GetCallerRpcServer :IGetCallerRpcServer
-{
-public GetCallerRpcServer(IRpcClient client)
-{
-this.Client=client;
-}
-public IRpcClient Client{get;private set; }
-///<summary>
-///<inheritdoc/>
-///</summary>
-public System.String GetCallerID (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.String returnData=Client.Invoke<System.String>("GetCallerID",invokeOption, parameters);
-return returnData;
-}
-///<summary>
-///<inheritdoc/>
-///</summary>
-public  async Task<System.String> GetCallerIDAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return GetCallerID(invokeOption);});
-}
-}
+    public interface IGetCallerRpcServer : IRemoteServer
+    {
+        ///<summary>
+        ///测试调用上下文
+        ///</summary>
+        System.String GetCallerID(InvokeOption invokeOption = null);
+
+        ///<summary>
+        ///测试调用上下文
+        ///</summary>
+        Task<System.String> GetCallerIDAsync(InvokeOption invokeOption = null);
+    }
+
+    public class GetCallerRpcServer : IGetCallerRpcServer
+    {
+        public GetCallerRpcServer(IRpcClient client)
+        {
+            this.Client = client;
+        }
+
+        public IRpcClient Client { get; private set; }
+
+        ///<summary>
+        ///<inheritdoc/>
+        ///</summary>
+        public System.String GetCallerID(InvokeOption invokeOption = null)
+        {
+            if (Client == null)
+            {
+                throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+            }
+            object[] parameters = new object[] { };
+            System.String returnData = Client.Invoke<System.String>("GetCallerID", invokeOption, parameters);
+            return returnData;
+        }
+
+        ///<summary>
+        ///<inheritdoc/>
+        ///</summary>
+        public async Task<System.String> GetCallerIDAsync(InvokeOption invokeOption = null)
+        {
+            if (Client == null)
+            {
+                throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+            }
+            return await Task.Run(() =>
+            {
+                return GetCallerID(invokeOption);
+            });
+        }
+    }
 }

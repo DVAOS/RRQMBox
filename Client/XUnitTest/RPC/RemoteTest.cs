@@ -169,6 +169,11 @@ namespace RRQMSocketXUnitTest.RPC
             Assert.Equal("RRQM", class01.Name);
         }
 
+        public void Test19(string id)
+        {
+            server.Test19_CallBack(id);
+        }
+
         public void Test22()
         {
             int value = server.Test22_IncludeCaller(10);

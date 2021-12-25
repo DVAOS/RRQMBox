@@ -15,9 +15,9 @@ using System;
 
 namespace NewLifeRPCClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.测试Sum");
             Console.WriteLine("2.测试GetBytes");
@@ -48,7 +48,7 @@ namespace NewLifeRPCClientDemo
                         {
                             for (int i = 0; i < 10000; i++)
                             {
-                                var rs = client.Invoke<byte[]>("Big/GetBytes", new { a = 1024*10 });//测试10k数据
+                                var rs = client.Invoke<byte[]>("Big/GetBytes", new { a = 1024 * 10 });//测试10k数据
                             }
                         });
                         Console.WriteLine(timeSpan);
@@ -69,7 +69,7 @@ namespace NewLifeRPCClientDemo
                 default:
                     break;
             }
-            
+
             Console.ReadKey();
         }
     }

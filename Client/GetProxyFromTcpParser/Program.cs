@@ -15,9 +15,9 @@ using System;
 
 namespace GetProxyFromTcpParser
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
@@ -30,13 +30,11 @@ namespace GetProxyFromTcpParser
             {
                 client.Connect();
                 RpcProxyInfo proxyInfo = client.GetProxyInfo();
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
     }
 }

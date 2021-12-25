@@ -11,16 +11,12 @@
 //------------------------------------------------------------------------------
 using SocketLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("0.仿RRQM的IOCP架构");
             Console.WriteLine("1.常规IOCP架构");

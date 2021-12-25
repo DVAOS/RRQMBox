@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Custom="RRQM_Windows"
-                    xmlns:common="clr-namespace:RRQMBox.Server.Common"
                     xmlns:controls="RRQM_Controls">
     <SolidColorBrush x:Key="foregroundColor" Color="#FFF7F4F5" />
     <SolidColorBrush x:Key="backgroundColor" Color="#141414" />

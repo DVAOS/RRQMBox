@@ -17,9 +17,9 @@ using System.Text;
 
 namespace TokenClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择类型");
             Console.WriteLine("1.多租户Token客户端");
@@ -125,7 +125,6 @@ namespace TokenClientDemo
                 //从服务器断开连接，当连接不成功时不会触发。
             };
 
-
             //声明配置
             var config = new TokenClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
@@ -142,7 +141,8 @@ namespace TokenClientDemo
             }
         }
     }
-    class MyTokenClient : TokenClient
+
+    internal class MyTokenClient : TokenClient
     {
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {

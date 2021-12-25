@@ -15,9 +15,9 @@ using System;
 
 namespace RRQMRPCClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.测试Sum");
             Console.WriteLine("2.测试GetBytes");
@@ -26,10 +26,11 @@ namespace RRQMRPCClientDemo
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");
+            config.VerifyToken = "123RPC";
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect("123RPC");
+            client.Connect();
             client.DiscoveryService();
 
             switch (Console.ReadLine())

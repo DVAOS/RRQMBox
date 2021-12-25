@@ -32,29 +32,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RRQMCore, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMCore.6.1.0\lib\net45\RRQMCore.dll</HintPath>
+    <Reference Include="RRQMCore, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.6.2.0\lib\net45\RRQMCore.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.6.1.0\lib\net45\RRQMSocket.dll</HintPath>
+    <Reference Include="RRQMSocket, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.6.2.0\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.FileTransfer, Version=6.0.2.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.FileTransfer.6.0.2\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
+    <Reference Include="RRQMSocket.FileTransfer, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.FileTransfer.6.2.0\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.Http, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.Http.6.1.0\lib\net45\RRQMSocket.Http.dll</HintPath>
+    <Reference Include="RRQMSocket.Http, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.Http.6.2.0\lib\net45\RRQMSocket.Http.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.6.1.0\lib\net45\RRQMSocket.RPC.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.6.2.0\lib\net45\RRQMSocket.RPC.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.6.1.0\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.JsonRpc, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.JsonRpc.6.2.0\lib\net45\RRQMSocket.RPC.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.WebApi, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.WebApi.6.1.0\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.WebApi, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.WebApi.6.2.0\lib\net45\RRQMSocket.RPC.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=6.1.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.6.1.0\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    <Reference Include="RRQMSocket.RPC.XmlRpc, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.6.2.0\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="RRQMSocket.WebSocket, Version=6.2.0.0, Culture=neutral, PublicKeyToken=a9db37c9b0783a15, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.WebSocket.6.2.0\lib\net45\RRQMSocket.WebSocket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

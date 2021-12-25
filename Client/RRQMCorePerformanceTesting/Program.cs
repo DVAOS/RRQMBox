@@ -27,9 +27,9 @@ using System.Threading.Tasks;
 
 namespace RRQMCorePerformanceTesting
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.测试内存池并发性能");
             Console.WriteLine("2.测试内存池延迟释放性能");
@@ -113,7 +113,7 @@ namespace RRQMCorePerformanceTesting
             Console.WriteLine($"内存池当前容量：{BytePool.GetPoolSize()}");
             Console.WriteLine($"总用时：{time}");
         }
-       
+
         private static void TestBytePoolPerformance_two()
         {
             ThreadPool.SetMinThreads(100, 100);
@@ -149,12 +149,10 @@ namespace RRQMCorePerformanceTesting
                             {
                                 byteBlocks.Add(byteBlock);
                             }
-
                         }
 
                         await Task.Delay(10);
                     }
-
                 });
             }
             Console.ReadKey();
@@ -162,8 +160,8 @@ namespace RRQMCorePerformanceTesting
             BytePool.Clear();
             run = false;
             Console.WriteLine($"内存池当前容量：{BytePool.GetPoolSize()}");
-
         }
+
         private static void TestSerializePerformance()
         {
             Student student = new Student();
@@ -247,6 +245,7 @@ namespace RRQMCorePerformanceTesting
             Console.WriteLine($"RRQM:{timeSpan1}");
             Console.WriteLine($"System:{timeSpan2}");
         }
+
         private void TestSerialize()
         {
             string obj = "RRQM";
@@ -267,6 +266,7 @@ namespace RRQMCorePerformanceTesting
             byte[] data3 = SerializeConvert.XmlSerializeToBytes(obj);
             string newXmlObj = SerializeConvert.XmlDeserializeFromBytes<string>(data3);
         }
+
         private void TestFileControler()
         {
             //判断该文件时候已在打开状态
@@ -275,12 +275,14 @@ namespace RRQMCorePerformanceTesting
             //获取文件SHA256值，转为大写16进制
             FileControler.GetFileHash("C:/1.txt");
         }
+
         private void TestTimeRun()
         {
             Action action = new Action(() => { Console.WriteLine("Hello"); });
             EasyAction.DelayRun(2000, action);//延迟两秒执行
             EasyAction.DelayRun(TimeSpan.FromSeconds(2), action);//延迟两秒执行
         }
+
         private void TestTimeMeasurer()
         {
             TimeSpan timeSpan = TimeMeasurer.Run(() =>
@@ -293,6 +295,7 @@ namespace RRQMCorePerformanceTesting
 
             Console.WriteLine(timeSpan);
         }
+
         private void TestXml()
         {
             XmlTool xmlTool = new XmlTool("Test.xml");
@@ -318,11 +321,13 @@ namespace RRQMCorePerformanceTesting
             //获取Node2下所有属性集合，并包装为字典
             Dictionary<string, string> attributes = xmlTool.SearchAllAttributes("Node2");
         }
+
         private void Test3DES()
         {
             DataLock.EncryptDES(new byte[10], "RRQM1234");
             byte[] data = DataLock.DecryptDES(new byte[10], "RRQM1234");
         }
+
         private void TestAppMessenger()
         {
             //注册静态方法
@@ -341,6 +346,7 @@ namespace RRQMCorePerformanceTesting
             //触发已注册的SayHelloThree方法，传入string参数，返回string参数。
             string mes = AppMessenger.Default.Send<string>("SayHelloThree", "若汝棋茗");
         }
+
         private static void CreatWaitHandle()
         {
             RRQMWaitHandlePool<MyWaitResult> waitHandle = new RRQMWaitHandlePool<MyWaitResult>();
@@ -351,12 +357,14 @@ namespace RRQMCorePerformanceTesting
 
             MyWaitResult myWaitResult = waitData.WaitResult;
         }
+
         private static void CreatObjectPool()
         {
             ObjectPool<MyObject> objectPool = new ObjectPool<MyObject>();
             MyObject myObject = objectPool.GetObject();
             objectPool.DestroyObject(myObject);
         }
+
         private static void TestBytePool()
         {
             TimeSpan timeSpan1 = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
@@ -377,8 +385,8 @@ namespace RRQMCorePerformanceTesting
             });
             Console.WriteLine($"System:{timeSpan1}");
             Console.WriteLine($"RRQMCore:{timeSpan2}");
-
         }
+
         private static void CreatByteBlock()
         {
             //获取不小于64kb长度ByteBlock
@@ -398,16 +406,15 @@ namespace RRQMCorePerformanceTesting
             byteBlock1.SetHolding(true);
         }
     }
+
     public class MyMessage : IMessage
     {
         public static void SayHelloOne()
         {
-
         }
 
         public void SayHelloTwo()
         {
-
         }
 
         [RegistMethod]
@@ -417,28 +424,24 @@ namespace RRQMCorePerformanceTesting
         }
     }
 
-    class MyWaitResult : WaitResult
+    internal class MyWaitResult : WaitResult
     {
-
     }
 
-    class MyObject : IPoolObject
+    internal class MyObject : IPoolObject
     {
         public bool NewCreate { get; set; }
 
         public void Create()
         {
-
         }
 
         public void Destroy()
         {
-
         }
 
         public void Recreate()
         {
-
         }
     }
 
@@ -462,20 +465,22 @@ namespace RRQMCorePerformanceTesting
         public Dictionary<string, string> Dic3 { get; set; }
         public Dictionary<int, Arg> Dic4 { get; set; }
     }
+
     [Serializable]
     public class Arg
     {
         public Arg()
         {
-
         }
 
         public Arg(int myProperty)
         {
             this.MyProperty = myProperty;
         }
+
         public int MyProperty { get; set; }
     }
+
     [Serializable]
     public class Person
     {

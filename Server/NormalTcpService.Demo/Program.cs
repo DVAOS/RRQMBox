@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 
 namespace TcpServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择服务类型");
             Console.WriteLine("1.普通TCP服务器");
@@ -71,7 +71,6 @@ namespace TcpServiceDemo
                 //有客户端断开连接
             };
 
-
             service.Connecting += (client, e) =>
             {
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
@@ -88,13 +87,12 @@ namespace TcpServiceDemo
                 client.Send(Encoding.UTF8.GetBytes($"响应信息：{mes}"));
             };
 
-
             //声明配置
             var config = new TcpServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
             config.ReceiveType = ReceiveType.BIO;//独立线程
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -129,13 +127,11 @@ namespace TcpServiceDemo
                           try
                           {
                               byte[] data = Encoding.UTF8.GetBytes("你好");
-                              networkStream.Write(data,0,data.Length);
+                              networkStream.Write(data, 0, data.Length);
                           }
                           catch (Exception)
                           {
-
                           }
-                         
                       }
                       else
                       {
@@ -152,7 +148,7 @@ namespace TcpServiceDemo
                         byte[] buffer = new byte[1024];
                         if (networkStream.CanRead)
                         {
-                            int r = networkStream.Read(buffer,0,buffer.Length);
+                            int r = networkStream.Read(buffer, 0, buffer.Length);
                             if (r == 0)
                             {
                                 break;
@@ -172,7 +168,6 @@ namespace TcpServiceDemo
                 //有客户端断开连接
             };
 
-
             service.Connecting += (client, e) =>
             {
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
@@ -189,13 +184,12 @@ namespace TcpServiceDemo
                 client.Send(Encoding.UTF8.GetBytes($"响应信息：{mes}"));
             };
 
-
             //声明配置
             var config = new TcpServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
             config.ReceiveType = ReceiveType.NetworkStream;
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -216,7 +210,6 @@ namespace TcpServiceDemo
         {
             SimpleTcpService service = new SimpleTcpService();
 
-
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
             {
                 Console.WriteLine($"客户端数量：{service.SocketClients.Count}");
@@ -235,7 +228,6 @@ namespace TcpServiceDemo
                 //有客户端断开连接
             };
 
-
             service.Connecting += (client, e) =>
             {
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
@@ -252,12 +244,11 @@ namespace TcpServiceDemo
                 client.Send(Encoding.UTF8.GetBytes($"已收到信息：{mes}"));
             };
 
-
             //声明配置
             var config = new TcpServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -273,7 +264,6 @@ namespace TcpServiceDemo
             }
             Console.ReadKey();
         }
-
 
         private static void CreateNormalTcpService()
         {
@@ -297,7 +287,7 @@ namespace TcpServiceDemo
             var config = new TcpServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -313,7 +303,6 @@ namespace TcpServiceDemo
             }
             Console.ReadKey();
         }
-
     }
 
     public class MyTcpService : TcpService<MySocketClient>
@@ -334,11 +323,10 @@ namespace TcpServiceDemo
     {
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
-            //string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-            //Console.WriteLine($"已从{this.Name}接收到信息：{mes}");//Name即IP+Port
+            string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+            Console.WriteLine($"已从{this.Name}接收到信息：{mes}");//Name即IP+Port
 
-            //this.Send(Encoding.UTF8.GetBytes($"已收到信息：{mes}"));
+            this.Send(Encoding.UTF8.GetBytes($"已收到信息：{mes}"));
         }
     }
-
 }

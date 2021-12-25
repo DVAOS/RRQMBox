@@ -12,7 +12,6 @@
 using RRQMCore.ByteManager;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Xunit;
@@ -44,7 +43,7 @@ namespace RRQMSocketXUnitTest.Protocol
 
             int receivedCount = 0;
             string newID = null;
-            client.Received += (SimpleProtocolClient protocolClient,short? arg1, ByteBlock arg2) =>
+            client.Received += (SimpleProtocolClient protocolClient, short? arg1, ByteBlock arg2) =>
             {
                 if (arg1 == 10)
                 {
@@ -54,7 +53,6 @@ namespace RRQMSocketXUnitTest.Protocol
                 {
                     receivedCount++;
                 }
-
             };
 
             var config = new TokenClientConfig();
@@ -63,6 +61,7 @@ namespace RRQMSocketXUnitTest.Protocol
             client.Setup(config);//载入配置
             client.Connect("XUnitTest");//连接
             Thread.Sleep(waitTime);
+            Assert.NotNull(client.ID);
 
             Assert.True(client.Online);
             Assert.Equal("127.0.0.1", client.IP);

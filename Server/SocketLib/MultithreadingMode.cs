@@ -9,12 +9,8 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,9 +36,9 @@ namespace SocketLib
 
         public void SetSocket(Socket socket)
         {
-            Thread thread = new Thread(()=> 
+            Thread thread = new Thread(() =>
             {
-                byte[] buffer = new byte[1024*1024];
+                byte[] buffer = new byte[1024 * 1024];
                 while (true)
                 {
                     int r = socket.Receive(buffer);

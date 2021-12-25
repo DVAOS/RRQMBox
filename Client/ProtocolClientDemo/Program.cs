@@ -13,17 +13,14 @@ using RRQMCore;
 using RRQMCore.Run;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ProtocolClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择类型");
             Console.WriteLine("1.协议发送");
@@ -54,12 +51,12 @@ namespace ProtocolClientDemo
                     {
                         Test_Protocol_10000_Send_Then_Return();
                         break;
-                    } 
+                    }
                 case "5":
                     {
                         Test_Protocol_10000_Send_Then_Return_Performance();
                         break;
-                    } 
+                    }
                 case "6":
                     {
                         Test_Channel();
@@ -71,7 +68,7 @@ namespace ProtocolClientDemo
             Console.ReadKey();
         }
 
-        static void Test_Channel()
+        private static void Test_Channel()
         {
             SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
 
@@ -82,14 +79,19 @@ namespace ProtocolClientDemo
             //必须知道接收方已创建通道的ID
             if (protocolClient.TrySubscribeChannel(id, out Channel channel))
             {
-                byte[] data = new byte[1024*1024];
+                byte[] data = new byte[1024 * 1024];
                 for (int i = 0; i < 10; i++)
                 {
                     channel.Write(data);//持续写入（发送）
                 }
                 channel.Complete();//最后调用完成
-                //channel.Cancel();//或调用取消
-                //channel.Dispose();//或销毁
+                                   //channel.Cancel();//或调用取消
+                                   //channel.Dispose();//或销毁
+
+                //在完成，或取消操作时，可传入消息。接收方可通过channel.LastOperationMes获取消息。
+                //channel.Complete("好的");//最后调用完成
+                //channel.Cancel("我要取消");//或调用取消
+
                 Console.WriteLine("发送完成");
             }
             else
@@ -98,7 +100,7 @@ namespace ProtocolClientDemo
             }
         }
 
-        static void Test_Protocol_10000_Send_Then_Return_Performance()
+        private static void Test_Protocol_10000_Send_Then_Return_Performance()
         {
             SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
 
@@ -166,13 +168,13 @@ namespace ProtocolClientDemo
 
             StreamOperator streamOperator = new StreamOperator();
             streamOperator.PackageSize = 1024 * 64;//分包长度
-            streamOperator.SetMaxSpeed(1024 * 1024 * 5) ;//最大传输值
-            
+            streamOperator.SetMaxSpeed(1024 * 1024 * 5);//最大传输值
+
             //streamOperator.Cancel();//随时取消传输
-            
+
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (a) =>
             {
-                if (streamOperator.Result.ResultCode !=  ResultCode.Default)
+                if (streamOperator.Result.ResultCode != ResultCode.Default)
                 {
                     a.Dispose();
                 }
@@ -187,7 +189,6 @@ namespace ProtocolClientDemo
             //该方法会阻塞，直到结束
             Result result = protocolClient.SendStream(stream, streamOperator, metadata);
             Console.WriteLine(result);
-
         }
 
         private static void Test_ProtocolSend()
@@ -201,14 +202,12 @@ namespace ProtocolClientDemo
                 string[] p_m = strEnter.Split(' ');
                 if (p_m.Length == 2)
                 {
-
                     protocolClient.Send(short.Parse(p_m[0]), Encoding.UTF8.GetBytes(p_m[1]));
                 }
                 else
                 {
                     protocolClient.Send(Encoding.UTF8.GetBytes(strEnter));
                 }
-
             }
         }
 
@@ -231,7 +230,6 @@ namespace ProtocolClientDemo
                 {
                     //运行到此处的数据，意味着该数据既不是系统协议数据，也没有订阅该协议数据。可以自由处理。
                     Console.WriteLine($"已从{client.Name}接收到未订阅处理的信息，协议为：‘{protocol}’，信息：{mes}");
-
                 }
             };
 

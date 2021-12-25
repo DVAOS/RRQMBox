@@ -22,9 +22,9 @@ using System.Text;
 
 namespace XUnitService
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CreateTcpService(7789);
             CreateUdpService(7790, 7791);
@@ -53,6 +53,7 @@ namespace XUnitService
             rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
             rpcService.RegisterServer<Server>();//注册服务
         }
+
         private static IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
         {
             JsonRpcParser jsonRpcParser = new JsonRpcParser();
@@ -100,6 +101,7 @@ namespace XUnitService
             Console.WriteLine($"webApiParser解析器添加完成，端口号：{port}，序列化器：{dataConverter.GetType().Name}");
             return webApiParser;
         }
+
         private static IRPCParser CreateRRQMUdpParser(int port)
         {
             UdpRpcParser udpRPCParser = new UdpRpcParser();
@@ -199,7 +201,6 @@ namespace XUnitService
             service.Start();
             Console.WriteLine($"TokenService已启动,端口：{port}");
         }
-
 
         private static void CreateUdpService(int bindPort, int targetPort)
         {

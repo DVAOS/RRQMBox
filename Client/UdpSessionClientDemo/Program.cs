@@ -14,13 +14,12 @@ using System;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace UdpSessionClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.简单udp测试");
             Console.WriteLine("2.udp性能测试");
@@ -43,7 +42,7 @@ namespace UdpSessionClientDemo
             Console.ReadKey();
         }
 
-        static void TestUdpPerformance()
+        private static void TestUdpPerformance()
         {
             SimpleUdpSession udpSession = new SimpleUdpSession();
 
@@ -76,10 +75,9 @@ namespace UdpSessionClientDemo
                 Console.WriteLine($"已发送{testCount}条记录，收到：{receivedCount}条");
                 receivedCount = 0;
             }
-
         }
 
-        static void TestUdpSession()
+        private static void TestUdpSession()
         {
             SimpleUdpSession udpSession = new SimpleUdpSession();
             udpSession.Received += (remote, byteBlock) =>
@@ -93,7 +91,7 @@ namespace UdpSessionClientDemo
 
             while (true)
             {
-               // udpSession.Send(new IPHost("127.0.0.1:7789").EndPoint, Encoding.UTF8.GetBytes(Console.ReadLine()));
+                // udpSession.Send(new IPHost("127.0.0.1:7789").EndPoint, Encoding.UTF8.GetBytes(Console.ReadLine()));
                 //udpSession.Send(new IPHost("101.34.15.251:7789").EndPoint, Encoding.UTF8.GetBytes(Console.ReadLine()));
                 udpSession.Send(new IPHost("120.206.42.191:30658").EndPoint, Encoding.UTF8.GetBytes(Console.ReadLine()));
             }

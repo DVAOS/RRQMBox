@@ -10,21 +10,17 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore;
-using RRQMCore.ByteManager;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProtocolServiceDemo
 {
-
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择类型");
             Console.WriteLine("1.简单协议接收");
@@ -102,7 +98,6 @@ namespace ProtocolServiceDemo
                              //byteBlock.Pos = 6;//先预设流位置为6
                              //if (byteBlock.TryReadBytesPackageInfo(out int pos,out int length))//获取数据包信息
                              //{
-
                              ////真实数据则是从byteBlock.Buffer的pos，长度为length
                              //Console.WriteLine($"已收到数据，长度为:{length}");
                              //}
@@ -115,7 +110,6 @@ namespace ProtocolServiceDemo
                      });
                  });
             };
-
         }
 
         private static void Test_ProtocolSubscriber_Then_Return()
@@ -140,7 +134,6 @@ namespace ProtocolServiceDemo
 
                     //处理完数据后，如果不想数据再被其他端处理，则设为已处理即可。
                     e.Handled = true;
-
                 }));
             };
         }
@@ -179,7 +172,6 @@ namespace ProtocolServiceDemo
                 //为初始化配置
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
-
         }
 
         private static void Test_ReceiveStream()
@@ -211,7 +203,7 @@ namespace ProtocolServiceDemo
 
                 Task.Run(async () =>
                 {
-                    while (streamOperator.Result.ResultCode ==  ResultCode.Default)
+                    while (streamOperator.Result.ResultCode == ResultCode.Default)
                     {
                         Console.WriteLine($"速度={streamOperator.Speed()},进度={streamOperator.Progress}");
 
@@ -223,12 +215,11 @@ namespace ProtocolServiceDemo
                 Console.WriteLine("开始接收流数据");
             };
 
-
             protocolService.ReceivedStream += (socketClient, e) =>
             {
                 //此处不管传输成功与否，都会执行，具体状态通过e.Status判断。
 
-                if (e.Result.ResultCode ==  ResultCode.Success)
+                if (e.Result.ResultCode == ResultCode.Success)
                 {
                     e.Bucket.Dispose();//必须手动释放流数据。
                 }
@@ -251,7 +242,6 @@ namespace ProtocolServiceDemo
                 //有客户端断开连接
             };
 
-
             service.Received += (client, protocol, byteBlock) =>
             {
                 //从客户端收到信息
@@ -270,7 +260,6 @@ namespace ProtocolServiceDemo
                 }
             };
 
-
             //声明配置
             var config = new ProtocolServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
@@ -279,7 +268,7 @@ namespace ProtocolServiceDemo
             config.VerifyToken = "Token";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动

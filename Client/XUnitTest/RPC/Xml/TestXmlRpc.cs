@@ -37,7 +37,7 @@ namespace RRQMSocketXUnitTest.RPC.Xml
             remoteTest.Test09();
             remoteTest.Test10();
             remoteTest.Test11();
-            
+
             remoteTest.Test13();
             remoteTest.Test14();
             remoteTest.Test15();
@@ -46,6 +46,4 @@ namespace RRQMSocketXUnitTest.RPC.Xml
             remoteTest.Test18();
         }
     }
-
-
 }

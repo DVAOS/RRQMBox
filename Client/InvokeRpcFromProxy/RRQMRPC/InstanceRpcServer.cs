@@ -9,58 +9,61 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMCore.Exceptions;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
+
 namespace RRQMRPC.RRQMTest
 {
-public interface IInstanceRpcServer:IRemoteServer
-{
-///<summary>
-///测试调用实例
-///</summary>
- System.Int32 Increment (InvokeOption invokeOption = null);
-///<summary>
-///测试调用实例
-///</summary>
-Task<System.Int32> IncrementAsync (InvokeOption invokeOption = null);
-}
-public class InstanceRpcServer :IInstanceRpcServer
-{
-public InstanceRpcServer(IRpcClient client)
-{
-this.Client=client;
-}
-public IRpcClient Client{get;private set; }
-///<summary>
-///<inheritdoc/>
-///</summary>
-public System.Int32 Increment (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
-}
-object[] parameters = new object[]{};
-System.Int32 returnData=Client.Invoke<System.Int32>("Increment",invokeOption, parameters);
-return returnData;
-}
-///<summary>
-///<inheritdoc/>
-///</summary>
-public  async Task<System.Int32> IncrementAsync (InvokeOption invokeOption = null)
-{
-if(Client==null)
-{
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
-}
-return await Task.Run(() =>{
-return Increment(invokeOption);});
-}
-}
+    public interface IInstanceRpcServer : IRemoteServer
+    {
+        ///<summary>
+        ///测试调用实例
+        ///</summary>
+        System.Int32 Increment(InvokeOption invokeOption = null);
+
+        ///<summary>
+        ///测试调用实例
+        ///</summary>
+        Task<System.Int32> IncrementAsync(InvokeOption invokeOption = null);
+    }
+
+    public class InstanceRpcServer : IInstanceRpcServer
+    {
+        public InstanceRpcServer(IRpcClient client)
+        {
+            this.Client = client;
+        }
+
+        public IRpcClient Client { get; private set; }
+
+        ///<summary>
+        ///<inheritdoc/>
+        ///</summary>
+        public System.Int32 Increment(InvokeOption invokeOption = null)
+        {
+            if (Client == null)
+            {
+                throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+            }
+            object[] parameters = new object[] { };
+            System.Int32 returnData = Client.Invoke<System.Int32>("Increment", invokeOption, parameters);
+            return returnData;
+        }
+
+        ///<summary>
+        ///<inheritdoc/>
+        ///</summary>
+        public async Task<System.Int32> IncrementAsync(InvokeOption invokeOption = null)
+        {
+            if (Client == null)
+            {
+                throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+            }
+            return await Task.Run(() =>
+            {
+                return Increment(invokeOption);
+            });
+        }
+    }
 }

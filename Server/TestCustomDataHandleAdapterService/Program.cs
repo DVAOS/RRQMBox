@@ -17,9 +17,9 @@ using System.Threading;
 
 namespace TestCustomDataHandleAdapterService
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.测试适配器");
             Console.WriteLine("2.启动测试适配器服务");
@@ -41,7 +41,7 @@ namespace TestCustomDataHandleAdapterService
             }
         }
 
-        static void CreateService()
+        private static void CreateService()
         {
             SimpleTcpService service = new SimpleTcpService();
 
@@ -49,7 +49,6 @@ namespace TestCustomDataHandleAdapterService
             {
                 client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
-
 
             service.Received += (client, byteBlock, obj) =>
             {
@@ -62,7 +61,6 @@ namespace TestCustomDataHandleAdapterService
 
         public class MySocketClient : SimpleSocketClient
         {
-
             public void Up_Go_Send(byte[] data)
             {
                 ByteBlock byteBlock = BytePool.GetByteBlock(this.BufferLength);//内存池实现，可以直接new byte[].
@@ -77,8 +75,8 @@ namespace TestCustomDataHandleAdapterService
                 {
                     byteBlock.Dispose();
                 }
-
             }
+
             public void Down_Go_Send(byte[] data)
             {
                 ByteBlock byteBlock = BytePool.GetByteBlock(this.BufferLength);//内存池实现，可以直接new byte[].
@@ -94,6 +92,7 @@ namespace TestCustomDataHandleAdapterService
                     byteBlock.Dispose();
                 }
             }
+
             public void Up_Hold_Send(byte[] data)
             {
                 ByteBlock byteBlock = BytePool.GetByteBlock(this.BufferLength);//内存池实现，可以直接new byte[].
@@ -109,6 +108,7 @@ namespace TestCustomDataHandleAdapterService
                     byteBlock.Dispose();
                 }
             }
+
             public void Down_Hold_Send(byte[] data)
             {
                 ByteBlock byteBlock = BytePool.GetByteBlock(this.BufferLength);//内存池实现，可以直接new byte[].
@@ -133,6 +133,7 @@ namespace TestCustomDataHandleAdapterService
                 transferBytes.Add(new TransferByte(data));
                 this.Send(transferBytes);
             }
+
             public void Down_Go_SplicingSend(byte[] data)
             {
                 List<TransferByte> transferBytes = new List<TransferByte>();
@@ -141,6 +142,7 @@ namespace TestCustomDataHandleAdapterService
                 transferBytes.Add(new TransferByte(data));
                 this.Send(transferBytes);
             }
+
             public void Up_Hold_SplicingSend(byte[] data)
             {
                 List<TransferByte> transferBytes = new List<TransferByte>();
@@ -149,6 +151,7 @@ namespace TestCustomDataHandleAdapterService
                 transferBytes.Add(new TransferByte(data));
                 this.Send(transferBytes);
             }
+
             public void Down_Hold_SplicingSend(byte[] data)
             {
                 List<TransferByte> transferBytes = new List<TransferByte>();
@@ -159,7 +162,7 @@ namespace TestCustomDataHandleAdapterService
             }
         }
 
-        static void Test_CustomDataHandleAdapter()
+        private static void Test_CustomDataHandleAdapter()
         {
             int received = 0;
             DataAdapterTester dataAdapterTester = DataAdapterTester.CreateTester(new CustomDataHandleAdapter(), (byteBlock, obj) =>
@@ -189,7 +192,7 @@ namespace TestCustomDataHandleAdapterService
     /// <summary>
     /// 解析的对象最好是类，而不是结构体，不然会和object发生拆装箱性能消耗。
     /// </summary>
-    class DataModel
+    internal class DataModel
     {
         public DataModel(byte type, byte instruct, byte length, byte[] data)
         {
@@ -208,13 +211,12 @@ namespace TestCustomDataHandleAdapterService
     /// <summary>
     /// 数据结构解析
     /// </summary>
-    class DataModelCustomDataHandleAdapter : DataHandlingAdapter
+    internal class DataModelCustomDataHandleAdapter : DataHandlingAdapter
     {
         /// <summary>
         /// 是否支持拼接发送，为false的话可以不实现<see cref="PreviewSend(IList{TransferByte}, bool)"/>
         /// </summary>
         public override bool CanSplicingSend => true;
-
 
         /// <summary>
         /// 临时包，此包仅当前实例储存
@@ -386,13 +388,12 @@ namespace TestCustomDataHandleAdapterService
     /// <summary>
     /// 支持分片
     /// </summary>
-    class CanSplicingCustomDataHandleAdapter : DataHandlingAdapter
+    internal class CanSplicingCustomDataHandleAdapter : DataHandlingAdapter
     {
         /// <summary>
         /// 是否支持拼接发送，为false的话可以不实现<see cref="PreviewSend(IList{TransferByte}, bool)"/>
         /// </summary>
         public override bool CanSplicingSend => true;
-
 
         /// <summary>
         /// 临时包，此包仅当前实例储存
@@ -564,13 +565,12 @@ namespace TestCustomDataHandleAdapterService
     /// <summary>
     /// 不支持分片
     /// </summary>
-    class CustomDataHandleAdapter : DataHandlingAdapter
+    internal class CustomDataHandleAdapter : DataHandlingAdapter
     {
         /// <summary>
         /// 是否支持拼接发送，为false的话可以不实现<see cref="PreviewSend(IList{TransferByte}, bool)"/>
         /// </summary>
         public override bool CanSplicingSend => false;
-
 
         /// <summary>
         /// 临时包，此包仅当前实例储存
@@ -702,5 +702,4 @@ namespace TestCustomDataHandleAdapterService
 
         #endregion 发送
     }
-
 }

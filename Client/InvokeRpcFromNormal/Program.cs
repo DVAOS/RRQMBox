@@ -16,9 +16,9 @@ using System.Threading;
 
 namespace InvokeRpcFromNormal
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             TcpRpcClient client = new TcpRpcClient();
 

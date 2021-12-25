@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 
 namespace InvokeRpcFromProxy
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择测试");
             Console.WriteLine("0.性能测试");
@@ -106,7 +106,7 @@ namespace InvokeRpcFromProxy
                             Console.WriteLine($"测试不通过。应当返回{j + 1},实际={result}");
                         }
 
-                        if (j%1000==0)
+                        if (j % 1000 == 0)
                         {
                             Console.WriteLine($"已调用{j}次");
                         }
@@ -258,7 +258,6 @@ namespace InvokeRpcFromProxy
         {
             int count = 0;
 
-
             Console.WriteLine("请输入待测试客户端数量");
             int clientCount = int.Parse(Console.ReadLine());
 
@@ -278,16 +277,13 @@ namespace InvokeRpcFromProxy
                 });
             }
 
-
             LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
             {
                 Console.WriteLine($"调用{count}次");
                 count = 0;
             });
             loopAction.RunAsync();
-
         }
-
     }
 
     public class RpcHandler
@@ -299,7 +295,6 @@ namespace InvokeRpcFromProxy
         public TcpRpcClient Client => client;
 
         public string IPHost { get => "127.0.0.1:7794"; }
-
 
         /// <summary>
         /// 检验client是否在线
@@ -372,7 +367,6 @@ namespace InvokeRpcFromProxy
                 Console.WriteLine(ex.Message);//模拟日志记录
                 return null;
             }
-
         }
     }
 }

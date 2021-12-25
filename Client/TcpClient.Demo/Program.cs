@@ -19,12 +19,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RRQMSocket.Helper;
+using RRQMCore.Collections.Concurrent;
+using System.Linq;
 
 namespace TcpClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择服务类型");
             Console.WriteLine("1.普通TCP客户端");
@@ -119,6 +122,12 @@ namespace TcpClientDemo
         {
             SimpleTcpClient tcpClient = new SimpleTcpClient();
 
+            tcpClient.Connecting += (client, e) =>
+            {
+                e.DataHandlingAdapter = new NormalDataHandlingAdapter();//从6.1.0开始，适配器最好在此处设置。
+                //client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());//直接设置适配器。可以在任何时刻调用。
+            };
+
             tcpClient.Connected += (client, e) =>
             {
                 //成功连接到服务器
@@ -184,6 +193,8 @@ namespace TcpClientDemo
         {
             MyTcpClient tcpClient = new MyTcpClient();
 
+            tcpClient.UseReconnection(-1, true);
+
             tcpClient.Connected += (client, e) =>
             {
                 //成功连接到服务器
@@ -193,7 +204,6 @@ namespace TcpClientDemo
             {
                 //从服务器断开连接，当连接不成功时不会触发。
             };
-
 
             //声明配置
             var config = new TcpClientConfig();
@@ -230,7 +240,8 @@ namespace TcpClientDemo
             }
         }
     }
-    class MyTcpClient : RRQMSocket.TcpClient
+
+    internal class MyTcpClient : RRQMSocket.TcpClient
     {
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {
@@ -242,7 +253,7 @@ namespace TcpClientDemo
     /// <summary>
     /// 发送，然后同步等待返回
     /// </summary>
-    class SendThenReturnTcpClient : TcpClient, IWaitSender
+    internal class SendThenReturnTcpClient : TcpClient, IWaitSender
     {
         /// <summary>
         /// 构造函数
@@ -251,7 +262,8 @@ namespace TcpClientDemo
         {
             this.waitData = new WaitData<byte[]>();
         }
-        WaitData<byte[]> waitData;
+
+        private WaitData<byte[]> waitData;
 
         private int timeout = 60 * 1000;
 
@@ -288,9 +300,9 @@ namespace TcpClientDemo
                 this.waitData.SetCancellationToken(token);
                 switch (this.waitData.Wait(this.timeout))
                 {
-
                     case WaitDataStatus.SetRunning:
                         return waitData.WaitResult;
+
                     case WaitDataStatus.Overtime:
                         throw new RRQMTimeoutException();
                     case WaitDataStatus.Canceled:

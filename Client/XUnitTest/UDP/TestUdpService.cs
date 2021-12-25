@@ -12,9 +12,7 @@
 using RRQMCore.ByteManager;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.UDP
@@ -37,8 +35,8 @@ namespace RRQMSocketXUnitTest.UDP
             udpSession.Start();//启动
 
             Assert.Equal(ServerState.Running, udpSession.ServerState);
-            Assert.Equal("RRQMUdpServer",udpSession.ServerName);
-            Assert.Equal(2048,udpSession.BufferLength);
+            Assert.Equal("RRQMUdpServer", udpSession.ServerName);
+            Assert.Equal(2048, udpSession.BufferLength);
             Assert.Equal("127.0.0.1:10086", udpSession.RemoteIPHost.ToString());
 
             udpSession.Stop();
@@ -53,7 +51,7 @@ namespace RRQMSocketXUnitTest.UDP
             udpSession.Dispose();
             Assert.Equal(ServerState.Disposed, udpSession.ServerState);
 
-            Assert.ThrowsAny<Exception>(()=> 
+            Assert.ThrowsAny<Exception>(() =>
             {
                 udpSession.Start();
             });
@@ -64,11 +62,11 @@ namespace RRQMSocketXUnitTest.UDP
         {
             SimpleUdpSession udpSession = new SimpleUdpSession();
 
-            int count = 0 ;
+            int count = 0;
             udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
             {
                 count++;
-                Assert.Equal(count,BitConverter.ToInt32(e.Buffer,0));
+                Assert.Equal(count, BitConverter.ToInt32(e.Buffer, 0));
             };
             var config = new UdpSessionConfig();//UDP配置
             config.RemoteIPHost = new IPHost("127.0.0.1:7790");
@@ -80,7 +78,7 @@ namespace RRQMSocketXUnitTest.UDP
             udpSession.Send(BitConverter.GetBytes(1));
 
             byte[] data_2 = BitConverter.GetBytes(2);
-            udpSession.Send(data_2,0,data_2.Length);
+            udpSession.Send(data_2, 0, data_2.Length);
 
             ByteBlock byteBlock = BytePool.GetByteBlock(4);
             byteBlock.Write(BitConverter.GetBytes(3));
@@ -89,8 +87,7 @@ namespace RRQMSocketXUnitTest.UDP
 
             udpSession.SendAsync(BitConverter.GetBytes(4));
             byte[] data_5 = BitConverter.GetBytes(5);
-            udpSession.Send(new IPHost($"127.0.0.1:7790").EndPoint,data_5,0,data_5.Length);
-
+            udpSession.Send(new IPHost($"127.0.0.1:7790").EndPoint, data_5, 0, data_5.Length);
         }
     }
 }

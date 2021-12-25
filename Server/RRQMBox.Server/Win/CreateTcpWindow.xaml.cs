@@ -58,7 +58,7 @@ namespace RRQMBox.Server.Win
 
         private RRQMList<SocketClient> onLineClient;
         private SimpleTcpService tcpService;
-       
+
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
             CreateTcp();

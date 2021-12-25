@@ -11,19 +11,15 @@
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC.Udp
 {
     public class TestRRQMUdpRpc
     {
-       
         [Theory]
-        [InlineData("127.0.0.1:7797",8848)]
-        public void ShouldSuccessfulCallService(string ipHost,int port)
+        [InlineData("127.0.0.1:7797", 8848)]
+        public void ShouldSuccessfulCallService(string ipHost, int port)
         {
             UdpRpcClient client = new UdpRpcClient();
             var config = new UdpRpcClientConfig();

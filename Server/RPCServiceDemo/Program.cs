@@ -22,9 +22,9 @@ using System.Threading.Tasks;
 
 namespace RPCServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //实例化RPCService
             RPCService rpcService = new RPCService();
@@ -59,10 +59,7 @@ namespace RPCServiceDemo
             }
 
             Console.ReadKey();
-
-
         }
-
 
         private static IRPCParser CreateRRQMTcpParser(int port)
         {
@@ -96,7 +93,7 @@ namespace RPCServiceDemo
         }
     }
 
-    class QosTcpRpcParser : TcpRpcParser
+    internal class QosTcpRpcParser : TcpRpcParser
     {
         /// <summary>
         /// 在获取代理时筛选，
@@ -107,19 +104,19 @@ namespace RPCServiceDemo
         /// <returns></returns>
         public override RpcProxyInfo GetProxyInfo(string proxyToken, ICaller caller)
         {
-            RpcProxyInfo rpcProxy= base.GetProxyInfo(proxyToken, caller);
+            RpcProxyInfo rpcProxy = base.GetProxyInfo(proxyToken, caller);
             if (proxyToken.StartsWith("RPC"))
             {
                 RpcProxyInfo proxyInfo = new RpcProxyInfo()
                 {
-                    AssemblyName=this.NameSpace+".dll",
+                    AssemblyName = this.NameSpace + ".dll",
                     Status = 1,//1表示成功，2表示失败
                     Version = this.RPCVersion.ToString()
                 };
 
                 string ser = proxyToken.Replace("RPC", string.Empty);
 
-                proxyInfo.Codes = new List<CellCode>(this.Codes.Where(a =>a.CodeType== CodeType.ClassArgs|| a.Name.Contains(ser)));
+                proxyInfo.Codes = new List<CellCode>(this.Codes.Where(a => a.CodeType == CodeType.ClassArgs || a.Name.Contains(ser)));
 
                 return proxyInfo;
             }
@@ -225,7 +222,6 @@ namespace RPCServiceDemo
         [RRQMRPC(MethodFlags.IncludeCallContext)]
         public bool DelayInvoke(IServerCallContext serverCallContext, int tick)//同步服务
         {
-
             for (int i = 0; i < tick; i++)
             {
                 Thread.Sleep(100);

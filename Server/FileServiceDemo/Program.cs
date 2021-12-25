@@ -15,15 +15,15 @@ using System;
 
 namespace FileServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CreateFileServicePro();
             Console.ReadKey();
         }
 
-        static void CreateFileServicePro()
+        private static void CreateFileServicePro()
         {
             FileService fileService = new FileService();
 

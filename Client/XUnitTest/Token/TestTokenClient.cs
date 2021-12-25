@@ -12,8 +12,6 @@
 using RRQMCore.ByteManager;
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using Xunit;
 
@@ -40,7 +38,7 @@ namespace RRQMSocketXUnitTest.Token
             };
 
             int receivedCount = 0;
-            client.Received += (SimpleTokenClient tokenClient,ByteBlock arg1, object arg2) =>
+            client.Received += (SimpleTokenClient tokenClient, ByteBlock arg1, object arg2) =>
             {
                 receivedCount++;
             };

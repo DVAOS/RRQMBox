@@ -12,13 +12,12 @@
 using RRQMSocket;
 using System;
 using System.Net;
-using System.Text;
 
 namespace UdpSessionDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.简单udp测试");
             Console.WriteLine("2.udp性能测试");
@@ -41,7 +40,7 @@ namespace UdpSessionDemo
             Console.ReadKey();
         }
 
-        static void TestUdpPerformance()
+        private static void TestUdpPerformance()
         {
             SimpleUdpSession udpSession = new SimpleUdpSession();
 
@@ -51,14 +50,14 @@ namespace UdpSessionDemo
                 udpSession.Send(remote, byteBlock);
             };
             UdpSessionConfig config = new UdpSessionConfig();
-            config.BindIPHost =new IPHost(7789);
+            config.BindIPHost = new IPHost(7789);
             udpSession.Setup(config);
             udpSession.Start();
 
             Console.WriteLine("等待接收");
         }
 
-        static void TestUdpSession()
+        private static void TestUdpSession()
         {
             SimpleUdpSession udpSession = new SimpleUdpSession();
             udpSession.Received += (remote, byteBlock) =>
@@ -76,6 +75,5 @@ namespace UdpSessionDemo
 
             Console.ReadKey();
         }
-
     }
 }

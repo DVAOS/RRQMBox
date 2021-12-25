@@ -10,13 +10,10 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.ByteManager;
-using RRQMSocket.FileTransfer;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
-namespace RRQMCoreXUnitTest
+namespace XUnitTest.Core
 {
     public class TestByteBlock
     {
@@ -50,8 +47,6 @@ namespace RRQMCoreXUnitTest
 
             byteBlock.WriteBytesPackage(null);//null byte[]包
 
-
-
             //重置流位置，然后依次读
             byteBlock.Pos = 0;
             byte newWriteByte = byteBlock.ReadByte();//byte
@@ -67,8 +62,8 @@ namespace RRQMCoreXUnitTest
             Assert.Equal(writeDouble, newWriteDouble);
 
             Test newWriteObject = byteBlock.ReadObject<Test>();//object
-            Assert.Equal(writeObject.P1,newWriteObject.P1);
-            Assert.Equal(writeObject.P2,newWriteObject.P2);
+            Assert.Equal(writeObject.P1, newWriteObject.P1);
+            Assert.Equal(writeObject.P2, newWriteObject.P2);
 
             object nullObject = byteBlock.ReadObject<object>();//null object
             Assert.Null(nullObject);
@@ -76,7 +71,7 @@ namespace RRQMCoreXUnitTest
             byte[] newWriteBytes = byteBlock.ReadBytesPackage();
             for (int i = 0; i < newWriteBytes.Length; i++)
             {
-                Assert.Equal(writeBytes[i],newWriteBytes[i]);
+                Assert.Equal(writeBytes[i], newWriteBytes[i]);
             }
 
             byte[] newNullWriteBytes = byteBlock.ReadBytesPackage();
@@ -93,12 +88,12 @@ namespace RRQMCoreXUnitTest
             ByteBlock.Ratio = 1.5f;
 
             //测试申请内存
-            ByteBlock byteBlock = BytePool.GetByteBlock(10,true);
+            ByteBlock byteBlock = BytePool.GetByteBlock(10, true);
 
             Assert.NotNull(byteBlock);
-            Assert.Equal(0,byteBlock.Pos);
-            Assert.Equal(0,byteBlock.Len);
-            Assert.Equal(10,byteBlock.Capacity);
+            Assert.Equal(0, byteBlock.Pos);
+            Assert.Equal(0, byteBlock.Len);
+            Assert.Equal(10, byteBlock.Capacity);
 
             //测试写入时动态扩容
             byte[] data = new byte[20];

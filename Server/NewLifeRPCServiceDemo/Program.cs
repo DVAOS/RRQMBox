@@ -20,9 +20,9 @@ using System.Text;
 
 namespace NewLifeRPCServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             XTrace.UseConsole();
             var netUri = new NetUri(NetType.Tcp, IPAddress.Any, 5001);
@@ -37,11 +37,8 @@ namespace NewLifeRPCServiceDemo
             server.Register<BigController>();
             server.Start();
 
-           
             Console.ReadKey();
         }
-
-        
     }
 
     public class BigController

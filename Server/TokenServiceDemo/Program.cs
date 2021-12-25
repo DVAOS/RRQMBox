@@ -18,9 +18,9 @@ using System.Text;
 
 namespace TokenServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("选择服务类型");
             Console.WriteLine("1.多租户Token服务器");
@@ -42,17 +42,17 @@ namespace TokenServiceDemo
                     break;
             }
         }
+
         private static void CreateSimpleTokenService()
         {
             SimpleTokenService service = new SimpleTokenService();
 
-            LoopAction loopAction = LoopAction.CreateLoopAction(-1,1000,(loop)=> 
-            {
-                Console.WriteLine($"客户端数量：{service.SocketClients.Count}");
-            });
+            LoopAction loopAction = LoopAction.CreateLoopAction(-1, 1000, (loop) =>
+              {
+                  Console.WriteLine($"客户端数量：{service.SocketClients.Count}");
+              });
 
             loopAction.RunAsync();
-
 
             service.Connected += (client, e) =>
             {
@@ -79,7 +79,6 @@ namespace TokenServiceDemo
                 client.Send(Encoding.UTF8.GetBytes($"响应信息：{mes}"));
             };
 
-
             //声明配置
             var config = new TokenServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
@@ -89,7 +88,7 @@ namespace TokenServiceDemo
             config.VerifyToken = "Token";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -105,7 +104,6 @@ namespace TokenServiceDemo
             }
             Console.ReadKey();
         }
-
 
         private static void CreateNormalTokenService()
         {
@@ -129,7 +127,7 @@ namespace TokenServiceDemo
             config.VerifyToken = "Token";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
 
-            //载入配置                                                       
+            //载入配置
             service.Setup(config);
 
             //启动
@@ -145,7 +143,6 @@ namespace TokenServiceDemo
             }
             Console.ReadKey();
         }
-
     }
 
     public class MyTokenService : TokenService<MyTokenSocketClient>
@@ -177,7 +174,6 @@ namespace TokenServiceDemo
 
     public class MyTokenSocketClient : TokenSocketClient
     {
-
         public string Flag
         {
             get { return (string)GetValue(FlagProperty); }
@@ -187,8 +183,6 @@ namespace TokenServiceDemo
         // Using a DependencyProperty as the backing store for Flag.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FlagProperty =
             DependencyProperty.Register("Flag", typeof(string), typeof(MyTokenSocketClient), null);
-
-
 
         protected override void HandleReceivedData(ByteBlock byteBlock, object obj)
         {

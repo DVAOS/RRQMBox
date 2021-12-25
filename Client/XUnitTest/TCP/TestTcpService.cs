@@ -16,7 +16,7 @@ using Xunit;
 namespace RRQMSocketXUnitTest.TCP
 {
     public class TestTcpService
-    { 
+    {
         [Fact]
         public void ShouldShowProperties()
         {
@@ -41,7 +41,7 @@ namespace RRQMSocketXUnitTest.TCP
             Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
-            Assert.Equal(10, service.MaxCount);
+            Assert.Equal(1000, service.MaxCount);
             Assert.Equal(300, service.ClearInterval);
 
             service.Stop();
@@ -54,7 +54,7 @@ namespace RRQMSocketXUnitTest.TCP
             Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
-            Assert.Equal(10, service.MaxCount);
+            Assert.Equal(1000, service.MaxCount);
             Assert.Equal(300, service.ClearInterval);
 
             service.Dispose();

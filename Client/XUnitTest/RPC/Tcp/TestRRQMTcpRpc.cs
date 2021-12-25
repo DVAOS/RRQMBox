@@ -12,9 +12,6 @@
 using RRQMCore.Serialization;
 using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC.Tcp
@@ -30,7 +27,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect("123RPC");//此步骤可以省略
+            client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -46,7 +43,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             config.ProxyToken = "error";
 
             client.Setup(config);
-            client.Connect("123RPC");//此步骤可以省略
+            client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -60,12 +57,15 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         public void ShouldSuccessfulCallService(SerializationType serializationType)
         {
             TcpRpcClient client = new TcpRpcClient();
+
+            client.RegisterServer<CallbackServer>();
+
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect("123RPC");//此步骤可以省略
+            client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService();
 
             Assert.NotNull(methodItems);
@@ -99,6 +99,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             remoteTest.Test16();
             remoteTest.Test17();
             remoteTest.Test18();
+            remoteTest.Test19(client.ID);
             remoteTest.Test22();
             remoteTest.Test25();
         }
@@ -114,7 +115,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect("123RPC");//此步骤可以省略
+                client.Connect("123RPC");
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -122,7 +123,6 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 Assert.Equal(i, value);
                 client.Dispose();
             }
-
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect("123RPC");//此步骤可以省略
+                client.Connect("123RPC");
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -145,10 +145,9 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                     int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.CustomInstance);
                     Assert.Equal(j, value);
                 }
-               
+
                 client.Dispose();
             }
-
         }
 
         [Fact]
@@ -162,7 +161,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 config.ProxyToken = "RPC";
 
                 client.Setup(config);
-                client.Connect("123RPC");//此步骤可以省略
+                client.Connect("123RPC");
                 client.DiscoveryService();
 
                 RemoteTest remoteTest = new RemoteTest(client);
@@ -174,7 +173,6 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
 
                 client.Dispose();
             }
-
         }
 
         [Fact]
@@ -186,11 +184,20 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect("123RPC");//此步骤可以省略
+            client.Connect("123RPC");
             client.DiscoveryService();
 
             RemoteTest remoteTest = new RemoteTest(client);
             remoteTest.Test26();
+        }
+    }
+
+    public class CallbackServer:RRQMSocket.RPC.ServerProvider
+    {
+        [RRQMRPCCallBackMethod(1000)]
+        public string SayHello(int age)
+        {
+            return $"我今年{age}岁了。";
         }
     }
 }

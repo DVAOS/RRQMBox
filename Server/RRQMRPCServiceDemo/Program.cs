@@ -17,9 +17,9 @@ using System.Text;
 
 namespace RRQMRPCServiceDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             RPCService rpcService = new RPCService();
 
@@ -28,8 +28,8 @@ namespace RRQMRPCServiceDemo
             var config = new TcpRpcParserConfig();
 
             //继承TcpService配置
-            config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789")};
-           
+            config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789") };
+
             //继承TokenService配置
             config.VerifyToken = "123RPC";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
@@ -50,7 +50,7 @@ namespace RRQMRPCServiceDemo
         }
     }
 
-    public class BigController:ServerProvider
+    public class BigController : ServerProvider
     {
         [RRQMRPC]
         public int Sum(int a, int b) => a + b;

@@ -11,9 +11,6 @@
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using RRQMSocket.RPC.JsonRpc;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC.Json

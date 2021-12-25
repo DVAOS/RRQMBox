@@ -1,11 +1,22 @@
-﻿using RRQMCore.ByteManager;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore;
+using RRQMCore.ByteManager;
 using RRQMCore.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
-namespace RRQMCoreXUnitTest
+namespace XUnitTest.Core
 {
     public class TestRRQMSerialize
     {
@@ -30,12 +41,11 @@ namespace RRQMCoreXUnitTest
         [InlineData(ulong.MinValue)]
         [InlineData("RRQM")]
         [InlineData('R')]
-       
         public void ShouldSerializePrimitiveObjBeOk(object obj)
         {
             byte[] data = SerializeConvert.RRQMBinarySerialize(obj, true);
 
-            object sobj = SerializeConvert.RRQMBinaryDeserialize(data,0,obj.GetType());
+            object sobj = SerializeConvert.RRQMBinaryDeserialize(data, 0, obj.GetType());
 
             Assert.Equal(obj, sobj);
             Assert.Equal(obj.GetType(), sobj.GetType());
@@ -52,6 +62,7 @@ namespace RRQMCoreXUnitTest
             student.P5 = DateTime.Now;
             student.P6 = 10;
             student.P7 = new byte[1024 * 64];
+            student.P8 = new string[] { "I","love","you"};
 
             Random random = new Random();
             random.NextBytes(student.P7);
@@ -91,24 +102,32 @@ namespace RRQMCoreXUnitTest
             student.Dic4.Add(2, new Arg(2));
             student.Dic4.Add(3, new Arg(3));
 
-            ByteBlock byteBlock =new ByteBlock(1024*512);
+            ByteBlock byteBlock = new ByteBlock(1024 * 512);
             SerializeConvert.RRQMBinarySerialize(byteBlock, student, true);
             Student newStudent = SerializeConvert.RRQMBinaryDeserialize<Student>(byteBlock.Buffer, 0);
             byteBlock.Dispose();
 
-            Assert.Equal(student.P1,newStudent.P1);
-            Assert.Equal(student.P2,newStudent.P2);
-            Assert.Equal(student.P3,newStudent.P3);
-            Assert.Equal(student.P4,newStudent.P4);
-            Assert.Equal(student.P5,newStudent.P5);
-            Assert.Equal(student.P6,newStudent.P6);
+            Assert.Equal(student.P1, newStudent.P1);
+            Assert.Equal(student.P2, newStudent.P2);
+            Assert.Equal(student.P3, newStudent.P3);
+            Assert.Equal(student.P4, newStudent.P4);
+            Assert.Equal(student.P5, newStudent.P5);
+            Assert.Equal(student.P6, newStudent.P6);
 
             Assert.NotNull(newStudent.P7);
-            Assert.Equal(student.P7.Length,newStudent.P7.Length);
+            Assert.Equal(student.P7.Length, newStudent.P7.Length);
+
+            Assert.NotNull(newStudent.P8);
+            Assert.Equal(student.P8.Length, newStudent.P8.Length);
+
+            for (int i = 0; i < student.P8.Length; i++)
+            {
+                Assert.Equal(student.P8[i],newStudent.P8[i]);
+            }
 
             for (int i = 0; i < student.P7.Length; i++)
             {
-                Assert.Equal(student.P7[i],newStudent.P7[i]);
+                Assert.Equal(student.P7[i], newStudent.P7[i]);
             }
 
             Assert.NotNull(newStudent.List1);
@@ -144,14 +163,34 @@ namespace RRQMCoreXUnitTest
             Assert.NotNull(newStudent.Dic4);
             Assert.Equal(student.Dic4.Count, newStudent.Dic4.Count);
         }
+
+        [Fact]
+        public void ShouldSerializeMetadataBeOk()
+        {
+            Metadata metadata = new Metadata();//传递到服务器的元数据
+            metadata.Add("1", "1");
+            metadata.Add("2", "2");
+
+            ByteBlock byteBlock = new ByteBlock(1024 * 512);
+            SerializeConvert.RRQMBinarySerialize(byteBlock, metadata, true);
+            Metadata newMetadata = SerializeConvert.RRQMBinaryDeserialize<Metadata>(byteBlock.Buffer, 0);
+            byteBlock.Dispose();
+
+            Assert.NotNull(newMetadata);
+            Assert.Equal(metadata.Count,newMetadata.Count);
+            foreach (var item in metadata.Keys)
+            {
+                Assert.Equal(metadata[item],newMetadata[item]);
+            }
+        }
     }
 
     public class Arg
     {
         public Arg()
         {
-
         }
+
         public Arg(int myProperty)
         {
             this.MyProperty = myProperty;
@@ -169,6 +208,7 @@ namespace RRQMCoreXUnitTest
         public DateTime P5 { get; set; }
         public double P6 { get; set; }
         public byte[] P7 { get; set; }
+        public string[] P8 { get; set; }
 
         public List<int> List1 { get; set; }
         public List<string> List2 { get; set; }

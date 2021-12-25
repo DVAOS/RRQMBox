@@ -10,19 +10,16 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore;
-using RRQMCore.ByteManager;
 using RRQMCore.Run;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileClientDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("1.测试拉取文件");
             Console.WriteLine("2.测试推送文件");
@@ -47,7 +44,7 @@ namespace FileClientDemo
         /// <summary>
         /// 测试推送文件
         /// </summary>
-        static void TestPushFile()
+        private static void TestPushFile()
         {
             FileClient fileClient = CreateFileClientPro();
 
@@ -72,7 +69,6 @@ namespace FileClientDemo
 
             loopAction.RunAsync();
             /*片段代码的作用是实时获取传输进度*/
-
 
             //Task.Run(async () => //上述代码片功能可以用该代码片段代替
             //{
@@ -103,7 +99,6 @@ namespace FileClientDemo
             metadata.Add("1", "1");
             metadata.Add("2", "2");
 
-
             IResult result = fileClient.PushFile(fileRequest, fileOperator, metadata);
             Console.WriteLine(result);
         }
@@ -111,7 +106,7 @@ namespace FileClientDemo
         /// <summary>
         /// 测试下拉文件
         /// </summary>
-        static void TestPullFile()
+        private static void TestPullFile()
         {
             FileClient fileClient = CreateFileClientPro();
 
@@ -151,7 +146,7 @@ namespace FileClientDemo
             Console.WriteLine(result);
         }
 
-        static FileClient CreateFileClientPro()
+        private static FileClient CreateFileClientPro()
         {
             FileClient fileClient = new FileClient();
 
@@ -174,7 +169,6 @@ namespace FileClientDemo
             {
                 Console.WriteLine(ex.Message);
             }
-
 
             return fileClient;
         }
