@@ -32,35 +32,78 @@ namespace EERPCServiceDemo
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
             this.tcpRpcParser = new TcpRpcParser();
-            tcpRpcParser.Setup(7789).Start();
+            this.tcpRpcParser.Connected += TcpRpcParser_Connected;
+            this.tcpRpcParser.Disconnected += TcpRpcParser_Disconnected;
+            var config = new TcpRpcParserConfig();
+            config.ListenIPHosts = new RRQMSocket.IPHost[] { new RRQMSocket.IPHost(7789) };
+            config.ClearInterval = -1;
+            tcpRpcParser.Setup(config).Start();
             this.ShowMsg("服务器已启动");
+        }
+
+        private void TcpRpcParser_Disconnected(RpcSocketClient client, RRQMSocket.MesEventArgs e)
+        {
+            this.listBox2.Items.Remove(client.ID);
+        }
+
+        private void TcpRpcParser_Connected(RpcSocketClient client, RRQMSocket.MesEventArgs e)
+        {
+            this.listBox2.Items.Add(client.ID);
         }
 
         public void ShowMsg(string msg)
         {
-            this.Invoke((Action)(delegate () { this.textBox1.AppendText(msg+"\r\n"); }));
+            this.Invoke((Action)(delegate () { this.textBox1.AppendText(msg + "\r\n"); }));
         }
 
         TcpRpcParser tcpRpcParser;
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AccessType accessType = AccessType.Owner;
-            if (this.checkBox1.Checked)
+            try
             {
-                accessType = accessType | AccessType.Owner;
+                AccessType accessType = AccessType.Owner;
+                if (this.checkBox1.Checked)
+                {
+                    accessType = accessType | AccessType.Owner;
+                }
+                if (this.checkBox2.Checked)
+                {
+                    accessType = accessType | AccessType.Service;
+                }
+                if (this.checkBox3.Checked)
+                {
+                    accessType = accessType | AccessType.Everyone;
+                }
+                if (this.checkBox4.Checked)
+                {
+                    this.tcpRpcParser.PublishEvent(this.textBox2.Text, accessType);
+                    ShowMsg("发布成功");
+                }
+                else if (this.listBox2.SelectedItem is string id)
+                {
+                    if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
+                    {
+                        socketClient.PublishEvent(this.textBox2.Text, accessType);
+                        ShowMsg("发布成功");
+                    }
+                    else
+                    {
+                        ShowMsg("没有找到对应客户端");
+                    }
+                }
+                else
+                {
+                    ShowMsg("请选择一个客户端ID");
+                }
             }
-            if (this.checkBox2.Checked)
+            catch (Exception ex)
             {
-                accessType = accessType | AccessType.Service;
+                ShowMsg(ex.Message);
             }
-            if (this.checkBox3.Checked)
-            {
-                accessType = accessType | AccessType.Everyone;
-            }
-            this.tcpRpcParser.PublishEvent(this.textBox2.Text, accessType);
-            ShowMsg("发布成功");
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -73,25 +116,151 @@ namespace EERPCServiceDemo
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.tcpRpcParser.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-            this.ShowMsg($"订阅成功");
+            try
+            {
+                if (this.checkBox4.Checked)
+                {
+                    this.tcpRpcParser.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                    ShowMsg("订阅成功");
+                }
+                else if (this.listBox2.SelectedItem is string id)
+                {
+                    if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
+                    {
+                        socketClient.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                        ShowMsg("订阅成功");
+                    }
+                    else
+                    {
+                        ShowMsg("没有找到对应客户端");
+                    }
+                }
+                else
+                {
+                    ShowMsg("请选择一个客户端ID");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
         }
 
-        private void SubscribeEvent(EventSender eventSender,string arg)
+        private void SubscribeEvent(EventSender eventSender, string arg)
         {
             this.ShowMsg($"从{eventSender.RaiseSourceType}收到通知事件{eventSender.EventName}，信息：{arg}");
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem is string eventName)
+            try
             {
-                this.tcpRpcParser.RaiseEvent(eventName,this.textBox4.Text);
+                if (listBox1.SelectedItem is string eventName)
+                {
+                    if (this.checkBox4.Checked)
+                    {
+                        this.tcpRpcParser.RaiseEvent(eventName, this.textBox4.Text);
+                        ShowMsg("触发成功");
+                    }
+                    else if (this.listBox2.SelectedItem is string id)
+                    {
+                        if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
+                        {
+                            socketClient.RaiseEvent(eventName, this.textBox4.Text);
+                            ShowMsg("触发成功");
+                        }
+                        else
+                        {
+                            ShowMsg("没有找到对应客户端");
+                        }
+                    }
+                    else
+                    {
+                        ShowMsg("请选择一个客户端ID");
+                    }
+                }
+                else
+                {
+                    ShowMsg("请先选择事件");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ShowMsg("请先选择事件");
+                ShowMsg(ex.Message);
             }
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.checkBox4.Checked)
+                {
+                    this.tcpRpcParser.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                    ShowMsg("取消订阅成功");
+                }
+                else if (this.listBox2.SelectedItem is string id)
+                {
+                    if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
+                    {
+                        socketClient.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                        ShowMsg("取消订阅成功");
+                    }
+                    else
+                    {
+                        ShowMsg("没有找到对应客户端");
+                    }
+                }
+                else
+                {
+                    ShowMsg("请选择一个客户端ID");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.checkBox4.Checked)
+                {
+                    this.tcpRpcParser.UnpublishEvent(this.textBox2.Text);
+                    ShowMsg("取消发布成功");
+                }
+                else if (this.listBox2.SelectedItem is string id)
+                {
+                    if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
+                    {
+                        socketClient.UnpublishEvent(this.textBox2.Text);
+                        ShowMsg("取消发布成功");
+                    }
+                    else
+                    {
+                        ShowMsg("没有找到对应客户端");
+                    }
+                }
+                else
+                {
+                    ShowMsg("请选择一个客户端ID");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Clear();
         }
     }
 }

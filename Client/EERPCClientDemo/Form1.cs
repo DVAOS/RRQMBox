@@ -40,6 +40,7 @@ namespace EERPCClientDemo
             this.tcpRpcClient.Disconnected += TcpRpcClient_Disconnected;
             tcpRpcClient.Setup("127.0.0.1:7789").Connect();
             this.button3.Enabled = false;
+            this.Text = this.tcpRpcClient.ID;
             ShowMsg("连接成功");
         }
 
@@ -50,21 +51,29 @@ namespace EERPCClientDemo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AccessType accessType = AccessType.Owner;
-            if (this.checkBox1.Checked)
+            try
             {
-                accessType = accessType | AccessType.Owner;
+                AccessType accessType = AccessType.Owner;
+                if (this.checkBox1.Checked)
+                {
+                    accessType = accessType | AccessType.Owner;
+                }
+                if (this.checkBox2.Checked)
+                {
+                    accessType = accessType | AccessType.Service;
+                }
+                if (this.checkBox3.Checked)
+                {
+                    accessType = accessType | AccessType.Everyone;
+                }
+                this.tcpRpcClient.PublishEvent(this.textBox2.Text, accessType);
+                ShowMsg("发布成功");
             }
-            if (this.checkBox2.Checked)
+            catch (Exception ex)
             {
-                accessType = accessType | AccessType.Service;
+                ShowMsg(ex.Message);
             }
-            if (this.checkBox3.Checked)
-            {
-                accessType = accessType | AccessType.Everyone;
-            }
-            this.tcpRpcClient.PublishEvent(this.textBox2.Text, accessType);
-            ShowMsg("发布成功");
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -77,8 +86,16 @@ namespace EERPCClientDemo
 
         private void button4_Click(object sender, EventArgs e)
         {
-            this.tcpRpcClient.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-            this.ShowMsg($"订阅成功");
+            try
+            {
+                this.tcpRpcClient.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                this.ShowMsg($"订阅成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
         }
         private void SubscribeEvent(EventSender eventSender, string arg)
         {
@@ -87,14 +104,56 @@ namespace EERPCClientDemo
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem is string eventName)
+            try
             {
-                this.tcpRpcClient.RaiseEvent(eventName, this.textBox4.Text);
+                if (listBox1.SelectedItem is string eventName)
+                {
+                    this.tcpRpcClient.RaiseEvent(eventName, this.textBox4.Text);
+                    ShowMsg("触发成功");
+                }
+                else
+                {
+                    ShowMsg("请先选择事件");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ShowMsg("请先选择事件");
+                ShowMsg(ex.Message);
             }
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.tcpRpcClient.UnpublishEvent(this.textBox2.Text);
+                ShowMsg("取消发布成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.tcpRpcClient.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                ShowMsg("取消订阅成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMsg(ex.Message);
+            }
+
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Clear();
         }
     }
 }

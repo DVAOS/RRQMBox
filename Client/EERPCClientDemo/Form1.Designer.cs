@@ -53,22 +53,28 @@ namespace EERPCClientDemo
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button5 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1103, 89);
+            this.button2.Location = new System.Drawing.Point(30, 250);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(194, 38);
             this.button2.TabIndex = 14;
-            this.button2.Text = "获取所有事件";
+            this.button2.Text = "刷新所有事件";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(721, 89);
+            this.checkBox3.Location = new System.Drawing.Point(799, 95);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(152, 35);
             this.checkBox3.TabIndex = 13;
@@ -78,7 +84,7 @@ namespace EERPCClientDemo
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(587, 89);
+            this.checkBox2.Location = new System.Drawing.Point(665, 95);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(128, 35);
             this.checkBox2.TabIndex = 12;
@@ -90,7 +96,7 @@ namespace EERPCClientDemo
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(447, 89);
+            this.checkBox1.Location = new System.Drawing.Point(525, 95);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(123, 35);
             this.checkBox1.TabIndex = 11;
@@ -99,14 +105,14 @@ namespace EERPCClientDemo
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(30, 89);
+            this.textBox2.Location = new System.Drawing.Point(108, 95);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(398, 38);
             this.textBox2.TabIndex = 10;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(903, 89);
+            this.button1.Location = new System.Drawing.Point(981, 95);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(150, 38);
             this.button1.TabIndex = 9;
@@ -116,10 +122,10 @@ namespace EERPCClientDemo
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(447, 487);
+            this.textBox1.Location = new System.Drawing.Point(447, 396);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1138, 339);
+            this.textBox1.Size = new System.Drawing.Size(857, 430);
             this.textBox1.TabIndex = 8;
             // 
             // button3
@@ -134,7 +140,7 @@ namespace EERPCClientDemo
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(447, 173);
+            this.button4.Location = new System.Drawing.Point(525, 179);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(150, 38);
             this.button4.TabIndex = 17;
@@ -144,7 +150,7 @@ namespace EERPCClientDemo
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(30, 173);
+            this.textBox3.Location = new System.Drawing.Point(108, 179);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(398, 38);
             this.textBox3.TabIndex = 16;
@@ -160,9 +166,9 @@ namespace EERPCClientDemo
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1435, 293);
+            this.button5.Location = new System.Drawing.Point(1154, 294);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(150, 179);
+            this.button5.Size = new System.Drawing.Size(143, 39);
             this.button5.TabIndex = 20;
             this.button5.Text = "触发事件";
             this.button5.UseVisualStyleBackColor = true;
@@ -171,16 +177,78 @@ namespace EERPCClientDemo
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(447, 294);
-            this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(954, 178);
+            this.textBox4.Size = new System.Drawing.Size(661, 38);
             this.textBox4.TabIndex = 19;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(1154, 95);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(150, 38);
+            this.button6.TabIndex = 21;
+            this.button6.Text = "取消发布";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(695, 179);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(150, 38);
+            this.button7.TabIndex = 22;
+            this.button7.Text = "取消订阅";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(1219, 352);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(78, 38);
+            this.button8.TabIndex = 23;
+            this.button8.Text = "清空";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(448, 360);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 31);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "日志";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 99);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(86, 31);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "事件名";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 182);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 31);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "事件名";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1595, 837);
+            this.ClientSize = new System.Drawing.Size(1331, 837);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.listBox1);
@@ -216,6 +284,12 @@ namespace EERPCClientDemo
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label1;
     }
 }
 
