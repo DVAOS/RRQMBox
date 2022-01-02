@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.ByteManager;
+using RRQMCore.Serialization;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
@@ -39,6 +40,7 @@ namespace XUnitService
             RPCService rpcService = new RPCService();
 
             CodeGenerator.AddProxyType<RpcArgsClassLib.ProxyClass1>();
+            CodeGenerator.AddProxyType<RpcArgsClassLib.ProxyClass2>(deepSearch: true);
 
             rpcService.AddRPCParser("tcpRPCParser", CreateRRQMTcpParser(7794));
 
@@ -52,6 +54,15 @@ namespace XUnitService
             rpcService.AddRPCParser("JsonRpcParser_Tcp", CreateJsonRpcParser(7803, JsonRpcProtocolType.Tcp));
             rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
             rpcService.RegisterServer<Server>();//注册服务
+
+            rpcService.ShareProxy(new IPHost(8848));
+            Console.WriteLine("RPC代理已开启分享，请通过8848端口获取。");
+
+            //RpcProxyInfo proxyInfo = rpcService.GetProxyInfo(RpcType.RRQMRPC | RpcType.JsonRpc | RpcType.XmlRpc, "RPC");
+
+            //string code = CodeGenerator.ConvertToCode("RRQM", proxyInfo.Codes);
+            //byte[] data = SerializeConvert.RRQMBinarySerialize(proxyInfo);
+            //var obj = SerializeConvert.RRQMBinaryDeserialize<RpcProxyInfo>(data, 0);
         }
 
         private static IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
@@ -64,7 +75,7 @@ namespace XUnitService
             config.ClearInterval = -1;//规定不清理无数据客户端
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };
             config.ProtocolType = protocolType;
-
+            config.ProxyToken = "RPC";
             jsonRpcParser.Setup(config);
             jsonRpcParser.Start();
             Console.WriteLine($"jsonRpcParser解析器添加完成，端口号：{port}，协议：{protocolType}");
@@ -79,7 +90,7 @@ namespace XUnitService
             config.ThreadCount = 1;//设置多线程数量
             config.ClearInterval = -1;//规定不清理无数据客户端
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-
+            config.ProxyToken = "RPC";
             xmlRpcParser.Setup(config);
             xmlRpcParser.Start();
 
@@ -104,13 +115,12 @@ namespace XUnitService
 
         private static IRPCParser CreateRRQMUdpParser(int port)
         {
-            UdpRpcParser udpRPCParser = new UdpRpcParser();
+            UdpRpc udpRPCParser = new UdpRpc();
             var config = new UdpRpcParserConfig();
             config.BindIPHost = new IPHost(port);
             config.BufferLength = 1024;
             config.ThreadCount = 1;
             config.ProxyToken = "RPC";
-            config.NameSpace = "RRQMTest";
 
             udpRPCParser.Setup(config);
 
@@ -132,7 +142,6 @@ namespace XUnitService
             config.VerifyTimeout = 3 * 1000;//令箭验证超时时间，3秒
             config.VerifyToken = "123RPC";//令箭值
             config.ProxyToken = "RPC";//默认服务代理令箭
-            config.NameSpace = "RRQMTest";//默认代理代码命名空间
             //载入配置
             tcpRPCParser.Setup(config);
 
@@ -146,7 +155,7 @@ namespace XUnitService
         private static void CreateProtocolService(int port)
         {
             SimpleProtocolService service = new SimpleProtocolService();
-            service.Received += (SimpleProtocolSocketClient arg1, short? arg2, ByteBlock arg3) =>
+            service.Received += (SimpleProtocolSocketClient arg1, short arg2, ByteBlock arg3) =>
             {
                 Console.WriteLine($"ProtocolService收到数据，协议为：{arg2}，数据长度为：{arg3.Len - 2}");
                 if (arg2 == 10)

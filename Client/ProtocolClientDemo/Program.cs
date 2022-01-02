@@ -29,6 +29,7 @@ namespace ProtocolClientDemo
             Console.WriteLine("4.测试Test_Protocol_10000_Send_Then_Return");
             Console.WriteLine("5.性能测试Test_Protocol_10000_Send_Then_Return");
             Console.WriteLine("6.测试Test_Channel");
+            Console.WriteLine("7.测试PingPong");
 
             switch (Console.ReadLine())
             {
@@ -62,10 +63,28 @@ namespace ProtocolClientDemo
                         Test_Channel();
                         break;
                     }
+                case "7":
+                    {
+                        Test_PingPong();
+                        break;
+                    }
                 default:
                     break;
             }
             Console.ReadKey();
+        }
+
+        private static void Test_PingPong()
+        {
+            PingPongClient protocolClient = new PingPongClient();
+            //声明配置
+            var config = new ProtocolClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
+            config.HeartbeatFrequency = 100;
+            //载入配置
+            protocolClient.Setup(config);
+
+            protocolClient.Connect("Token");
         }
 
         private static void Test_Channel()
@@ -222,7 +241,7 @@ namespace ProtocolClientDemo
                 //Protocol系的数据，前两个字节为协议，所以真实数据应该偏移2个单位。
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, byteBlock.Len - 2);
 
-                if (protocol == null)
+                if (protocol == -1)
                 {
                     Console.WriteLine($"已从{client.Name}接收默认协议信息：{mes}");//意味着发送方是直接使用Send发送
                 }

@@ -84,7 +84,7 @@ namespace XUnitTest.Core
             //测试扩容比赋值
             Assert.Equal(1.5f, ByteBlock.Ratio);
             ByteBlock.Ratio = 0.5f;
-            Assert.Equal(1f, ByteBlock.Ratio);
+            Assert.Equal(1.5f, ByteBlock.Ratio);
             ByteBlock.Ratio = 1.5f;
 
             //测试申请内存
@@ -101,14 +101,92 @@ namespace XUnitTest.Core
             byteBlock.Write(data);
             Assert.Equal(20, byteBlock.Pos);
             Assert.Equal(20, byteBlock.Len);
-            Assert.Equal(25, byteBlock.Capacity);
+            Assert.Equal(22, byteBlock.Capacity);//初始10，扩容1.5倍为15，但是不够，继续扩容1.5倍，22.5，取整，22。
 
             byte[] data2 = new byte[100];
             new Random().NextBytes(data2);
             byteBlock.Write(data2);
             Assert.Equal(120, byteBlock.Pos);
             Assert.Equal(120, byteBlock.Len);
-            Assert.Equal(167, byteBlock.Capacity);
+            Assert.Equal(163, byteBlock.Capacity);//22，33，49，73，109，163
+        }
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        [InlineData(1000000)]
+        [InlineData(10000000)]
+        [InlineData(100000000)]
+        public void ShouldCanReadOverlength(int count)
+        {
+            ByteBlock byteBlock = new ByteBlock(1024, true);
+            for (int i = 0; i < count; i++)
+            {
+                byteBlock.Write(i);
+            }
+
+            byteBlock.Pos = 0;
+            for (int i = 0; i < count; i++)
+            {
+                int value = byteBlock.ReadInt32();
+                Assert.Equal(i,value);
+            }
+        }
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        [InlineData(1000000)]
+        [InlineData(10000000)]
+        [InlineData(100000000)]
+        public void ShouldCanReadStringOverlength(int count)
+        {
+            ByteBlock byteBlock = new ByteBlock(1024, true);
+            for (int i = 0; i < count; i++)
+            {
+                byteBlock.Write(i.ToString());
+            }
+
+            byteBlock.Pos = 0;
+            for (int i = 0; i < count; i++)
+            {
+                string value = byteBlock.ReadString();
+                Assert.Equal(i.ToString(), value);
+            }
+        }
+
+        [Fact]
+        public void ShouldCanWriteOverlengthPos()
+        {
+            ByteBlock byteBlock = new ByteBlock(10, true);
+            byteBlock.Clear();
+
+            for (byte i = 0; i < 10; i++)
+            {
+                byteBlock.Write(i);
+            }
+
+            byteBlock.Pos = 20;
+            for (byte i = 0; i < 10; i++)
+            {
+                byteBlock.Write(i);
+            }
+
+            Assert.Equal(byteBlock.Pos,byteBlock.Len);
+            byteBlock.Pos = 0;
+            for (byte i = 0; i < 10; i++)
+            {
+               Assert.Equal(i,byteBlock.ReadByte()) ;
+            }
+            byteBlock.Pos = 20;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.Equal(i, byteBlock.ReadByte());
+            }
         }
     }
 

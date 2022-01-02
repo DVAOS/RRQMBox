@@ -163,7 +163,7 @@ namespace XUnitTest.Core
         [InlineData(65536, 10)]
         [InlineData(65536, 1024)]
         [InlineData(65536, 1024 * 64)]
-        [InlineData(655360, 10)]
+        [InlineData(655360, 100)]
         [InlineData(655360, 1024)]
         [InlineData(655360, 1024 * 64)]
 

@@ -10,19 +10,25 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket;
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
 using System;
 
-namespace GetProxyFromTcpParser
+namespace TestNATServiceDemo
 {
-    internal class Program
+    class Program
     {
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
-            RPCService service = new RPCService();
-            RpcProxyInfo proxyInfo = service.GetProxyInfo(new IPHost("127.0.0.1:8848"), RpcType.RRQMRPC, "FileVerifyToken");
-            string code = CodeGenerator.ConvertToCode(proxyInfo.Namespace, proxyInfo.Codes);
+            NATService service = new NATService();
+
+            var config = new NATServiceConfig();
+            config.ListenIPHosts = new IPHost[] { new IPHost(7788) };
+            config.TargetIPHost = new IPHost("127.0.0.1:7789");
+
+            service.Setup(config);
+            service.Start();
+
+            Console.WriteLine("转发服务器已启动。");
+            Console.ReadKey();
         }
     }
 }

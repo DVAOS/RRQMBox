@@ -14,15 +14,39 @@ using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 
-namespace GetProxyFromTcpParser
+namespace ReverseRPCClientDemo
 {
-    internal class Program
+    class Program
     {
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             RPCService service = new RPCService();
-            RpcProxyInfo proxyInfo = service.GetProxyInfo(new IPHost("127.0.0.1:8848"), RpcType.RRQMRPC, "FileVerifyToken");
-            string code = CodeGenerator.ConvertToCode(proxyInfo.Namespace, proxyInfo.Codes);
+            service.ShareProxy(new IPHost(8848));
+
+            TcpRpcClient client = new TcpRpcClient();
+
+            service.AddRPCParser("client", client);
+            service.RegisterServer<CallbackServer>();
+            var config = new TcpRpcClientConfig();
+            config.ProxyToken = "RPC";
+            config.RemoteIPHost = new IPHost("127.0.0.1:7789");
+            client.Setup(config);
+
+            Console.ReadKey();
+           
+           
+            client.Connect("123RPC");
+            client.DiscoveryService("RPC");
+            Console.WriteLine("成功连接");
+            Console.ReadKey();
+        }
+    }
+    public class CallbackServer : RRQMSocket.RPC.ServerProvider
+    {
+        [RRQMRPCCallBack()]
+        public int ConPerformance(int age)
+        {
+            return ++age;
         }
     }
 }

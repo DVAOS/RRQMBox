@@ -28,6 +28,7 @@ namespace ProtocolServiceDemo
             Console.WriteLine("3.测试10000_ProtocolSubscriber");
             Console.WriteLine("4.测试10000_ProtocolSubscriber_Then_Return");
             Console.WriteLine("5.测试Channel");
+            Console.WriteLine("6.测试心跳");
 
             switch (Console.ReadLine())
             {
@@ -55,12 +56,45 @@ namespace ProtocolServiceDemo
                     {
                         Test_Channel();
                         break;
+                    } 
+                case "6":
+                    {
+                        Test_PingPong();
+                        break;
                     }
                 default:
                     break;
             }
 
             Console.ReadKey();
+        }
+
+        private static void Test_PingPong()
+        {
+            PingPongService service = new PingPongService();
+
+            //声明配置
+            var config = new ProtocolServiceConfig();
+            config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
+
+            //继承TokenService配置
+            config.VerifyToken = "Token";//连接验证令箭，可实现多租户模式
+            config.VerifyTimeout = 3 * 1000;//验证3秒超时
+
+            //载入配置
+            service.Setup(config);
+
+            //启动
+
+            try
+            {
+                service.Start();
+                Console.WriteLine("Protocol服务器启动成功");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private static void Test_Channel()
@@ -193,12 +227,12 @@ namespace ProtocolServiceDemo
                 StreamOperator streamOperator = e.StreamOperator;//获取操作器，可用于取消任务，获取进度等。
 
                 Console.WriteLine("设置最大传输速度为1024byte");
-                streamOperator.SetMaxSpeed(1024);
+                //streamOperator.SetMaxSpeed(1024);
 
                 Console.WriteLine("5秒后设置为5Mb");
                 RRQMCore.Run.EasyAction.DelayRun(5, () =>
                  {
-                     streamOperator.SetMaxSpeed(1024 * 1024 * 5);
+                     //streamOperator.SetMaxSpeed(1024 * 1024 * 5);
                  });
 
                 Task.Run(async () =>
@@ -249,7 +283,7 @@ namespace ProtocolServiceDemo
                 //Protocol系的数据，前两个字节为协议，所以真实数据应该偏移2个单位。
                 string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 2, byteBlock.Len - 2);
 
-                if (protocol == null)
+                if (protocol == -1)
                 {
                     Console.WriteLine($"已从{client.Name}接收默认协议信息：{mes}");//意味着发送方是直接使用Send发送
                 }
@@ -284,5 +318,5 @@ namespace ProtocolServiceDemo
             }
             return service;
         }
-    }
+    } 
 }

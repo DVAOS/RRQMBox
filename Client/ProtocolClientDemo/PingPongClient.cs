@@ -9,20 +9,36 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.ByteManager;
 using RRQMSocket;
-using RRQMSocket.RPC;
-using RRQMSocket.RPC.RRQMRPC;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace GetProxyFromTcpParser
+namespace ProtocolClientDemo
 {
-    internal class Program
+    class PingPongClient : RRQMSocket.ProtocolClient
     {
-        private static void Main(string[] args)
+        protected override void HandleProtocolData(short procotol, ByteBlock byteBlock)
         {
-            RPCService service = new RPCService();
-            RpcProxyInfo proxyInfo = service.GetProxyInfo(new IPHost("127.0.0.1:8848"), RpcType.RRQMRPC, "FileVerifyToken");
-            string code = CodeGenerator.ConvertToCode(proxyInfo.Namespace, proxyInfo.Codes);
+            throw new NotImplementedException();
+        }
+
+        protected override void HandleStream(StreamStatusEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void PreviewHandleStream(StreamOperationEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+        protected override void OnPong()
+        {
+            Console.WriteLine("Pong");
+            base.OnPong();
         }
     }
 }

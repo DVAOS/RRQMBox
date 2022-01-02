@@ -14,6 +14,7 @@ using RRQMCore.ByteManager;
 using RRQMCore.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace XUnitTest.Core
@@ -43,7 +44,7 @@ namespace XUnitTest.Core
         [InlineData('R')]
         public void ShouldSerializePrimitiveObjBeOk(object obj)
         {
-            byte[] data = SerializeConvert.RRQMBinarySerialize(obj, true);
+            byte[] data = SerializeConvert.RRQMBinarySerialize(obj);
 
             object sobj = SerializeConvert.RRQMBinaryDeserialize(data, 0, obj.GetType());
 
@@ -62,7 +63,7 @@ namespace XUnitTest.Core
             student.P5 = DateTime.Now;
             student.P6 = 10;
             student.P7 = new byte[1024 * 64];
-            student.P8 = new string[] { "I","love","you"};
+            student.P8 = new string[] { "I", "love", "you" };
 
             Random random = new Random();
             random.NextBytes(student.P7);
@@ -103,7 +104,7 @@ namespace XUnitTest.Core
             student.Dic4.Add(3, new Arg(3));
 
             ByteBlock byteBlock = new ByteBlock(1024 * 512);
-            SerializeConvert.RRQMBinarySerialize(byteBlock, student, true);
+            SerializeConvert.RRQMBinarySerialize(byteBlock, student);
             Student newStudent = SerializeConvert.RRQMBinaryDeserialize<Student>(byteBlock.Buffer, 0);
             byteBlock.Dispose();
 
@@ -122,7 +123,7 @@ namespace XUnitTest.Core
 
             for (int i = 0; i < student.P8.Length; i++)
             {
-                Assert.Equal(student.P8[i],newStudent.P8[i]);
+                Assert.Equal(student.P8[i], newStudent.P8[i]);
             }
 
             for (int i = 0; i < student.P7.Length; i++)
@@ -172,19 +173,165 @@ namespace XUnitTest.Core
             metadata.Add("2", "2");
 
             ByteBlock byteBlock = new ByteBlock(1024 * 512);
-            SerializeConvert.RRQMBinarySerialize(byteBlock, metadata, true);
+            SerializeConvert.RRQMBinarySerialize(byteBlock, metadata);
             Metadata newMetadata = SerializeConvert.RRQMBinaryDeserialize<Metadata>(byteBlock.Buffer, 0);
             byteBlock.Dispose();
 
             Assert.NotNull(newMetadata);
-            Assert.Equal(metadata.Count,newMetadata.Count);
+            Assert.Equal(metadata.Count, newMetadata.Count);
             foreach (var item in metadata.Keys)
             {
-                Assert.Equal(metadata[item],newMetadata[item]);
+                Assert.Equal(metadata[item], newMetadata[item]);
+            }
+        }
+
+        [Fact]
+        public void ShouldSerializeProcessInfoesBeOk()
+        {
+            List<ProcessInfo> infos = new List<ProcessInfo>();
+            for (int i = 0; i < 200; i++)
+            {
+                infos.Add(new ProcessInfo() { Location = i.ToString(), Name = i.ToString(), PID = i, WinName = i.ToString() });
+            }
+
+
+            ByteBlock byteBlock = new ByteBlock(10240, true);
+            SerializeConvert.RRQMBinarySerialize(byteBlock, infos.ToArray());
+            byte[] datas = byteBlock.ToArray();
+            ProcessInfo[] newinfos = SerializeConvert.RRQMBinaryDeserialize<ProcessInfo[]>(datas, 0);
+            Assert.NotNull(newinfos);
+            Assert.Equal(infos.Count, newinfos.Length);
+
+            for (int i = 0; i < infos.Count; i++)
+            {
+                Assert.Equal(infos[i].Location, newinfos[i].Location);
+                Assert.Equal(infos[i].Name, newinfos[i].Name);
+                Assert.Equal(infos[i].WinName, newinfos[i].WinName);
+                Assert.Equal(infos[i].PID, newinfos[i].PID);
+            }
+        }
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        [InlineData(1000000)]
+        public void ShouldSerializeList(int count)
+        {
+            List<string> list = null;
+
+            byte[] data = SerializeConvert.RRQMBinarySerialize(list);
+            var list1 = SerializeConvert.RRQMBinaryDeserialize<List<string>>(data, 0);
+            Assert.Null(list1);
+
+            list = new List<string>();
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list2 = SerializeConvert.RRQMBinaryDeserialize<List<string>>(data, 0);
+            Assert.NotNull(list2);
+            Assert.True(list2.Count == 0);
+
+            list = new List<string>();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(i.ToString());
+            }
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list3 = SerializeConvert.RRQMBinaryDeserialize<List<string>>(data, 0);
+            Assert.NotNull(list3);
+            Assert.Equal(count, list3.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.Equal(list[i],list3[i]);
+            }
+        }
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        [InlineData(1000000)]
+        public void ShouldSerializeArray(int count)
+        {
+            string[] list = null;
+
+            byte[] data = SerializeConvert.RRQMBinarySerialize(list);
+            var list1 = SerializeConvert.RRQMBinaryDeserialize<string[]>(data, 0);
+            Assert.Null(list1);
+
+            list = new string[0];
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list2 = SerializeConvert.RRQMBinaryDeserialize<string[]>(data, 0);
+            Assert.NotNull(list2);
+            Assert.True(list2.Length == 0);
+
+            list = new string[count];
+            for (int i = 0; i < count; i++)
+            {
+                list[i]=i.ToString();
+            }
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list3 = SerializeConvert.RRQMBinaryDeserialize<string[]>(data, 0);
+            Assert.NotNull(list3);
+            Assert.Equal(count, list3.Length);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.Equal(list[i], list3[i]);
+            }
+        }
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        [InlineData(100000)]
+        [InlineData(1000000)]
+        public void ShouldSerializeDic(int count)
+        {
+            Dictionary<int,int> list = null;
+
+            byte[] data = SerializeConvert.RRQMBinarySerialize(list);
+            var list1 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
+            Assert.Null(list1);
+
+            list = new  Dictionary<int, int>();
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list2 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
+            Assert.NotNull(list2);
+            Assert.True(list2.Count == 0);
+
+            list = new  Dictionary<int, int>();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(i,i);
+            }
+            data = SerializeConvert.RRQMBinarySerialize(list);
+            var list3 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
+            Assert.NotNull(list3);
+            Assert.Equal(count, list3.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.Equal(list[i], list3[i]);
             }
         }
     }
 
+    public class ProcessInfo
+    {
+        public string Name { get; set; }
+        public int PID { get; set; }
+        public string WinName { get; set; }
+        public string Location { get; set; }
+    }
+    public class ProcessInfoShort
+    {
+        public string Name { get; set; }
+        public string Location { get; set; }
+    }
     public class Arg
     {
         public Arg()

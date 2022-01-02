@@ -35,8 +35,6 @@ namespace RRQMRPCServiceDemo
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
 
             //继承TcpRpcParser配置，以实现RPC交互
-            config.NameSpace = "RRQMTest";
-            config.RPCVersion = new Version(1, 0, 0, 0);//定义此次发布的RPC版本。
             config.ProxyToken = "RPC";//代理令箭，当客户端获取代理文件,或服务时需验证令箭
             tcpRPCParser.Setup(config);
             tcpRPCParser.Start();

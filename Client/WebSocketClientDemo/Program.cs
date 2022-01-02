@@ -56,7 +56,7 @@ namespace WebSocketClientDemo
             while (true)
             {
                 Console.ReadKey();
-                myWSClient.SubpackageSend(data,1,8,4);
+                myWSClient.SubpackageSend(data, 1, 8, 4);
             }
         }
 

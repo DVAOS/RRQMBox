@@ -71,7 +71,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSServicePerformanceDemo", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EERPCServiceDemo", "EERPCServiceDemo\EERPCServiceDemo.csproj", "{B9CC19DC-3033-4888-A3CF-D236F3E697B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSocketWebSocketServiceDemo", "SuperSocketWebSocketServiceDemo\SuperSocketWebSocketServiceDemo.csproj", "{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketWebSocketServiceDemo", "SuperSocketWebSocketServiceDemo\SuperSocketWebSocketServiceDemo.csproj", "{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseRPCServiceDemo", "ReverseRPCServiceDemo\ReverseRPCServiceDemo.csproj", "{CEBAA11E-CDA6-46A3-B676-0762B429627F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "网络地址转换", "网络地址转换", "{CAA87A69-BD62-4399-ADED-854AA3FD5128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNATServiceDemo", "TestNATServiceDemo\TestNATServiceDemo.csproj", "{D7B28D98-2127-4A07-965F-4D89EFDD4191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +173,14 @@ Global
 		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBAA11E-CDA6-46A3-B676-0762B429627F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBAA11E-CDA6-46A3-B676-0762B429627F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBAA11E-CDA6-46A3-B676-0762B429627F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBAA11E-CDA6-46A3-B676-0762B429627F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B28D98-2127-4A07-965F-4D89EFDD4191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B28D98-2127-4A07-965F-4D89EFDD4191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B28D98-2127-4A07-965F-4D89EFDD4191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B28D98-2127-4A07-965F-4D89EFDD4191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +207,8 @@ Global
 		{A175C487-4F73-49BD-A91F-583D357D150E} = {70CAEE3D-150C-4F92-8345-6672595703DD}
 		{B9CC19DC-3033-4888-A3CF-D236F3E697B2} = {AE9F1E91-95F0-426A-95DE-DEF67A0CA348}
 		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5} = {70CAEE3D-150C-4F92-8345-6672595703DD}
+		{CEBAA11E-CDA6-46A3-B676-0762B429627F} = {AE9F1E91-95F0-426A-95DE-DEF67A0CA348}
+		{D7B28D98-2127-4A07-965F-4D89EFDD4191} = {CAA87A69-BD62-4399-ADED-854AA3FD5128}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BB08AC0-8102-4AFB-BA22-F13EDD701E07}

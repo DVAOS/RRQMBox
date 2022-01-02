@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 using RpcArgsClassLib;
 using RRQMCore.XREF.Newtonsoft.Json.Linq;
+using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
@@ -86,8 +87,8 @@ namespace XUnitService
             timer.Start();
         }
 
-        [XmlRpc]
-        [JsonRpc]
+        [XmlRpc(MethodName = "Xml_Test01_Performance")]
+        [JsonRpc(MethodName = "Json_Test01_Performance")]
         [Route]
         [RRQMRPC]
         [Description("性能测试")]
@@ -257,30 +258,21 @@ namespace XUnitService
             return class01;
         }
 
-        [RRQMRPC]
-        public void Test19_CallBack(string id)
+        [RRQMRPC(Async = true)]//此处必须使用异步，要么在方法里面使用Task.Run
+        public string Test19_CallBack(string id,int age)
         {
-            Task.Run(() =>
+            //先在RPC服务器中找到TcpRpc解析器。
+            TcpRpcParser tcpRpcParser = ((TcpRpcParser)this.RPCService.RPCParsers["tcpRPCParser"]);
+
+            //然后检索出id对应的RpcSocketClient
+            if (tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
             {
-                try
-                {
-                    //先判断SocketClient是否还在线，然后回调。
-                    //TcpRPCParser tcpRPCParser = ((TcpRPCParser)this.RPCService.RPCParsers["TcpParser"]);
-                    //if (tcpRPCParser.Service.SocketClients.TryGetSocketClient(iDToken, out RPCSocketClient socketClient))
-                    //{
-                    //    string msg = socketClient.CallBack<string>(1000, invokeOption, 10);
-                    //}
-
-                    //或者这样直接调
-                    string mes = ((TcpRpcParser)this.RPCService.RPCParsers["tcpRPCParser"]).CallBack<string>(id, 1000, InvokeOption.WaitInvoke, 10);
-
-                    ShowMsg($"TestCallBack，mes={mes}");
-                }
-                catch (Exception ex)
-                {
-                    ShowMsg($"TestCallBack调用异常,信息：{ex.Message}");
-                }
-            });
+                //最后调用CallBack
+                string msg = socketClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, age);
+                ShowMsg($"TestCallBack，mes={msg}");
+                return msg;
+            }
+            return null;
         }
 
         [XmlRpc]
@@ -307,7 +299,7 @@ namespace XUnitService
 
         [JsonRpc]
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test22_IncludeCaller(IServerCallContext serverCallContext, int a)
+        public int Test22_IncludeCaller(ICallContext serverCallContext, int a)
         {
             if (serverCallContext is JsonRpcServerCallContext jsonRpcServerCallContext)
             {
@@ -318,7 +310,7 @@ namespace XUnitService
         private int invokeCount;
 
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test23_InvokeType(IServerCallContext serverCallContext)
+        public int Test23_InvokeType(ICallContext serverCallContext)
         {
             return invokeCount++;
         }
@@ -330,7 +322,7 @@ namespace XUnitService
         }
 
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public int Test26_TestCancellationToken(IServerCallContext serverCallContext)
+        public int Test26_TestCancellationToken(ICallContext serverCallContext)
         {
             int i = 0;
             serverCallContext.TokenSource.Token.Register(() =>
@@ -348,6 +340,40 @@ namespace XUnitService
             }
 
             return 1;
+        }
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public void Test27_TestCallBackFromCallContext(ICallContext serverCallContext)
+        {
+            if (serverCallContext.Caller is RpcSocketClient socketClient)
+            {
+                Task.Run(() =>
+                {
+                    //直接调用CallBack
+                    string msg = socketClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, 10);
+                    ShowMsg($"TestCallBack，mes={msg}");
+                });
+            }
+        }
+
+        /// <summary>
+        /// "测试从RPC创建通道，从而实现流数据的传输"
+        /// </summary>
+        /// <param name="serverCallContext"></param>
+        /// <param name="channelID"></param>
+        [Description("测试从RPC创建通道，从而实现流数据的传输")]
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public void Test28_TestChannel(ICallContext serverCallContext, int channelID)
+        {
+            if (serverCallContext.Caller is RpcSocketClient socketClient)
+            {
+                if (socketClient.TrySubscribeChannel(channelID, out Channel channel))
+                {
+                    for (int i = 0; i < 1024; i++)
+                    {
+                        channel.Write(new byte[1024]);
+                    }
+                }
+            }
         }
 
         private void ShowMsg(string msg)

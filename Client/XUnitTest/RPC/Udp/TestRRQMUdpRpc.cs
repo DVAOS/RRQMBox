@@ -21,21 +21,20 @@ namespace RRQMSocketXUnitTest.RPC.Udp
         [InlineData("127.0.0.1:7797", 8848)]
         public void ShouldSuccessfulCallService(string ipHost, int port)
         {
-            UdpRpcClient client = new UdpRpcClient();
+            UdpRpc client = new UdpRpc();
             var config = new UdpRpcClientConfig();
             config.RemoteIPHost = new IPHost(ipHost);
             config.BindIPHost = new IPHost(port);
-            config.ProxyToken = "RPC";
-
+           
             client.Setup(config);
             client.Start();
-            MethodItem[] methodItems = client.DiscoveryService();
+            MethodItem[] methodItems = client.DiscoveryService("RPC");
 
             Assert.NotNull(methodItems);
             Assert.True(methodItems.Length > 0);
 
             RemoteTest remoteTest = new RemoteTest(client);
-            remoteTest.Test01();
+            remoteTest.Test01("rrqm");
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();

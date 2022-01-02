@@ -11,7 +11,11 @@
 //------------------------------------------------------------------------------
 using RRQMCore.Serialization;
 using RRQMSocket;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC.Tcp
@@ -24,11 +28,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "RPC";
 
             client.Setup(config);
             client.Connect("123RPC");
-            MethodItem[] methodItems = client.DiscoveryService();
+            MethodItem[] methodItems = client.DiscoveryService("RPC");
 
             Assert.NotNull(methodItems);
             Assert.True(methodItems.Length > 0);
@@ -40,14 +43,16 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "error";
 
             client.Setup(config);
             client.Connect("123RPC");
-            MethodItem[] methodItems = client.DiscoveryService();
 
-            Assert.NotNull(methodItems);
-            Assert.True(methodItems.Length == 0);
+            Assert.ThrowsAny<Exception>(() =>
+            {
+                client.DiscoveryService("error");
+            });
+
+
         }
 
         [Theory]
@@ -58,15 +63,16 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         {
             TcpRpcClient client = new TcpRpcClient();
 
-            client.RegisterServer<CallbackServer>();
+            RPCService service = new RPCService();
+            service.AddRPCParser("client", client);
+            service.RegisterServer<CallbackServer>();
 
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "RPC";
 
             client.Setup(config);
             client.Connect("123RPC");
-            MethodItem[] methodItems = client.DiscoveryService();
+            MethodItem[] methodItems = client.DiscoveryService("RPC");
 
             Assert.NotNull(methodItems);
             Assert.True(methodItems.Length > 0);
@@ -76,7 +82,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             InvokeOption.WaitInvoke.SerializationType = serializationType;
 
             RemoteTest remoteTest = new RemoteTest(client);
-            remoteTest.Test01();
+            remoteTest.Test01("rrqm");
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();
@@ -112,11 +118,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.ProxyToken = "RPC";
 
                 client.Setup(config);
                 client.Connect("123RPC");
-                client.DiscoveryService();
+                client.DiscoveryService("RPC");
 
                 RemoteTest remoteTest = new RemoteTest(client);
                 int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.GlobalInstance);
@@ -133,11 +138,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.ProxyToken = "RPC";
 
                 client.Setup(config);
                 client.Connect("123RPC");
-                client.DiscoveryService();
+                client.DiscoveryService("RPC");
 
                 RemoteTest remoteTest = new RemoteTest(client);
                 for (int j = 0; j < 10; j++)
@@ -158,11 +162,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 TcpRpcClient client = new TcpRpcClient();
                 var config = new TcpRpcClientConfig();
                 config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-                config.ProxyToken = "RPC";
 
                 client.Setup(config);
                 client.Connect("123RPC");
-                client.DiscoveryService();
+                client.DiscoveryService("RPC");
 
                 RemoteTest remoteTest = new RemoteTest(client);
                 for (int j = 0; j < 10; j++)
@@ -181,23 +184,49 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "RPC";
 
             client.Setup(config);
             client.Connect("123RPC");
-            client.DiscoveryService();
+            client.DiscoveryService("RPC");
 
             RemoteTest remoteTest = new RemoteTest(client);
             remoteTest.Test26();
         }
+
+        [Fact]
+        public void ShouldCreateChannelAndReadWrite()
+        {
+            TcpRpcClient client = new TcpRpcClient();
+            var config = new TcpRpcClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
+
+            client.Setup(config);
+            client.Connect("123RPC");
+            MethodItem[] methodItems = client.DiscoveryService("RPC");
+
+            RRQMProxy.Server server = new RRQMProxy.Server(client);
+
+            Channel channel = client.CreateChannel();
+            int length = 0;
+            Task.Run(()=> 
+            {
+                while (channel.MoveNext())
+                {
+                    length += channel.GetCurrent().Length;
+                }
+            });
+            server.Test28_TestChannel(channel.ID);
+            Thread.Sleep(1000*2);
+            Assert.Equal(1024*1024,length);
+        }
     }
 
-    public class CallbackServer:RRQMSocket.RPC.ServerProvider
+    public class CallbackServer : RRQMSocket.RPC.ServerProvider
     {
-        [RRQMRPCCallBackMethod(1000)]
+        [RRQMRPCCallBack()]
         public string SayHello(int age)
         {
-            return $"我今年{age}岁了。";
+            return $"我今年{age}岁了";
         }
     }
 }

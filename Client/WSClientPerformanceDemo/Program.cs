@@ -26,6 +26,7 @@ namespace WSClientPerformanceDemo
             Console.WriteLine("1.SuperSocket测试");
             Console.WriteLine("2.WebSocketSharp测试");
             Console.WriteLine("3.RRQMWebSocket测试");
+            Console.WriteLine("4.WebSocketSharp wss测试");
             switch (Console.ReadLine())
             {
                 case "1":
@@ -41,6 +42,11 @@ namespace WSClientPerformanceDemo
                 case "3":
                     {
                         TestRRQMWebSocket();
+                        break;
+                    } 
+                case "4":
+                    {
+                        TestWebSocketSharpWSS();
                         break;
                     }
                 default:
@@ -126,7 +132,43 @@ namespace WSClientPerformanceDemo
             }
         }
 
-        
+        static void TestWebSocketSharpWSS()
+        {
+            string webPath = "wss://mqtt.eclipseprojects.io/mqtt";
+            WebSocketSharp.WebSocket webSocket = new WebSocketSharp.WebSocket(webPath);
+            //webSocket.SslConfiguration = new WebSocketSharp.Net.ClientSslConfiguration() {  };
+            webSocket.Connect();
+
+
+            int count = 0;
+
+            webSocket.OnMessage += (sender, e) =>
+            {
+                if (e.RawData.Length != len)
+                {
+                    Console.WriteLine("数据错误。");
+                }
+                count++;
+            };
+
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    Console.WriteLine(count);
+                    count = 0;
+                    await Task.Delay(1000);
+                }
+            });
+
+            byte[] data = new byte[len];
+            new Random().NextBytes(data);
+            while (true)
+            {
+                webSocket.Send(data);//发送消息的函数
+            }
+        }
+
         static void TestWebSocketSharp()
         {
             string webPath = "ws://127.0.0.1:7789";

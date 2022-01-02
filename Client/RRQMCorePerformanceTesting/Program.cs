@@ -34,6 +34,7 @@ namespace RRQMCorePerformanceTesting
             Console.WriteLine("1.测试内存池并发性能");
             Console.WriteLine("2.测试内存池延迟释放性能");
             Console.WriteLine("3.测试RRQM序列化和系统序列化");
+            Console.WriteLine("4.测试等待池");
 
             switch (Console.ReadLine())
             {
@@ -52,11 +53,36 @@ namespace RRQMCorePerformanceTesting
                         TestSerializePerformance();
                         break;
                     }
+                case "4":
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            Task.Run(() =>
+                            {
+                                TestWaitPool();
+                            });
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
 
             Console.ReadKey();
+        }
+
+        static RRQMWaitHandlePool<IWaitResult> WaitHandlePool = new RRQMWaitHandlePool<IWaitResult>();
+        static void TestWaitPool()
+        {
+            TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+             {
+                 WaitResult waitResult = new WaitResult();
+                 WaitData<IWaitResult> waitData = WaitHandlePool.GetWaitData(waitResult);
+
+                 waitData.Wait(1000 * 5);
+             });
+
+            Console.WriteLine(timeSpan);
         }
 
         /// <summary>
@@ -216,7 +242,7 @@ namespace RRQMCorePerformanceTesting
                 for (int i = 0; i < 100000; i++)
                 {
                     ByteBlock byteBlock = BytePool.GetByteBlock(1024 * 100);
-                    SerializeConvert.RRQMBinarySerialize(byteBlock, student, true);
+                    SerializeConvert.RRQMBinarySerialize(byteBlock, student);
                     Student student1 = SerializeConvert.RRQMBinaryDeserialize<Student>(byteBlock.Buffer, 0);
                     byteBlock.Dispose();
                     if (i % 1000 == 0)
@@ -259,7 +285,7 @@ namespace RRQMCorePerformanceTesting
             string newFileObj = SerializeConvert.BinaryDeserializeFromFile<string>("C:/1.txt");
 
             //用RRQM二进制序列化、反序列化
-            byte[] data2 = SerializeConvert.RRQMBinarySerialize(obj, true);
+            byte[] data2 = SerializeConvert.RRQMBinarySerialize(obj);
             string newRRQMObj = SerializeConvert.RRQMBinaryDeserialize<string>(data2, 0);
 
             //用Xml序列化、反序列化

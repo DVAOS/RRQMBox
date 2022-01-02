@@ -9,43 +9,41 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.ByteManager;
+using RRQMSocket;
 using System;
-using RRQMSocket.RPC;
-using RRQMCore.Exceptions;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace RRQMRPC.RRQMTest
+
+namespace ProtocolServiceDemo
 {
-    public class T1
+    class PingPongService:RRQMSocket.ProtocolService<PingPongSocketClient>
     {
-        public int P1 { get; set; }
-        public string P2 { get; set; }
     }
 
-    public class T2
+    class PingPongSocketClient : RRQMSocket.ProtocolSocketClient
     {
-        public int P1 { get; set; }
-        public string P2 { get; set; }
-    }
+        protected override void HandleProtocolData(short procotol, ByteBlock byteBlock)
+        {
+            throw new NotImplementedException();
+        }
 
-    public class T3
-    {
-        public int P1 { get; set; }
-    }
+        protected override void HandleStream(StreamStatusEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
 
-    public class T4
-    {
-        public string P1 { get; set; }
-    }
+        protected override void PreviewHandleStream(StreamOperationEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
 
-    public class T5
-    {
-        public T1 P1 { get; set; }
-    }
-    public class T6
-    {
-        public T2 P1 { get; set; }
+        protected override void OnPing()
+        {
+            Console.WriteLine("Ping");
+            base.OnPing();
+        }
     }
 }

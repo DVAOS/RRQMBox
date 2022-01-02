@@ -42,22 +42,10 @@ namespace RPCServiceDemo
             Console.WriteLine("按任意键显示代理代码");
             Console.ReadKey();
 
-            if (rpcService.TryGetRPCParser("qosTcpRpcParser", out IRPCParser parser))
-            {
-                if (parser is TcpRpcParser tcpRpcParser)
-                {
-                    CellCode[] cellCodes = tcpRpcParser.Codes;
-                    foreach (var item in cellCodes)
-                    {
-                        Console.WriteLine(item.Code);
+            RpcProxyInfo proxyInfo = rpcService.GetProxyInfo(RpcType.RRQMRPC, "RPC");
+            string code = CodeGenerator.ConvertToCode(proxyInfo.Namespace, proxyInfo.Codes);
 
-                        File.WriteAllText(item.Name + ".cs", item.Code);
-                    }
-
-                    tcpRpcParser.CompilerProxy();
-                }
-            }
-
+            Console.WriteLine(code);
             Console.ReadKey();
         }
 
@@ -73,13 +61,12 @@ namespace RPCServiceDemo
             //继承TokenService配置
             config.VerifyToken = "123RPC";//连接验证令箭，可实现多租户模式
             config.VerifyTimeout = 3 * 1000;//验证3秒超时
+            config.ThreadCount = 20;
 
             //继承ProcotolService配置
             config.CanResetID = true;//是否重新设置ID
 
             //继承TcpRpcParser配置，以实现RPC交互
-            config.NameSpace = "RRQMTest";
-            config.RPCVersion = new Version(1, 0, 0, 0);//定义此次发布的RPC版本。
             config.ProxyToken = "RPC";//代理令箭，当客户端获取代理文件,或服务时需验证令箭
 
             //载入配置
@@ -99,30 +86,25 @@ namespace RPCServiceDemo
         /// 在获取代理时筛选，
         /// 仅筛选代理代码功能，并不能决定服务能不能调用
         /// </summary>
-        /// <param name="proxyToken"></param>
-        /// <param name="caller"></param>
-        /// <returns></returns>
-        public override RpcProxyInfo GetProxyInfo(string proxyToken, ICaller caller)
+        /// <param name="args"></param>
+        public override void GetProxyInfo(GetProxyInfoArgs args)
         {
-            RpcProxyInfo rpcProxy = base.GetProxyInfo(proxyToken, caller);
-            if (proxyToken.StartsWith("RPC"))
+            if (args.ProxyToken.StartsWith("RPC"))
             {
-                RpcProxyInfo proxyInfo = new RpcProxyInfo()
+                string ser = args.ProxyToken.Replace("RPC", string.Empty);
+                foreach (var item in this.RPCService.ServerProviders)
                 {
-                    AssemblyName = this.NameSpace + ".dll",
-                    Status = 1,//1表示成功，2表示失败
-                    Version = this.RPCVersion.ToString()
-                };
-
-                string ser = proxyToken.Replace("RPC", string.Empty);
-
-                proxyInfo.Codes = new List<CellCode>(this.Codes.Where(a => a.CodeType == CodeType.ClassArgs || a.Name.Contains(ser)));
-
-                return proxyInfo;
+                    if (item.GetType().Name.Contains(ser))
+                    {
+                        ServerCellCode serverCellCode = CodeGenerator.Generator<RRQMRPCAttribute>(item.GetType());
+                        args.Codes.Add(serverCellCode);
+                    }
+                }
             }
             else
             {
-                return new RpcProxyInfo() { Status = 2, Message = "你不配拥有代理文件" };//1表示成功，2表示失败
+                args.IsSuccess = false;
+                args.ErrorMessage = "你不配拥有代理文件";
             }
         }
 
@@ -133,20 +115,20 @@ namespace RPCServiceDemo
         /// <param name="proxyToken"></param>
         /// <param name="caller"></param>
         /// <returns></returns>
-        public override List<MethodItem> GetRegisteredMethodItems(string proxyToken, ICaller caller)
+        public override MethodItem[] GetRegisteredMethodItems(string proxyToken, ICaller caller)
         {
             if (proxyToken.StartsWith("RPC"))
             {
                 string ser = proxyToken.Replace("RPC", string.Empty);
 
                 //全部服务
-                List<MethodItem> methodItems = this.MethodStore.GetAllMethodItem();
+                MethodItem[] methodItems = this.MethodStore.GetAllMethodItem();
 
-                return new List<MethodItem>(methodItems.Where(m => m.ServerName.Contains(ser)));
+                return methodItems.Where(m => m.ServerName.Contains(ser)).ToArray();
             }
             else
             {
-                return new List<MethodItem>();
+                return null;
             }
         }
     }
@@ -202,17 +184,24 @@ namespace RPCServiceDemo
     public class PerformanceRpcServer : ServerProvider
     {
         [Description("测试性能")]
-        [RRQMRPC]
+        [RRQMRPC(async: true)]//设置Task执行
         public string Performance()//同步服务
         {
             return "若汝棋茗";
         }
 
         [Description("测试并发性能")]
-        [RRQMRPC]
-        public Task<int> ConPerformance(int num)
+        [RRQMRPC(async: true)]
+        public int ConPerformance(int num)
         {
-            return Task.FromResult(++num);
+            return ++num;
+        }
+
+        [Description("测试并发性能2")]
+        [RRQMRPC(async: true)]
+        public int ConPerformance2(int num)
+        {
+            return ++num;
         }
     }
 
@@ -220,7 +209,7 @@ namespace RPCServiceDemo
     {
         [Description("测试可取消的调用")]
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public bool DelayInvoke(IServerCallContext serverCallContext, int tick)//同步服务
+        public bool DelayInvoke(ICallContext serverCallContext, int tick)//同步服务
         {
             for (int i = 0; i < tick; i++)
             {
@@ -251,7 +240,7 @@ namespace RPCServiceDemo
     {
         [Description("测试调用上下文")]
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public string GetCallerID(IServerCallContext callContext)
+        public string GetCallerID(ICallContext callContext)
         {
             if (callContext.Caller is RpcSocketClient socketClient)
             {

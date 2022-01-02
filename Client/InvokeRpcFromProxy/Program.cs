@@ -12,6 +12,7 @@
 using RRQMCore.Run;
 using RRQMRPC.RRQMTest;
 using RRQMSocket;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Threading;
@@ -29,6 +30,7 @@ namespace InvokeRpcFromProxy
             Console.WriteLine("2.测试调用实例类型");
             Console.WriteLine("3.测试可取消任务的执行");
             Console.WriteLine("4.测试并发性能");
+            Console.WriteLine("5.测试ID调用");
 
             switch (Console.ReadLine())
             {
@@ -57,6 +59,11 @@ namespace InvokeRpcFromProxy
                         Test_ConPerformance();
                         break;
                     }
+                case "5":
+                    {
+                        Test_IDInvoke();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -69,13 +76,13 @@ namespace InvokeRpcFromProxy
 
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "RPC";
+            config.SeparateThreadSend = true;
             client.Setup(config);
 
             try
             {
                 client.Connect("123RPC");
-                client.DiscoveryService();
+                client.DiscoveryService("RPC");
             }
             catch (Exception ex)
             {
@@ -84,34 +91,64 @@ namespace InvokeRpcFromProxy
             return client;
         }
 
+        private static void Test_IDInvoke()
+        {
+            TcpRpcClient client1 = GetTcpRpcClient();
+            TcpRpcClient client2 = GetTcpRpcClient();
+
+            RPCService service = new RPCService();
+            service.AddRPCParser("client1", client1);
+            service.RegisterServer<CallbackServer>();
+
+            TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+            {
+                for (int j = 0; j < 100000; j++)
+                {
+                    int result = client2.Invoke<int>(client1.ID,"Performance", InvokeOption.WaitInvoke, j);
+                    if (result!=j+1)
+                    {
+                        Console.WriteLine("调用结果不一致。");
+                    }
+                    if (j % 1000 == 0)
+                    {
+                        Console.WriteLine($"已调用{j}次");
+                    }
+                }
+            });
+
+            Console.WriteLine($"测试结束。用时：{timeSpan}");
+            Console.ReadKey();
+        }
+
         private static void Test_ConPerformance()
         {
             TcpRpcClient tcpRpcClient = GetTcpRpcClient();
 
             PerformanceRpcServer rpcServer = new PerformanceRpcServer(tcpRpcClient);
-
+            Console.WriteLine("请输入待测试并发数量");
+            int clientCount = int.Parse(Console.ReadLine());
+            ThreadPool.SetMinThreads(clientCount + 10, clientCount + 10);
             /*
              并发性能测试内容为，同时多个异步调用同一个方法，
              然后检测其返回值。
              */
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < clientCount; i++)
             {
                 Task.Run(() =>
                 {
-                    for (int j = 0; j < 100000; j++)
+                  TimeSpan timeSpan=  RRQMCore.Diagnostics.TimeMeasurer.Run(()=> 
                     {
-                        int result = rpcServer.ConPerformance(j);
-                        if (result != j + 1)
+                        for (int j = 0; j < 100000; j++)
                         {
-                            Console.WriteLine($"测试不通过。应当返回{j + 1},实际={result}");
+                            int result = tcpRpcClient.Invoke<int>("ConPerformance", InvokeOption.WaitInvoke, j);
+                            if (j % 1000 == 0)
+                            {
+                                Console.WriteLine($"已调用{j}次");
+                            }
                         }
-
-                        if (j % 1000 == 0)
-                        {
-                            Console.WriteLine($"已调用{j}次");
-                        }
-                    }
-                    Console.WriteLine("测试结束。");
+                    });
+                   
+                    Console.WriteLine($"测试结束。用时：{timeSpan}");
                 });
             }
 
@@ -260,6 +297,7 @@ namespace InvokeRpcFromProxy
 
             Console.WriteLine("请输入待测试客户端数量");
             int clientCount = int.Parse(Console.ReadLine());
+            ThreadPool.SetMinThreads(clientCount+10, clientCount + 10);
 
             for (int i = 0; i < clientCount; i++)
             {
@@ -283,6 +321,15 @@ namespace InvokeRpcFromProxy
                 count = 0;
             });
             loopAction.RunAsync();
+        }
+    }
+
+    public class CallbackServer : RRQMSocket.RPC.ServerProvider
+    {
+        [RRQMRPCCallBack()]
+        public int Performance(int i)
+        {
+            return ++i;
         }
     }
 
@@ -316,13 +363,12 @@ namespace InvokeRpcFromProxy
 
                     TcpRpcClientConfig config = new TcpRpcClientConfig();
                     config.RemoteIPHost = new IPHost(IPHost);
-                    config.ProxyToken = "FileServerRPC";
                     client.Setup(config);
 
                     try
                     {
                         client.Connect("FileServer");
-                        client.DiscoveryService();
+                        client.DiscoveryService("FileServerRPC");
                     }
                     catch
                     {

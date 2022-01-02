@@ -75,9 +75,9 @@ namespace WebSocketServiceDemo
                 default:
                     break;
             }
-
-            byte[] data = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            client.SubpackageSend(data, 0, data.Length, 4);
+            client.Send("我已收到");
+            //byte[] data = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            //client.SubpackageSend(data, 0, data.Length, 4);
         }
     }
 }

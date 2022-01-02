@@ -43,7 +43,7 @@ namespace RRQMSocketXUnitTest.Protocol
 
             int receivedCount = 0;
             string newID = null;
-            client.Received += (SimpleProtocolClient protocolClient, short? arg1, ByteBlock arg2) =>
+            client.Received += (SimpleProtocolClient protocolClient, short arg1, ByteBlock arg2) =>
             {
                 if (arg1 == 10)
                 {

@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Threading;
@@ -24,8 +25,6 @@ namespace InvokeRpcFromNormal
 
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-            config.ProxyToken = "RPC";
-
             //config.SerializationSelector = new MySerializationSelector();
 
             client.Setup(config);
@@ -37,7 +36,7 @@ namespace InvokeRpcFromNormal
                 Console.WriteLine("连接成功");
 
                 //2.然后发现服务
-                MethodItem[] methodItems = client.DiscoveryService();
+                MethodItem[] methodItems = client.DiscoveryService("RPC");
                 Console.WriteLine("服务发现成功");
 
                 foreach (var item in methodItems)

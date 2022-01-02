@@ -9,5 +9,4 @@
 			<HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
 		</Reference>
 	</ItemGroup>
-
 </Project>

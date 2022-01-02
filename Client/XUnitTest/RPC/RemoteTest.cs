@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.Serialization;
-using RRQMRPC.RRQMTest;
+using RRQMProxy;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System.Collections.Generic;
@@ -28,9 +28,20 @@ namespace RRQMSocketXUnitTest.RPC
             server = new Server(client);
         }
 
-        public void Test01()
+        public void Test01(string invokeType)
         {
-            server.Test01_Performance();
+            if (invokeType == "rrqm")
+            {
+                server.Test01_Performance();
+            }
+            else if (invokeType == "xml")
+            {
+                server.Xml_Test01_Performance();
+            }
+            else if (invokeType == "json")
+            {
+                server.Json_Test01_Performance();
+            }
         }
 
         public void Test02()
@@ -171,7 +182,12 @@ namespace RRQMSocketXUnitTest.RPC
 
         public void Test19(string id)
         {
-            server.Test19_CallBack(id);
+            for (int i = 0; i < 10; i++)
+            {
+                string msg = server.Test19_CallBack(id, i);
+                Assert.Equal($"我今年{i}岁了",msg);
+            }
+           
         }
 
         public void Test22()

@@ -32,7 +32,7 @@ namespace RRQMSocketXUnitTest.RPC.Json
             client.Connect();
 
             RemoteTest remoteTest = new RemoteTest(client);
-            remoteTest.Test01();
+            remoteTest.Test01("json");
             remoteTest.Test02();
             remoteTest.Test03();
             remoteTest.Test04();

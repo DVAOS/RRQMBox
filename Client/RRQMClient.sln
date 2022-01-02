@@ -62,7 +62,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebSocket–‘ƒ‹", "WebSocket–
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSClientPerformanceDemo", "WSClientPerformanceDemo\WSClientPerformanceDemo.csproj", "{22A0BAE5-6BB2-45AA-A037-2820071854C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EERPCClientDemo", "EERPCClientDemo\EERPCClientDemo.csproj", "{79D669D8-3325-4F87-BACE-F1FCA27EA36E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EERPCClientDemo", "EERPCClientDemo\EERPCClientDemo.csproj", "{79D669D8-3325-4F87-BACE-F1FCA27EA36E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseRPCClientDemo", "ReverseRPCClientDemo\ReverseRPCClientDemo.csproj", "{2F9DC229-B7F7-4834-A77F-44BF3868D8EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -146,6 +148,10 @@ Global
 		{79D669D8-3325-4F87-BACE-F1FCA27EA36E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79D669D8-3325-4F87-BACE-F1FCA27EA36E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79D669D8-3325-4F87-BACE-F1FCA27EA36E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9DC229-B7F7-4834-A77F-44BF3868D8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9DC229-B7F7-4834-A77F-44BF3868D8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9DC229-B7F7-4834-A77F-44BF3868D8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9DC229-B7F7-4834-A77F-44BF3868D8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +176,7 @@ Global
 		{7D1B5142-52ED-4CFF-86D0-5E3B1A77ED0E} = {D1F0FFF8-74BD-48DC-84E0-F8F412286866}
 		{22A0BAE5-6BB2-45AA-A037-2820071854C4} = {7D1B5142-52ED-4CFF-86D0-5E3B1A77ED0E}
 		{79D669D8-3325-4F87-BACE-F1FCA27EA36E} = {236BC25E-12FA-4418-94B1-DAA58BB3A750}
+		{2F9DC229-B7F7-4834-A77F-44BF3868D8EF} = {236BC25E-12FA-4418-94B1-DAA58BB3A750}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15522423-E912-48E9-94D4-0C626D45934F}

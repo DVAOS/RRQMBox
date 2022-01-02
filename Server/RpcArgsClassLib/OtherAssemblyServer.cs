@@ -29,7 +29,6 @@ namespace RpcArgsClassLib
         }
     }
 
-    [RRQMRPCMember]
     public class ClassOne
     {
         public int P1 { get; set; }
