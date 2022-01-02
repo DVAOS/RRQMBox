@@ -187,7 +187,7 @@ namespace ProtocolClientDemo
 
             StreamOperator streamOperator = new StreamOperator();
             streamOperator.PackageSize = 1024 * 64;//分包长度
-            streamOperator.SetMaxSpeed(1024 * 1024 * 5);//最大传输值
+            //streamOperator.SetMaxSpeed(1024 * 1024 * 5);//最大传输值
 
             //streamOperator.Cancel();//随时取消传输
 

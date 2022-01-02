@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket;
+using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
 
@@ -26,12 +27,10 @@ namespace RRQMRPCClientDemo
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            config.VerifyToken = "123RPC";
-            config.ProxyToken = "RPC";
 
             client.Setup(config);
-            client.Connect();
-            client.DiscoveryService();
+            client.Connect("123RPC");
+            client.DiscoveryService("RPC");
 
             switch (Console.ReadLine())
             {

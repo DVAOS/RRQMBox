@@ -30,7 +30,7 @@ namespace RRQMSocketXUnitTest.TCP
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(TcpServiceConfig.ServerNameProperty, "RRQMServer")
-                .SetValue(TcpServiceConfig.MaxCountProperty, 1000)
+                .SetValue(TcpServiceConfig.MaxCountProperty, 10)
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
 
             //载入配置
