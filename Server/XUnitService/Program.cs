@@ -133,7 +133,10 @@ namespace XUnitService
         private static IRPCParser CreateRRQMTcpParser(int port)
         {
             TcpRpcParser tcpRPCParser = new TcpRpcParser();
-
+            tcpRPCParser.Connecting += (client, e) =>
+            {
+                e.DataHandlingAdapter = new FixedHeaderDataHandlingAdapter() { MaxSizeHeader = 1024 * 1024 * 20 };
+            };
             //创建配置
             var config = new TcpRpcParserConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost(port) };//监听一个IP地址

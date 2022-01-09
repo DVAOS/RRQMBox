@@ -11,10 +11,12 @@
 //------------------------------------------------------------------------------
 using RRQMCore.Serialization;
 using RRQMProxy;
+using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RRQMSocketXUnitTest.RPC
@@ -185,9 +187,9 @@ namespace RRQMSocketXUnitTest.RPC
             for (int i = 0; i < 10; i++)
             {
                 string msg = server.Test19_CallBack(id, i);
-                Assert.Equal($"我今年{i}岁了",msg);
+                Assert.Equal($"我今年{i}岁了", msg);
             }
-           
+
         }
 
         public void Test22()
@@ -242,6 +244,43 @@ namespace RRQMSocketXUnitTest.RPC
              });
             int result2 = server.Test26_TestCancellationToken(invokeOption2);
             Assert.Equal(0, result2);
+        }
+
+        public void Test28(TcpRpcClient client)
+        {
+            int count = 1000;
+            ChannelStatus status = ChannelStatus.Default;
+
+            Channel channel = client.CreateChannel();
+
+            Task.Run(() =>
+            {
+                while (channel.MoveNext())
+                {
+                    byte[] data = channel.GetCurrent();
+                }
+
+                status = channel.Status;
+            });
+
+            int result = server.Test28_ServiceToClientChannel(channel.ID,count);
+
+            Thread.Sleep(2000);
+            Assert.Equal(count*1024,result);    
+            Assert.Equal(ChannelStatus.Completed, status);    
+        }
+
+        public void Test29(TcpRpcClient client)
+        {
+            int channelID = server.Test29_ClientToServiceChannel();
+            if (client.TrySubscribeChannel(channelID,out Channel channel))
+            {
+                for (int i = 0; i < 1000; i++)
+                {
+                    channel.Write(new byte[1024]);
+                }
+                channel.Complete();//必须调用指令函数，如Complete，Cancel，Dispose
+            }
         }
     }
 }

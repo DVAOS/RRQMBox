@@ -356,24 +356,61 @@ namespace XUnitService
         }
 
         /// <summary>
-        /// "测试从RPC创建通道，从而实现流数据的传输"
+        /// "测试ServiceToClient创建通道，从而实现流数据的传输"
         /// </summary>
-        /// <param name="serverCallContext"></param>
+        /// <param name="callContext"></param>
         /// <param name="channelID"></param>
-        [Description("测试从RPC创建通道，从而实现流数据的传输")]
+        [Description("测试ServiceToClient创建通道，从而实现流数据的传输")]
         [RRQMRPC(MethodFlags.IncludeCallContext)]
-        public void Test28_TestChannel(ICallContext serverCallContext, int channelID)
+        public int Test28_ServiceToClientChannel(ICallContext callContext, int channelID,int count)
         {
-            if (serverCallContext.Caller is RpcSocketClient socketClient)
+            int size = 0;
+            if (callContext.Caller is RpcSocketClient socketClient)
             {
                 if (socketClient.TrySubscribeChannel(channelID, out Channel channel))
                 {
-                    for (int i = 0; i < 1024; i++)
+                    for (int i = 0; i < count; i++)
                     {
+                        size += 1024;
                         channel.Write(new byte[1024]);
                     }
+
+                    channel.Complete();//必须调用指令函数，如Complete，Cancel，Dispose
                 }
             }
+
+            return size;
+        }
+
+        /// <summary>
+        /// "测试ClientToService创建通道，从而实现流数据的传输"
+        /// </summary>
+        /// <param name="callContext"></param>
+        /// <param name="channelID"></param>
+        [Description("测试ClientToService创建通道，从而实现流数据的传输")]
+        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        public int Test29_ClientToServiceChannel(ICallContext callContext)
+        {
+            //调用该函数时，创建通道，然后返回通道ID。
+            if (callContext.Caller is RpcSocketClient socketClient)
+            {
+                Channel channel = socketClient.CreateChannel();
+                Task.Run(()=> 
+                {
+                    while (channel.MoveNext())
+                    {
+                        byte[] data = channel.GetCurrent();//此处可以处理数据
+                    }
+                    if (channel.Status== ChannelStatus.Completed)//完成
+                    {
+
+                    }
+                });
+
+                return channel.ID;
+            }
+
+            return -1;
         }
 
         private void ShowMsg(string msg)

@@ -1,14 +1,3 @@
-//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  CSDN博客：https://blog.csdn.net/qq_40374647
-//  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  Gitee源代码仓库：https://gitee.com/RRQM_Home
-//  Github源代码仓库：https://github.com/RRQM
-//  交流QQ群：234762506
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
@@ -109,13 +98,22 @@ Task<System.Int32> Test26_TestCancellationTokenAsync (InvokeOption invokeOption 
 void Test27_TestCallBackFromCallContextAsync (InvokeOption invokeOption = null);
 
 ///<summary>
-///测试从RPC创建通道，从而实现流数据的传输
+///测试ServiceToClient创建通道，从而实现流数据的传输
 ///</summary>
-  void Test28_TestChannel (System.Int32 channelID,InvokeOption invokeOption = null);
+ System.Int32 Test28_ServiceToClientChannel (System.Int32 channelID,System.Int32 count,InvokeOption invokeOption = null);
 ///<summary>
-///测试从RPC创建通道，从而实现流数据的传输
+///测试ServiceToClient创建通道，从而实现流数据的传输
 ///</summary>
-void Test28_TestChannelAsync (System.Int32 channelID,InvokeOption invokeOption = null);
+Task<System.Int32> Test28_ServiceToClientChannelAsync (System.Int32 channelID,System.Int32 count,InvokeOption invokeOption = null);
+
+///<summary>
+///测试ClientToService创建通道，从而实现流数据的传输
+///</summary>
+ System.Int32 Test29_ClientToServiceChannel (InvokeOption invokeOption = null);
+///<summary>
+///测试ClientToService创建通道，从而实现流数据的传输
+///</summary>
+Task<System.Int32> Test29_ClientToServiceChannelAsync (InvokeOption invokeOption = null);
 
 ///<summary>
 ///性能测试
@@ -806,26 +804,53 @@ Test27_TestCallBackFromCallContext(invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test28_TestChannel (System.Int32 channelID,InvokeOption invokeOption = null)
+public System.Int32 Test28_ServiceToClientChannel (System.Int32 channelID,System.Int32 count,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-object[] parameters = new object[]{channelID};
-Client.Invoke("Test28_TestChannel",invokeOption, parameters);
+object[] parameters = new object[]{channelID,count};
+System.Int32 returnData=Client.Invoke<System.Int32>("Test28_ServiceToClientChannel",invokeOption, parameters);
+return returnData;
 }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test28_TestChannelAsync (System.Int32 channelID,InvokeOption invokeOption = null)
+public  async Task<System.Int32> Test28_ServiceToClientChannelAsync (System.Int32 channelID,System.Int32 count,InvokeOption invokeOption = null)
 {
 if(Client==null)
 {
 throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test28_TestChannel(channelID,invokeOption);});
+return await Task.Run(() =>{
+return Test28_ServiceToClientChannel(channelID,count,invokeOption);});
+}
+
+///<summary>
+///<inheritdoc/>
+///</summary>
+public System.Int32 Test29_ClientToServiceChannel (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
+}
+object[] parameters = new object[]{};
+System.Int32 returnData=Client.Invoke<System.Int32>("Test29_ClientToServiceChannel",invokeOption, parameters);
+return returnData;
+}
+///<summary>
+///<inheritdoc/>
+///</summary>
+public  async Task<System.Int32> Test29_ClientToServiceChannelAsync (InvokeOption invokeOption = null)
+{
+if(Client==null)
+{
+throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+}
+return await Task.Run(() =>{
+return Test29_ClientToServiceChannel(invokeOption);});
 }
 
 ///<summary>
