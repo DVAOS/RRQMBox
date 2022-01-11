@@ -18,7 +18,8 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Border x:Name="border" Height="40" Margin="2" BorderBrush="Transparent" BorderThickness="1"
-                                            CornerRadius="3">
+                                            CornerRadius="3"
+                                            ToolTip="{Binding Mes}">
                                         <Grid Margin="3" Background="#92BCE1">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="7*" />
@@ -38,8 +39,7 @@
                                                 <TextBlock Width="70" VerticalAlignment="Center"
                                                            Text="{Binding Speed}" />
                                                 <Image Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                       Source="{Binding Status}"
-                                                       ToolTip="{Binding Mes}" />
+                                                       Source="{Binding Status}" />
                                             </StackPanel>
                                         </Grid>
                                     </Border>

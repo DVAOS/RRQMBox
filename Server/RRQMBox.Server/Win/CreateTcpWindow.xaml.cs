@@ -94,7 +94,7 @@ namespace RRQMBox.Server.Win
                 .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Receive | ClearType.Send)
                 .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000 * 1000)//10秒无数据交互将被清理
+                .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000*20)//10秒无数据交互将被清理
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。;
 
             //载入配置

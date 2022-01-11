@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.Serialization;
+using RRQMProxy;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
@@ -204,7 +205,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService("RPC");
 
-            RRQMProxy.Server server = new RRQMProxy.Server(client);
+            XUnitTestServer server = new XUnitTestServer(client);
 
             Channel channel = client.CreateChannel();
             int length = 0;

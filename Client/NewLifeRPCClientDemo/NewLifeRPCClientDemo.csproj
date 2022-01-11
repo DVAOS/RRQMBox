@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Core" Version="8.11.2021.1109" />
-    <PackageReference Include="RRQMCore" Version="5.8.0" />
+    <PackageReference Include="NewLife.Core" Version="9.0.2022.101" />
+    <PackageReference Include="RRQMCore" Version="6.3.0" />
   </ItemGroup>
 
 </Project>

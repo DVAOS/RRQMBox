@@ -75,6 +75,7 @@ namespace FileServiceGUI
                 return;
             }
             fileService = new FileService();
+            fileService.Received += FileService_Received;
             fileService.Connected += this.FileService_Connected;
             fileService.Disconnected += this.FileService_Disconnected;
             fileService.BeforeFileTransfer += this.FileService_BeforeFileTransfer;
@@ -92,6 +93,16 @@ namespace FileServiceGUI
             {
                 ShowMsg(ex.Message);
             }
+        }
+
+        private void FileService_Received(FileSocketClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
+        {
+            ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len-2}");
+            if (protocol==-1)
+            {
+                socketClient.Send(byteBlock.ToArray(2));
+            }
+            socketClient.Send(protocol,byteBlock.ToArray(2));
         }
 
         private void FileService_BeforeFileTransfer(FileSocketClient client, FileOperationEventArgs e)
@@ -163,7 +174,7 @@ namespace FileServiceGUI
                 {
                     return;
                 }
-                //this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
+                this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
             }
             catch (Exception ex)
             {

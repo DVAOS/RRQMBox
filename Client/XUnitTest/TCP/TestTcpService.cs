@@ -30,7 +30,7 @@ namespace RRQMSocketXUnitTest.TCP
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(TcpServiceConfig.ServerNameProperty, "RRQMServer")
-                .SetValue(TcpServiceConfig.MaxCountProperty, 10)
+                .SetValue(TcpServiceConfig.MaxCountProperty, 1000)
                 .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
 
             //载入配置
@@ -41,7 +41,7 @@ namespace RRQMSocketXUnitTest.TCP
             Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
-            Assert.Equal(10, service.MaxCount);
+            Assert.Equal(1000, service.MaxCount);
             Assert.Equal(300, service.ClearInterval);
 
             service.Stop();
@@ -54,7 +54,7 @@ namespace RRQMSocketXUnitTest.TCP
             Assert.Equal(2, service.Monitors.Length);
             Assert.Equal("RRQMServer", service.ServerName);
             Assert.Equal(ServerState.Running, service.ServerState);
-            Assert.Equal(10, service.MaxCount);
+            Assert.Equal(1000, service.MaxCount);
             Assert.Equal(300, service.ClearInterval);
 
             service.Dispose();

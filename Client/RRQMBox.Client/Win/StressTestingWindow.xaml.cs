@@ -67,9 +67,8 @@ namespace RRQMBox.Client.Win
                         testObject.Num = i;
 
                         var config = new TcpClientConfig();
-                        config.SetValue(TcpClientConfig.OnlySendProperty, true)
-                        .SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7789"))
-                        .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);
+                        config.OnlySend = false;
+                        config.RemoteIPHost= new IPHost("127.0.0.1:7789");
 
                         testObject.Client.Setup(config);
                         testObject.Client.Connect();

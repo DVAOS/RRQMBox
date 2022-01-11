@@ -7,14 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\完成.png" />
+    <None Remove="Resources\Images\未完成.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="RRQMSkin" Version="3.7.1" />
-    <PackageReference Include="RRQMSocket" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.RPC" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="6.3.0" />
-    <PackageReference Include="RRQMSocket.WebSocket" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RRQMSocketFramework">
+      <HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\完成.png" />
+    <Resource Include="Resources\Images\未完成.png" />
   </ItemGroup>
 
 </Project>

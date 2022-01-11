@@ -66,6 +66,7 @@ namespace FileClientGUI
         {
             fileClient = new FileClient();
             fileClient.BeforeFileTransfer += this.FileClient_BeforeFileTransfer;
+            fileClient.Received += FileClient_Received;
             //声明配置
             var config = new FileClientConfig();
 
@@ -84,6 +85,11 @@ namespace FileClientGUI
             {
                 ShowMsg(ex.Message);
             }
+        }
+
+        private void FileClient_Received(RRQMSocket.RPC.RRQMRPC.TcpRpcClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
+        {
+            ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len - 2}");
         }
 
         private void FileClient_BeforeFileTransfer(FileClient client, FileOperationEventArgs e)
@@ -139,7 +145,7 @@ namespace FileClientGUI
                 {
                     return;
                 }
-                //this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
+                this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
             }
             catch (Exception ex)
             {
@@ -221,13 +227,13 @@ namespace FileClientGUI
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
-        { 
-        
+        {
+            this.fileClient.Send(new byte[] { 1,2,3});
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-
+            this.fileClient.Send(10,new byte[] { 1, 2, 3 });
         }
     }
 }
