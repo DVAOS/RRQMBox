@@ -190,11 +190,11 @@ namespace RRQMClient.FileService
 
             loopAction.RunAsync();
 
-            fileOperator.SetMaxSpeed(1024);//开源版不支持该操作
+            //fileOperator.SetMaxSpeed(1024);//开源版不支持该操作
 
             RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
             {
-                fileOperator.SetMaxSpeed(int.MaxValue);
+                //fileOperator.SetMaxSpeed(int.MaxValue);
             });
 
             Metadata metadata = new Metadata();//传递到服务器的元数据

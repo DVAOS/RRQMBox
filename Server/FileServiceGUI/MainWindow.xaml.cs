@@ -174,7 +174,7 @@ namespace FileServiceGUI
                 {
                     return;
                 }
-                this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
+                //this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
             }
             catch (Exception ex)
             {

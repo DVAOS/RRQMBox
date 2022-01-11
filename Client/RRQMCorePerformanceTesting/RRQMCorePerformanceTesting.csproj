@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="RRQMSocketFramework">
-      <HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
-    </Reference>
+    <PackageReference Include="RRQMSocket" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.FileTransfer" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.RPC" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="6.4.0" />
+    <PackageReference Include="RRQMSocket.WebSocket" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

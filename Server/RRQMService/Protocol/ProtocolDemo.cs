@@ -101,7 +101,7 @@ namespace RRQMService.Protocol
                 {
                     Channel channel = client.CreateChannel(10);//创建指定ID的通道。
 
-                    channel.MaxSpeed = 1024 * 1024 * 100;
+                    //channel.MaxSpeed = 1024 * 1024 * 100;
 
                     //Channel channel = client.CreateChannel();//创建ID随机的通道。
                     Console.WriteLine($"成功创建通道，请使用{channel.ID}订阅");
@@ -215,12 +215,12 @@ namespace RRQMService.Protocol
                 StreamOperator streamOperator = e.StreamOperator;//获取操作器，可用于取消任务，获取进度等。
 
                 Console.WriteLine("设置最大传输速度为1024byte");
-                streamOperator.SetMaxSpeed(1024);
+                //streamOperator.SetMaxSpeed(1024);
 
                 Console.WriteLine("5秒后设置为5Mb");
                 RRQMCore.Run.EasyAction.DelayRun(5, () =>
                 {
-                    streamOperator.SetMaxSpeed(1024 * 1024 * 5);
+                    //streamOperator.SetMaxSpeed(1024 * 1024 * 5);
                 });
 
                 Task.Run(async () =>

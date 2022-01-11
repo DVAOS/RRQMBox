@@ -88,7 +88,7 @@ namespace RRQMClient.Protocol
             //必须知道接收方已创建通道的ID
             if (protocolClient.TrySubscribeChannel(id, out Channel channel))
             {
-                channel.MaxSpeed = 1024 * 1024 * 1024;
+                //channel.MaxSpeed = 1024 * 1024 * 1024;
                 byte[] data = new byte[1024 * 1024];
 
                 for (int i = 0; i < 1000; i++)
@@ -181,7 +181,7 @@ namespace RRQMClient.Protocol
 
             StreamOperator streamOperator = new StreamOperator();
             streamOperator.PackageSize = 1024 * 64;//分包长度
-            streamOperator.SetMaxSpeed(1024 * 1024 * 5);//最大传输值
+            //streamOperator.SetMaxSpeed(1024 * 1024 * 5);//最大传输值
 
             //streamOperator.Cancel();//随时取消传输
 
