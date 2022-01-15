@@ -1,4 +1,15 @@
-﻿using RRQMCore;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore;
 using RRQMCore.Run;
 using RRQMSocket;
 using System;
@@ -6,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RRQMClient.Protocol
@@ -19,8 +31,9 @@ namespace RRQMClient.Protocol
             Console.WriteLine("3.测试10000_ProtocolSubscriber_Send");
             Console.WriteLine("4.测试Test_Protocol_10000_Send_Then_Return");
             Console.WriteLine("5.性能测试Test_Protocol_10000_Send_Then_Return");
-            Console.WriteLine("6.测试Test_Channel");
+            Console.WriteLine("6.测试Channel");
             Console.WriteLine("7.测试PingPong");
+            Console.WriteLine("8.测试Channel HoldOn");
 
             switch (Console.ReadLine())
             {
@@ -59,6 +72,11 @@ namespace RRQMClient.Protocol
                         Test_PingPong();
                         break;
                     }
+                case "8":
+                    {
+                        Test_ChannelHoldOn();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -77,9 +95,52 @@ namespace RRQMClient.Protocol
             protocolClient.Connect("Token");
         }
 
+        private static void Test_ChannelHoldOn()
+        {
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+
+            Console.WriteLine("输入Channel的ID订阅，然后读写。");
+
+            int id = int.Parse(Console.ReadLine());
+
+            //必须知道接收方已创建通道的ID
+            if (protocolClient.TrySubscribeChannel(id, out Channel channel))
+            {
+                //channel.MaxSpeed = 1024 * 1024 * 1024;
+                byte[] data = new byte[1024 * 1024];
+
+                for (int j = 0; j < 10; j++)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        channel.Write(data);//持续写入（发送）
+                        Console.WriteLine($"{i}次发送成功");
+                    }
+
+                    channel.HoldOn($"第{j}组数据");
+                    Thread.Sleep(1000);
+                }
+                
+
+                channel.Complete();//最后调用完成
+                                   //channel.Cancel();//或调用取消
+                                   //channel.Dispose();//或销毁
+
+                //在完成，或取消操作时，可传入消息。接收方可通过channel.LastOperationMes获取消息。
+                //channel.Complete("好的");//最后调用完成
+                //channel.Cancel("我要取消");//或调用取消
+
+                Console.WriteLine("发送完成");
+            }
+            else
+            {
+                Console.WriteLine("未找到该ID对应的Channel");
+            }
+        }
+
         private static void Test_Channel()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             Console.WriteLine("输入Channel的ID订阅，然后读写。");
 
@@ -115,7 +176,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send_Then_Return_Performance()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             WaitSenderSubscriber subscriber = new WaitSenderSubscriber(10000);
             protocolClient.AddProtocolSubscriber(subscriber);
@@ -144,7 +205,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send_Then_Return()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine("输入信息，然后Enter发送");
 
             WaitSenderSubscriber waitSenderSubscriber = new WaitSenderSubscriber(10000);
@@ -159,7 +220,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine("输入信息，然后Enter发送");
             while (true)
             {
@@ -170,7 +231,7 @@ namespace RRQMClient.Protocol
         private static void Test_StreamSend()
         {
             //在测试流接收时，因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderDataHandlingAdapter());
+            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             byte[] data = new byte[1024 * 1024 * 50];
             new Random().NextBytes(data);

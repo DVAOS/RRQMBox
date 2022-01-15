@@ -38,7 +38,7 @@ namespace RRQMSocketXUnitTest.Token
             };
 
             int receivedCount = 0;
-            client.Received += (SimpleTokenClient tokenClient, ByteBlock arg1, object arg2) =>
+            client.Received += (tokenClient, arg1, arg2) =>
             {
                 receivedCount++;
             };

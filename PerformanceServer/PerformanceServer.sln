@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebSocket性能", "WebSocket性能", "{70CAEE3D-150C-4F92-8345-6672595703DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSServicePerformanceDemo", "WSServicePerformanceDemo\WSServicePerformanceDemo.csproj", "{A175C487-4F73-49BD-A91F-583D357D150E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketWebSocketServiceDemo", "SuperSocketWebSocketServiceDemo\SuperSocketWebSocketServiceDemo.csproj", "{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RPC对比服务器", "RPC对比服务器", "{46129FED-8481-4442-8BA1-2C1A4E5967FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPCPerformance", "RPCPerformance\RPCPerformance.csproj", "{D4791348-01A7-4193-BF8B-081DB4C63412}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TCP服务器", "TCP服务器", "{1268FF23-A95C-4705-AF7F-B611070418AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpServicePerformance", "TcpServicePerformance\TcpServicePerformance.csproj", "{DE63F877-7DBD-4900-8774-B225AE3ACA69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Debug|x64.ActiveCfg = Debug|x64
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Debug|x64.Build.0 = Debug|x64
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Release|x64.ActiveCfg = Release|x64
+		{A175C487-4F73-49BD-A91F-583D357D150E}.Release|x64.Build.0 = Release|x64
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Debug|x64.ActiveCfg = Debug|x64
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Debug|x64.Build.0 = Debug|x64
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|x64.ActiveCfg = Release|x64
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5}.Release|x64.Build.0 = Release|x64
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Debug|x64.ActiveCfg = Debug|x64
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Debug|x64.Build.0 = Debug|x64
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Release|x64.ActiveCfg = Release|x64
+		{D4791348-01A7-4193-BF8B-081DB4C63412}.Release|x64.Build.0 = Release|x64
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Debug|x64.ActiveCfg = Debug|x64
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Debug|x64.Build.0 = Debug|x64
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|x64.ActiveCfg = Release|x64
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A175C487-4F73-49BD-A91F-583D357D150E} = {70CAEE3D-150C-4F92-8345-6672595703DD}
+		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5} = {70CAEE3D-150C-4F92-8345-6672595703DD}
+		{D4791348-01A7-4193-BF8B-081DB4C63412} = {46129FED-8481-4442-8BA1-2C1A4E5967FC}
+		{DE63F877-7DBD-4900-8774-B225AE3ACA69} = {1268FF23-A95C-4705-AF7F-B611070418AE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BB08AC0-8102-4AFB-BA22-F13EDD701E07}
+	EndGlobalSection
+EndGlobal

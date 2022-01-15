@@ -57,7 +57,7 @@ namespace RRQMBox.Server.Win
         }
 
         private RRQMList<SocketClient> onLineClient;
-        private SimpleTcpService tcpService;
+        private TcpService tcpService;
 
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +68,7 @@ namespace RRQMBox.Server.Win
         {
             if (tcpService == null)
             {
-                tcpService = new SimpleTcpService();
+                tcpService = new TcpService();
                 //订阅事件
                 tcpService.Connected += Service_ClientConnected;//订阅连接事件
                 tcpService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
@@ -131,22 +131,22 @@ namespace RRQMBox.Server.Win
                     }
                 case 1:
                     {
-                        arg1.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+                        arg1.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
                         break;
                     }
                 case 2:
                     {
-                        arg1.SetDataHandlingAdapter(new FixedSizeDataHandlingAdapter(1024));
+                        arg1.SetDataHandlingAdapter(new FixedSizePackageAdapter(1024));
                         break;
                     }
                 case 3:
                     {
-                        arg1.SetDataHandlingAdapter(new TerminatorDataHandlingAdapter(1024, "\r\n"));
+                        arg1.SetDataHandlingAdapter(new TerminatorPackageAdapter(1024, "\r\n"));
                         break;
                     }
                 case 4:
                     {
-                        arg1.SetDataHandlingAdapter(new JsonStringDataHandlingAdapter());
+                        //arg1.SetDataHandlingAdapter(new JsonStringDataHandlingAdapter());
                         break;
                     }
             }

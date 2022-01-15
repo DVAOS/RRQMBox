@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RRQMBox.Server", "RRQMBox.Server\RRQMBox.Server.csproj", "{BCFD1C94-AF45-462E-ADFF-DF96BF8436D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "企业版RPC服务器", "企业版RPC服务器", "{AE9F1E91-95F0-426A-95DE-DEF67A0CA348}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "File服务器", "File服务器", "{98EBB253-77F3-4AD6-B390-3F4FEE4CFA6A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServiceGUI", "FileServiceGUI\FileServiceGUI.csproj", "{EE0959EF-3028-4306-ACEA-EE7823BCC219}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EERPCServiceDemo", "EERPCServiceDemo\EERPCServiceDemo.csproj", "{B9CC19DC-3033-4888-A3CF-D236F3E697B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRQMService", "RRQMService\RRQMService.csproj", "{6FAB33E3-09C9-4677-9B0A-5EDED1168ADA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RpcArgsClassLib", "RpcArgsClassLib\RpcArgsClassLib.csproj", "{82118EA6-3E2A-4594-A018-D5FF799162D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCFD1C94-AF45-462E-ADFF-DF96BF8436D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCFD1C94-AF45-462E-ADFF-DF96BF8436D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCFD1C94-AF45-462E-ADFF-DF96BF8436D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCFD1C94-AF45-462E-ADFF-DF96BF8436D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE0959EF-3028-4306-ACEA-EE7823BCC219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE0959EF-3028-4306-ACEA-EE7823BCC219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE0959EF-3028-4306-ACEA-EE7823BCC219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE0959EF-3028-4306-ACEA-EE7823BCC219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9CC19DC-3033-4888-A3CF-D236F3E697B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9CC19DC-3033-4888-A3CF-D236F3E697B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9CC19DC-3033-4888-A3CF-D236F3E697B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9CC19DC-3033-4888-A3CF-D236F3E697B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FAB33E3-09C9-4677-9B0A-5EDED1168ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FAB33E3-09C9-4677-9B0A-5EDED1168ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FAB33E3-09C9-4677-9B0A-5EDED1168ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FAB33E3-09C9-4677-9B0A-5EDED1168ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82118EA6-3E2A-4594-A018-D5FF799162D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82118EA6-3E2A-4594-A018-D5FF799162D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82118EA6-3E2A-4594-A018-D5FF799162D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82118EA6-3E2A-4594-A018-D5FF799162D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE0959EF-3028-4306-ACEA-EE7823BCC219} = {98EBB253-77F3-4AD6-B390-3F4FEE4CFA6A}
+		{B9CC19DC-3033-4888-A3CF-D236F3E697B2} = {AE9F1E91-95F0-426A-95DE-DEF67A0CA348}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BB08AC0-8102-4AFB-BA22-F13EDD701E07}
+	EndGlobalSection
+EndGlobal

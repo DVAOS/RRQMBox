@@ -38,7 +38,7 @@ namespace RRQMSocketXUnitTest.TCP
             };
 
             int receivedCount = 0;
-            client.Received += (SimpleTcpClient tcpClient, ByteBlock arg1, object arg2) =>
+            client.Received += (tcpClient, arg1, arg2) =>
             {
                 receivedCount++;
             };

@@ -27,6 +27,7 @@ namespace RRQMSocketXUnitTest.RPC.Xml
             client.Setup(config);
             client.Connect();
 
+           
             RemoteTest remoteTest = new RemoteTest(client);
             remoteTest.Test01("xml");
             remoteTest.Test02();

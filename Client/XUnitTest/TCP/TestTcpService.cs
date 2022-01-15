@@ -20,7 +20,7 @@ namespace RRQMSocketXUnitTest.TCP
         [Fact]
         public void ShouldShowProperties()
         {
-            SimpleTcpService service = new SimpleTcpService();
+            TcpService service = new TcpService();
             Assert.Equal(ServerState.None, service.ServerState);
 
             //注入配置

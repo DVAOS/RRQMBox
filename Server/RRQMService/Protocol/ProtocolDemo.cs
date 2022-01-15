@@ -1,4 +1,15 @@
-﻿using RRQMCore;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore;
 using RRQMCore.ByteManager;
 using RRQMSocket;
 using System;
@@ -20,6 +31,7 @@ namespace RRQMService.Protocol
             Console.WriteLine("4.测试10000_ProtocolSubscriber_Then_Return");
             Console.WriteLine("5.测试Channel");
             Console.WriteLine("6.测试心跳");
+            Console.WriteLine("7.测试Channel HoldOn");
             switch (Console.ReadLine())
             {
                 case "1":
@@ -50,6 +62,11 @@ namespace RRQMService.Protocol
                 case "6":
                     {
                         Test_PingPong();
+                        break;
+                    }
+                case "7":
+                    {
+                        Test_ChannelHoldOn();
                         break;
                     }
                 default:
@@ -84,15 +101,55 @@ namespace RRQMService.Protocol
             }
         }
 
-        private static void Test_Channel()
+        private static void Test_ChannelHoldOn()
         {
-            SimpleProtocolService protocolService = CreateSimpleProtocolService();
+            ProtocolService protocolService = CreateProtocolService();
 
             protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-                client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
+            };
+
+            protocolService.Connected += (client, e) =>
+            {
+                Task.Run(() =>
+                {
+                    Channel channel = client.CreateChannel(10);//创建指定ID的通道。
+
+                    //channel.MaxSpeed = 1024 * 1024 * 100;
+
+                    //Channel channel = client.CreateChannel();//创建ID随机的通道。
+                    Console.WriteLine($"成功创建通道，请使用{channel.ID}订阅");
+
+                    while (channel.CanMoveNext)
+                    {
+                        while (channel.MoveNext())//线程阻塞接收，直至接收完成或错误
+                        {
+                            byte[] data = channel.GetCurrent();//获取当前数据对象，此操作相当于把ByteBlock进行ToArray
+                            Console.WriteLine($"已收到数据，长度为:{data.Length}");
+                        }
+                        Console.WriteLine($"状态：{channel.Status}，信息：{channel.LastOperationMes}");
+                    }
+                    
+                    //BytePool.Clear();
+                    //GC.Collect();
+                    //代码执行到此处时，意味着通道接收已结束，可通过channel.Status获取最后的状态。
+                    Console.WriteLine($"已结束接收，状态为{channel.Status}");
+                });
+            };
+        }
+
+        private static void Test_Channel()
+        {
+            ProtocolService protocolService = CreateProtocolService();
+
+            protocolService.Connecting += (client, eOption) =>
+            {
+                //为初始化配置
+                //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
             };
 
             protocolService.Connected += (client, e) =>
@@ -136,13 +193,13 @@ namespace RRQMService.Protocol
 
         private static void Test_ProtocolSubscriber_Then_Return()
         {
-            SimpleProtocolService protocolService = CreateSimpleProtocolService();
+            ProtocolService protocolService = CreateProtocolService();
 
             protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-                client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
 
                 //此处直接订阅协议为10000，实际上订阅可以随时进行，取消订阅用RemoveProtocolSubscriber
                 client.AddProtocolSubscriber(new ProtocolSubscriber(10000, (Subscriber, e) =>
@@ -162,13 +219,13 @@ namespace RRQMService.Protocol
 
         private static void Test_ProtocolSubscriber()
         {
-            SimpleProtocolService protocolService = CreateSimpleProtocolService();
+            ProtocolService protocolService = CreateProtocolService();
 
             protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-                client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
 
                 //此处直接订阅协议为10000，实际上订阅可以随时进行，取消订阅用RemoveProtocolSubscriber
                 client.AddProtocolSubscriber(new ProtocolSubscriber(10000, (Subscriber, e) =>
@@ -188,7 +245,7 @@ namespace RRQMService.Protocol
 
         private static void Test_SimpleProtocolService()
         {
-            SimpleProtocolService protocolService = CreateSimpleProtocolService();
+            ProtocolService protocolService = CreateProtocolService();
             protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
@@ -198,13 +255,13 @@ namespace RRQMService.Protocol
 
         private static void Test_ReceiveStream()
         {
-            SimpleProtocolService protocolService = CreateSimpleProtocolService();
+            ProtocolService protocolService = CreateProtocolService();
 
             protocolService.Connecting += (client, eOption) =>
             {
                 //为初始化配置
                 //在测试流接收时，因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-                client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
             };
 
             protocolService.BeforeReceiveStream += (socketClient, e) =>
@@ -250,9 +307,9 @@ namespace RRQMService.Protocol
             };
         }
 
-        private static SimpleProtocolService CreateSimpleProtocolService()
+        private static ProtocolService CreateProtocolService()
         {
-            SimpleProtocolService service = new SimpleProtocolService();
+            ProtocolService service = new ProtocolService();
 
             service.Connected += (client, e) =>
             {

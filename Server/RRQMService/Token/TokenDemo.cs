@@ -1,4 +1,15 @@
-﻿using RRQMCore.ByteManager;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore.ByteManager;
 using RRQMCore.Run;
 using RRQMSocket;
 using System;
@@ -22,7 +33,7 @@ namespace RRQMService.Token
                     {
                         CreateSimpleTokenService();
                         break;
-                    } 
+                    }
                 case "2":
                     {
                         CreateQosTokenService();
@@ -40,7 +51,7 @@ namespace RRQMService.Token
 
         static void StartConnectPerformanceTokenService()
         {
-            SimpleTokenService service = new SimpleTokenService();
+            TokenService service = new TokenService();
 
             //声明配置
             var config = new TokenServiceConfig();
@@ -67,7 +78,7 @@ namespace RRQMService.Token
 
         private static void CreateSimpleTokenService()
         {
-            SimpleTokenService service = new SimpleTokenService();
+            TokenService service = new TokenService();
             service.Connected += (client, e) => { Console.WriteLine($"客户端{client.Name}连接"); };
 
             service.Disconnected += (client, e) => { Console.WriteLine($"客户端{client.Name}断开连接，原因：{e.Message}"); };
@@ -98,8 +109,8 @@ namespace RRQMService.Token
 
         private static void CreateQosTokenService()
         {
-            TokenService<QosTokenSocketClient> service =new  TokenService<QosTokenSocketClient>();
-            service.Connected += (client, e) => { Console.WriteLine($"客户端{client.Name}连接，{(client.Guest?"游客":"主人")}"); };
+            TokenService<QosTokenSocketClient> service = new TokenService<QosTokenSocketClient>();
+            service.Connected += (client, e) => { Console.WriteLine($"客户端{client.Name}连接，类型：{client.ClientType}"); };
 
             service.Disconnected += (client, e) => { Console.WriteLine($"客户端{client.Name}断开连接，原因：{e.Message}"); };
 
@@ -116,19 +127,19 @@ namespace RRQMService.Token
 
             //启动
             service.Start();
-            Console.WriteLine($"Token服务器启动成功,请使用'{service.VerifyToken}'连接为主人，以'T'开头认证为游客。");
+            Console.WriteLine($"Token服务器启动成功,请使用'{service.VerifyToken}'连接为主人，以'T'开头认证为游客。其他类型客户端请使用ASCII发送“me”连接为非正常客户端");
         }
     }
 
     public class QosTokenSocketClient : TokenSocketClient
     {
         /// <summary>
-        /// 是否为访客
+        /// 客户端类型
         /// </summary>
-        public bool Guest { get; set; }
+        public ClientType ClientType { get; set; }
 
 
-        protected override void HandleTokenReceivedData(ByteBlock byteBlock, object obj)
+        protected override void HandleTokenReceivedData(ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             //此处处理数据，相当于Received事件。
             //从客户端收到信息
@@ -141,12 +152,13 @@ namespace RRQMService.Token
         {
             if (verifyOption.Token == this.VerifyToken)
             {
+                this.ClientType = ClientType.Owner;
                 verifyOption.Accept = true;//如果是配置中的Token，直接允许连接
             }
             else if (verifyOption.Token.StartsWith("T"))//以T为标识示例，标识为游客
             {
                 verifyOption.Accept = true;
-                this.Guest = true;
+                this.ClientType =  ClientType.Guest;
             }
             else
             {
@@ -154,5 +166,38 @@ namespace RRQMService.Token
                 verifyOption.ErrorMessage = "啥也不是";
             }
         }
+
+        /// <summary>
+        /// 此处处理非常规连接，一般用于接收其他类型的TCP客户端。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected override bool OnAbnormalVerify(byte[] data)
+        {
+            if (Encoding.ASCII.GetString(data) == "me")
+            {
+                this.ClientType = ClientType.AbnormalClient;
+                return true;
+            }
+            return base.OnAbnormalVerify(data);
+        }
+    }
+
+    public enum ClientType
+    {
+        /// <summary>
+        /// 主人
+        /// </summary>
+        Owner,
+
+        /// <summary>
+        /// 访客
+        /// </summary>
+        Guest,
+
+        /// <summary>
+        /// 其他类型客户端
+        /// </summary>
+        AbnormalClient
     }
 }

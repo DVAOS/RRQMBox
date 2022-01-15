@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HPSocket.Net" Version="5.8.5.5" />
+    <PackageReference Include="RRQMSocket" Version="6.5.0" />
+    <PackageReference Include="SuperSocket.Engine" Version="1.6.6.1" />
+  </ItemGroup>
+</Project>

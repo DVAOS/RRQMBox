@@ -1,4 +1,15 @@
-﻿using RRQMCore.ByteManager;
+//------------------------------------------------------------------------------
+//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
+//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
+//  CSDN博客：https://blog.csdn.net/qq_40374647
+//  哔哩哔哩视频：https://space.bilibili.com/94253567
+//  Gitee源代码仓库：https://gitee.com/RRQM_Home
+//  Github源代码仓库：https://github.com/RRQM
+//  交流QQ群：234762506
+//  感谢您的下载和使用
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+using RRQMCore.ByteManager;
 using RRQMService.XUnitTest.Server;
 using RRQMSocket;
 using RRQMSocket.RPC;
@@ -44,6 +55,17 @@ namespace RRQMService.XUnitTest
             rpcService.AddRPCParser("JsonRpcParser_Tcp", CreateJsonRpcParser(7803, JsonRpcProtocolType.Tcp));
             rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
             rpcService.RegisterServer<XUnitTestServer>();//注册服务
+
+
+            foreach (var item in ((WebApiParser)rpcService.RPCParsers["webApiParser_Xml"]).RouteMap.Urls)
+            {
+                Console.WriteLine($"使用：http://127.0.0.1:7800" + item);
+            }
+
+            foreach (var item in ((WebApiParser)rpcService.RPCParsers["webApiParser_Json"]).RouteMap.Urls)
+            {
+                Console.WriteLine($"使用：http://127.0.0.1:7801" + item);
+            }
 
             rpcService.ShareProxy(new IPHost(8848));
             Console.WriteLine("RPC代理已开启分享，请通过8848端口获取。");
@@ -144,7 +166,7 @@ namespace RRQMService.XUnitTest
 
         private static void CreateProtocolService(int port)
         {
-            SimpleProtocolService service = new SimpleProtocolService();
+            ProtocolService service = new ProtocolService();
             service.Received += (SimpleProtocolSocketClient arg1, short arg2, ByteBlock arg3) =>
             {
                 Console.WriteLine($"ProtocolService收到数据，协议为：{arg2}，数据长度为：{arg3.Len - 2}");
@@ -175,7 +197,7 @@ namespace RRQMService.XUnitTest
 
         private static void CreateTokenService(int port)
         {
-            SimpleTokenService service = new SimpleTokenService();
+            TokenService service = new TokenService();
             service.Received += (arg1, arg2, arg3) =>
             {
                 arg1.Send(arg2);
@@ -218,7 +240,7 @@ namespace RRQMService.XUnitTest
 
         private static void CreateTcpService(int port)
         {
-            SimpleTcpService tcpService = new SimpleTcpService();
+            TcpService tcpService = new TcpService();
 
             //订阅初始化事件
             tcpService.Connecting += (arg1, arg2) =>
@@ -233,7 +255,7 @@ namespace RRQMService.XUnitTest
             };
 
             //订阅收到消息事件
-            tcpService.Received += (SimpleSocketClient arg1, RRQMCore.ByteManager.ByteBlock arg2, object arg3) =>
+            tcpService.Received += (arg1,  arg2, arg3) =>
             {
                 arg1.Send(arg2);
             };

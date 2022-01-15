@@ -33,7 +33,6 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
             client.Setup(config);
             client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService("RPC");
-
             Assert.NotNull(methodItems);
             Assert.True(methodItems.Length > 0);
         }
@@ -209,7 +208,7 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
 
             Channel channel = client.CreateChannel();
             int length = 0;
-            Task.Run(()=> 
+            Task.Run(() =>
             {
                 while (channel.MoveNext())
                 {
@@ -217,8 +216,8 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
                 }
             });
             server.Test28_TestChannel(channel.ID);
-            Thread.Sleep(1000*2);
-            Assert.Equal(1024*1024,length);
+            Thread.Sleep(1000 * 2);
+            Assert.Equal(1024 * 1024, length);
         }
     }
 
