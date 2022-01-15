@@ -8,15 +8,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="log4net" Version="2.0.13" />
+		<PackageReference Include="RRQMSocket.WebSocket" Version="6.5.0" />
 		<PackageReference Include="SuperSocket.Engine" Version="1.6.6.1" />
 		<PackageReference Include="SuperSocket.WebSocket" Version="1.6.6.1" />
 		<PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="RRQMSocketFramework">
-			<HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 </Project>
