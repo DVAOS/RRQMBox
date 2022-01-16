@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Web.Protos";
+
+message  AddPS
+{
+	int32 A=1;
+	int32 B=2;
+}
+
+message AddReturn
+{
+	int32 Rusult=1;
+}
+
+service TestGrpcService
+{
+	rpc Add(AddPS) returns(AddReturn) ;
+}
