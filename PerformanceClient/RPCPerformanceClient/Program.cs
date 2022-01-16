@@ -20,6 +20,7 @@ namespace RPCPerformanceClient
             Console.WriteLine("1.RRQMRPC-TCP");
             Console.WriteLine("2.NewLifeRPC");
             Console.WriteLine("3.BeetleXRPC");
+            Console.WriteLine("4.Grpc");
             var input = Console.ReadLine();
             Console.Clear();
             switch (input)
@@ -37,6 +38,11 @@ namespace RPCPerformanceClient
                 case "3":
                     {
                         BeetleXRPC.Start(100000);
+                        break;
+                    }
+                case "4":
+                    {
+                        GrpcDemoClient.Start(100000);
                         break;
                     }
                 default:

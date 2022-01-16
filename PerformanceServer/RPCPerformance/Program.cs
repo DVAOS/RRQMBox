@@ -21,13 +21,15 @@ namespace RPCPerformance
             Console.WriteLine("1.RRQMRPC-TCP");
             Console.WriteLine("2.NewLifeRPC");
             Console.WriteLine("3.BeetleXRPC");
+            Console.WriteLine("4.Grpc");
             switch (Console.ReadLine())
             {
                 case "0":
                     {
                         RRQMRPCTCP.Start();
                         NewLifeRPC.Start();
-                        BeetleXRPC.Start();
+                        BeetleXRPC.Start(); 
+                        GrpcDemo.Start();
                         break;
                     }
                 case "1":
@@ -43,6 +45,11 @@ namespace RPCPerformance
                 case "3":
                     {
                         BeetleXRPC.Start();
+                        break;
+                    }
+                case "4":
+                    {
+                        GrpcDemo.Start();
                         break;
                     }
                 default:

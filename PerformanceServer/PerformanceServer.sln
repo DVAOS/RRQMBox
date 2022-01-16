@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TCP服务器", "TCP服务�
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpServicePerformance", "TcpServicePerformance\TcpServicePerformance.csproj", "{DE63F877-7DBD-4900-8774-B225AE3ACA69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServiceConsoleApp", "GrpcServiceConsoleApp\GrpcServiceConsoleApp.csproj", "{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,14 +57,6 @@ Global
 		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|x64.ActiveCfg = Release|x64
 		{DE63F877-7DBD-4900-8774-B225AE3ACA69}.Release|x64.Build.0 = Release|x64
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Debug|x64.Build.0 = Debug|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Release|x64.ActiveCfg = Release|Any CPU
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,7 +66,6 @@ Global
 		{3262D2B0-6DD5-4CA1-A15B-DDBA55D535A5} = {70CAEE3D-150C-4F92-8345-6672595703DD}
 		{D4791348-01A7-4193-BF8B-081DB4C63412} = {46129FED-8481-4442-8BA1-2C1A4E5967FC}
 		{DE63F877-7DBD-4900-8774-B225AE3ACA69} = {1268FF23-A95C-4705-AF7F-B611070418AE}
-		{24E8D1CB-38F8-435A-ACA1-27C81E246C9B} = {46129FED-8481-4442-8BA1-2C1A4E5967FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BB08AC0-8102-4AFB-BA22-F13EDD701E07}

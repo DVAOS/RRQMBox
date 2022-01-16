@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RRQMClientGUI", "RRQMClient
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPPerformance", "TCPPerformance\TCPPerformance.csproj", "{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcClientConsoleApp", "GrpcClientConsoleApp\GrpcClientConsoleApp.csproj", "{7038B4A6-40C3-4FD0-9ADA-108397928138}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +44,6 @@ Global
 		{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7038B4A6-40C3-4FD0-9ADA-108397928138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7038B4A6-40C3-4FD0-9ADA-108397928138}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7038B4A6-40C3-4FD0-9ADA-108397928138}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7038B4A6-40C3-4FD0-9ADA-108397928138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,7 +53,6 @@ Global
 		{DA47FC8D-6C72-4D9B-A927-26FFB028B129} = {0E1AA19C-D736-43F2-98EF-23FDAE275A6A}
 		{FF07939E-9DB7-4DA5-8202-16045AA9E0D7} = {90946C14-4D89-4245-9F85-3F2DC7F4BDFF}
 		{CB6CA2E2-D614-45FA-BCA7-24519B1BE499} = {90946C14-4D89-4245-9F85-3F2DC7F4BDFF}
-		{7038B4A6-40C3-4FD0-9ADA-108397928138} = {0E1AA19C-D736-43F2-98EF-23FDAE275A6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15522423-E912-48E9-94D4-0C626D45934F}

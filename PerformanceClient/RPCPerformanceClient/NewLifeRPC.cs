@@ -9,8 +9,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using GrpcServer.Web.Protos;
 using NewLife.Log;
 using NewLife.Remoting;
+using RRQMProxy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,20 +33,18 @@ namespace RPCPerformanceClient
                 EncoderLog = XTrace.Log
             };
 
-
-
             switch (Console.ReadLine())
             {
                 case "1":
                     {
-                        var rs = client.Invoke<Int32>("Test/Sum", new { a = 10, b = 20 });//先试调一下，保证已经建立了完整的连接
+                        var rs = client.Invoke<int>("Test/Sum", new { a=10,b=20});//先试调一下，保证已经建立了完整的连接
 
                         TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                         {
                             for (int i = 0; i < count; i++)
                             {
-                                var rs = client.Invoke<Int32>("Test/Sum", new { a = i, b = i });
-                                if (rs != i + i)
+                                var rs = client.Invoke<int>("Test/Sum", new { a = i, b = i });
+                                if (rs!= i + i)
                                 {
                                     Console.WriteLine("调用结果不一致");
                                 }

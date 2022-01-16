@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using EventNext;
+using GrpcServer.Web.Protos;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
@@ -22,6 +23,8 @@ namespace RPCPerformance
     public interface ITestTaskController
     {
         Task<int> Sum(int a, int b);
+
+        Task<GetAddResponse> GetAdd(GetAddRequest request);
 
         Task<byte[]> GetBytes(int length);
 
@@ -36,19 +39,16 @@ namespace RPCPerformance
     [Service(typeof(ITestTaskController))]
     public class TestTaskController : ITestTaskController
     {
-        [RRQMRPC]
-        public Task<int> Sum(int a, int b)
+        public Task<GetAddResponse> GetAdd(GetAddRequest request)
         {
-            return Task.FromResult(a + b);
-        } 
-
-        [RRQMRPC]
-        public Task<byte[]> GetBytes(int length)
-        {
-            return Task.FromResult(new byte[length]) ;
+            return Task.FromResult(new GetAddResponse() { Result = request.A + request.B });
         }
 
-        [RRQMRPC]
+        public Task<byte[]> GetBytes(int length)
+        {
+            return Task.FromResult(new byte[length]);
+        }
+
         public Task<string> GetBigString()
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -56,15 +56,39 @@ namespace RPCPerformance
             {
                 stringBuilder.Append("RRQM");
             }
-            return Task.FromResult(stringBuilder.ToString()) ;
+            return Task.FromResult(stringBuilder.ToString());
+        }
+
+        public Task<int> Sum(int a, int b)
+        {
+            return Task.FromResult(a + b);
         }
     }
 
+    public class GetAddRequest
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+    }
+    
+    public class GetAddResponse
+    {
+        public int Result { get; set; }
+    }
 
     public class TestController : ServerProvider
     {
         [RRQMRPC]
-        public int Sum(int a, int b) => a + b;
+        public GetAddResponse GetAdd(GetAddRequest request)
+        {
+            return new GetAddResponse() { Result = request.A + request.B };
+        }
+
+        [RRQMRPC]
+        public int Sum(int a,int b)
+        {
+            return a+b;
+        }
 
         [RRQMRPC]
         public byte[] GetBytes(int length)

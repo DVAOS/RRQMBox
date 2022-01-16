@@ -9,6 +9,7 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMProxy;
 using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
@@ -23,8 +24,9 @@ namespace RPCPerformanceClient
         public static void Start(int count)
         {
             Console.WriteLine("1.测试Sum");
-            Console.WriteLine("2.测试GetBytes");
-            Console.WriteLine("3.测试BigString");
+            Console.WriteLine("2.测试GetAdd");
+            Console.WriteLine("3.测试GetBytes");
+            Console.WriteLine("4.测试BigString");
 
             TcpRpcClient client = new TcpRpcClient();
             var config = new TcpRpcClientConfig();
@@ -41,8 +43,8 @@ namespace RPCPerformanceClient
                         {
                             for (int i = 0; i < count; i++)
                             {
-                                var rs = client.Invoke<Int32>("Sum", InvokeOption.WaitInvoke, i, i);
-                                if (rs != i + i)
+                                var rs = client.Invoke<int>("Sum", InvokeOption.WaitInvoke, i,i);
+                                if (rs!= i + i)
                                 {
                                     Console.WriteLine("调用结果不一致");
                                 }
@@ -56,6 +58,26 @@ namespace RPCPerformanceClient
                         break;
                     }
                 case "2":
+                    {
+                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+                        {
+                            for (int i = 0; i < count; i++)
+                            {
+                                var rs = client.Invoke<GetAddResponse>("GetAdd", InvokeOption.WaitInvoke,new GetAddRequest() { A=i,B=i });
+                                if (rs.Result != i + i)
+                                {
+                                    Console.WriteLine("调用结果不一致");
+                                }
+                                if (i % 1000 == 0)
+                                {
+                                    Console.WriteLine(i);
+                                }
+                            }
+                        });
+                        Console.WriteLine(timeSpan);
+                        break;
+                    }
+                case "3":
                     {
                         TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                         {
@@ -75,7 +97,7 @@ namespace RPCPerformanceClient
                         Console.WriteLine(timeSpan);
                         break;
                     }
-                case "3":
+                case "4":
                     {
                         TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                         {

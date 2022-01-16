@@ -45,6 +45,10 @@ namespace RPCPerformance
 
             rpcService.RegisterServer<TestController>();
             Console.WriteLine("RPC服务已启动");
+
+            rpcService.ShareProxy(new IPHost(8848));
+            Console.WriteLine($"通过8848端口分享代理。");
+
         }
     }
 }
