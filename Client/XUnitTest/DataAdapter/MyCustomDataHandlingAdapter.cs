@@ -39,12 +39,12 @@ namespace XUnitTest.DataAdapter
 
         protected override void Reset()
         {
-            if (this.tempByteBlock!=null)
+            if (this.tempByteBlock != null)
             {
                 this.tempByteBlock.Dispose();
                 this.tempByteBlock = null;
             }
-           
+
         }
     }
 
@@ -106,13 +106,13 @@ namespace XUnitTest.DataAdapter
         /// </summary>
         /// <param name="header"></param>
         /// <returns></returns>
-        public bool OnParsingHeader(byte[] header)
+        public FilterResult OnParsingHeader(byte[] header)
         {
             //在该示例中，第一个字节表示后续的所有数据长度，但是header设置的是3，所以后续还应当接收length-2个长度。
-            this.bodyLength = header[0]-2;
+            this.bodyLength = header[0] - 2;
             this.dataType = header[1];
             this.orderType = header[2];
-            return true;
+            return FilterResult.Success;
         }
     }
 }

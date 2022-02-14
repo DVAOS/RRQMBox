@@ -443,7 +443,7 @@ namespace RRQMCorePerformanceTesting
         {
         }
 
-        [RegistMethod]
+        [AppMessage]
         public string SayHelloThree(string name)
         {
             return "SayHelloThree";

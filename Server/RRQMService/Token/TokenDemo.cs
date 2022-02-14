@@ -170,16 +170,17 @@ namespace RRQMService.Token
         /// <summary>
         /// 此处处理非常规连接，一般用于接收其他类型的TCP客户端。
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="byteBlock"></param>
+        /// <param name="requestInfo"></param>
         /// <returns></returns>
-        protected override bool OnAbnormalVerify(byte[] data)
+        protected override bool OnAbnormalVerify(ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            if (Encoding.ASCII.GetString(data) == "me")
+            if (Encoding.ASCII.GetString(byteBlock.Buffer,0,byteBlock.Len) == "me")
             {
                 this.ClientType = ClientType.AbnormalClient;
                 return true;
             }
-            return base.OnAbnormalVerify(data);
+            return base.OnAbnormalVerify(byteBlock, requestInfo);
         }
     }
 
