@@ -31,7 +31,7 @@ namespace RPCPerformanceClient
 
 
             XRPCClient client = new XRPCClient("localhost", 9090);
-            client.Options.ParameterFormater = new JsonPacket();//default messagepack
+            client.Options.ParameterFormater = new MsgPacket();//default messagepack
             ITestTaskController testController = client.Create<ITestTaskController>();
 
             switch (Console.ReadLine())

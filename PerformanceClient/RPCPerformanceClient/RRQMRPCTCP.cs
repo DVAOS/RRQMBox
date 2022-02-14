@@ -16,6 +16,7 @@ using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RPCPerformanceClient
 {
@@ -28,94 +29,37 @@ namespace RPCPerformanceClient
             Console.WriteLine("3.测试GetBytes");
             Console.WriteLine("4.测试BigString");
 
-            TcpRpcClient client = new TcpRpcClient();
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            client.Setup(config);
-            client.Connect("123RPC");
-            client.DiscoveryService("RPC");
-
-            switch (Console.ReadLine())
+            for (int i = 0; i < 10; i++)
             {
-                case "1":
+                Task.Run(()=> 
+                {
+                    TcpRpcClient client = new TcpRpcClient();
+                    var config = new TcpRpcClientConfig();
+                    config.RemoteIPHost = new IPHost("127.0.0.1:7789");
+                    client.Setup(config);
+                    client.Connect("123RPC");
+                    client.DiscoveryService("RPC");
+
+                    TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                     {
-                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
+                        for (int i = 0; i < count; i++)
                         {
-                            for (int i = 0; i < count; i++)
+                            var rs = client.Invoke<int>("Sum", InvokeOption.WaitInvoke, i, i);
+                            if (rs != i + i)
                             {
-                                var rs = client.Invoke<int>("Sum", InvokeOption.WaitInvoke, i,i);
-                                if (rs!= i + i)
-                                {
-                                    Console.WriteLine("调用结果不一致");
-                                }
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine(i);
-                                }
+                                Console.WriteLine("调用结果不一致");
                             }
-                        });
-                        Console.WriteLine(timeSpan);
-                        break;
-                    }
-                case "2":
-                    {
-                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                        {
-                            for (int i = 0; i < count; i++)
+                            if (i % 1000 == 0)
                             {
-                                var rs = client.Invoke<GetAddResponse>("GetAdd", InvokeOption.WaitInvoke,new GetAddRequest() { A=i,B=i });
-                                if (rs.Result != i + i)
-                                {
-                                    Console.WriteLine("调用结果不一致");
-                                }
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine(i);
-                                }
+                                Console.WriteLine(i);
                             }
-                        });
-                        Console.WriteLine(timeSpan);
-                        break;
-                    }
-                case "3":
-                    {
-                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                var rs = client.Invoke<byte[]>("GetBytes", InvokeOption.WaitInvoke,i);//测试10k数据
-                                if (rs.Length != i)
-                                {
-                                    Console.WriteLine("调用结果不一致");
-                                }
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine(i);
-                                }
-                            }
-                        });
-                        Console.WriteLine(timeSpan);
-                        break;
-                    }
-                case "4":
-                    {
-                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                var rs = client.Invoke<string>("GetBigString", InvokeOption.WaitInvoke);
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine(i);
-                                }
-                            }
-                        });
-                        Console.WriteLine(timeSpan);
-                        break;
-                    }
-                default:
-                    break;
+                        }
+                    });
+                    Console.WriteLine(timeSpan);
+                });
+                
             }
+            
         }
     }
 }
