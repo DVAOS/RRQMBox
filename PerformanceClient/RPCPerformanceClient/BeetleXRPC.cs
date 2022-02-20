@@ -5,14 +5,13 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using BeetleX.XRPC.Clients;
 using BeetleX.XRPC.Packets;
-using GrpcServer.Web.Protos;
-using RRQMProxy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,9 +24,8 @@ namespace RPCPerformanceClient
         public static void Start(int count)
         {
             Console.WriteLine("1.测试Sum");
-            Console.WriteLine("2.测试GetAdd");
-            Console.WriteLine("3.测试GetBytes");
-            Console.WriteLine("4.测试BigString");
+            Console.WriteLine("2.测试GetBytes");
+            Console.WriteLine("3.测试BigString");
 
 
             XRPCClient client = new XRPCClient("localhost", 9090);
@@ -70,9 +68,9 @@ namespace RPCPerformanceClient
                         {
                             for (int i = 0; i < count; i++)
                             {
-                                var rs = testController.GetAdd(new GetAddRequest() { A=i,B=i});
+                                var rs = testController.GetBytes(i);//测试10k数据
                                 rs.Wait();
-                                if (rs.Result.Result!=i)
+                                if (rs.Result.Length!=i)
                                 {
                                     Console.WriteLine("调用结果不一致");
                                 }
@@ -87,31 +85,6 @@ namespace RPCPerformanceClient
                         break;
                     }
                 case "3":
-                    {
-                        var rs = testController.GetBytes(10);//试调一次，保持在线
-                        rs.Wait();
-
-                        TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                var rs = testController.GetBytes(i);//测试10k数据
-                                rs.Wait();
-                                if (rs.Result.Length != i)
-                                {
-                                    Console.WriteLine("调用结果不一致");
-                                }
-
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine(i);
-                                }
-                            }
-                        });
-                        Console.WriteLine(timeSpan);
-                        break;
-                    }
-                case "4":
                     {
                         TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
                         {
@@ -137,8 +110,6 @@ namespace RPCPerformanceClient
     public interface ITestTaskController
     {
         Task<int> Sum(int a, int b);
-
-        Task<GetAddResponse> GetAdd(GetAddRequest request);
 
         Task<byte[]> GetBytes(int length);
 

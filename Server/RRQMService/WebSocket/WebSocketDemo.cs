@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -23,12 +24,13 @@ using System.Threading.Tasks;
 
 namespace RRQMService.WebSocket
 {
-   public static class WebSocketDemo
+    public static class WebSocketDemo
     {
         public static void Start()
         {
             Console.WriteLine("1.测试WS服务器");
             Console.WriteLine("2.测试WSs服务器");
+            Console.WriteLine("3.测试WS服务Message");
 
             switch (Console.ReadLine())
             {
@@ -40,6 +42,11 @@ namespace RRQMService.WebSocket
                 case "2":
                     {
                         TestWSsService();
+                        break;
+                    }
+                case "3":
+                    {
+                        TestWSServiceMessage();
                         break;
                     }
                 default:
@@ -62,6 +69,33 @@ namespace RRQMService.WebSocket
             Console.WriteLine("WSs服务器已启动");
         }
 
+        static void TestWSServiceMessage()
+        {
+            WSService wSService = new WSService();
+            
+            AppMessenger appMessenger=new AppMessenger() { AllowMultiple=true };//允许一个Token多播触发
+            appMessenger.Register<MyMessage>();
+
+            wSService.Received += (client,data)=> 
+            {
+                if (data.Opcode== WSDataType.Text)
+                {
+                    string token = data.GetMessage();
+                    if (appMessenger.CanSendMessage(token))
+                    {
+                        appMessenger.Send(token,client,data);
+                    }
+                }
+            };
+            wSService.Connected += WSService_Connected;
+
+            var config = new WSServiceConfig();
+            config.ListenIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) };//同时监听两个地址
+            config.ReceiveType = ReceiveType.IOCP;
+
+            wSService.Setup(config).Start();
+            Console.WriteLine("WS服务器已启动");
+        }
         static void TestWSService()
         {
             WSService wSService = new WSService();
@@ -89,7 +123,7 @@ namespace RRQMService.WebSocket
             loopAction.RunAsync();
         }
 
-        private static void WSService_Received(SimpleWSSocketClient client, WSDataFrame dataFrame)
+        private static void WSService_Received(IWSClientBase client, WSDataFrame dataFrame)
         {
             switch (dataFrame.Opcode)
             {
@@ -119,6 +153,24 @@ namespace RRQMService.WebSocket
                     break;
             }
             client.Send("我已收到");
+        }
+    }
+
+    public class MyMessage : IMessage
+    {
+        [AppMessage]
+        [AppMessage("Say")]//注册Say多播，当收到Say时，会触发所有的Say方法
+        public void SayHello(WSSocketClient socketClient,WSDataFrame dataFrame)
+        {
+            Console.WriteLine($"从{nameof(MyMessage)}:Hello");
+        }
+        
+        [AppMessage]
+        [AppMessage("Good")]
+        [AppMessage("Say")]//注册Say多播，当收到Say时，会触发所有的Say方法
+        public void SayGood(WSSocketClient socketClient, WSDataFrame dataFrame)
+        {
+            Console.WriteLine($"从{nameof(MyMessage)}:Good");
         }
     }
 }

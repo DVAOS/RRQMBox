@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -25,10 +26,11 @@ namespace FileClientGUI.Win
             InitializeComponent();
         }
 
-        public bool SelectRequest(out FileRequest fileRequest)
+        public bool SelectRequest(out FileRequest fileRequest,out string clientID)
         {
             this.ShowDialog();
             fileRequest = this.fileRequest;
+            clientID = this.clientID;
             return this.go;
         }
 
@@ -39,7 +41,7 @@ namespace FileClientGUI.Win
 
         private FileRequest fileRequest;
         private bool go;
-
+        private string clientID;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             fileRequest = new FileRequest()
@@ -48,6 +50,7 @@ namespace FileClientGUI.Win
                 Path = this.tb1.Text,
                 SavePath = this.tb2.Text
             };
+            this.clientID = this.tb3.Text;
             this.go = true;
             this.Close();
         }

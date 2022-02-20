@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -16,6 +17,7 @@ using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -98,11 +100,14 @@ namespace FileServiceGUI
         private void FileService_Received(FileSocketClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
         {
             ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len-2}");
-            if (protocol==-1)
+            if (protocol == -1)
             {
                 socketClient.Send(byteBlock.ToArray(2));
             }
-            socketClient.Send(protocol,byteBlock.ToArray(2));
+            else
+            {
+                socketClient.Send(protocol, byteBlock.ToArray(2));
+            }
         }
 
         private void FileService_BeforeFileTransfer(FileSocketClient client, FileOperationEventArgs e)
@@ -174,7 +179,7 @@ namespace FileServiceGUI
                 {
                     return;
                 }
-                //this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
+               // this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
             }
             catch (Exception ex)
             {
@@ -192,8 +197,9 @@ namespace FileServiceGUI
             }
             try
             {
-                this.transferModel.FileOperator.SetCancellationTokenSource(new System.Threading.CancellationTokenSource());
-                this.transferModel.FileOperator.Cancel();
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+                this.transferModel.FileOperator.Token=tokenSource.Token;
+                tokenSource.Cancel();
             }
             catch (Exception ex)
             {

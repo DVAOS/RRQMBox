@@ -1,18 +1,6 @@
-//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在RRQMCore.XREF命名空间的代码）归作者本人若汝棋茗所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  CSDN博客：https://blog.csdn.net/qq_40374647
-//  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  Gitee源代码仓库：https://gitee.com/RRQM_Home
-//  Github源代码仓库：https://github.com/RRQM
-//  交流QQ群：234762506
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMCore.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -21,122 +9,491 @@ namespace RRQMProxy
 {
 public interface IXUnitTestServer:IRemoteServer
 {
- System.Int32 Sum (System.Int32 a,System.Int32 b,InvokeOption invokeOption = null);
-Task<System.Int32> SumAsync (System.Int32 a,System.Int32 b,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Sum (System.Int32 a,System.Int32 b,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> SumAsync (System.Int32 a,System.Int32 b,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///性能测试
 ///</summary>
-  void Test01_Performance (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test01_Performance (IInvokeOption invokeOption = default);
 ///<summary>
 ///性能测试
 ///</summary>
-void Test01_PerformanceAsync (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Test01_PerformanceAsync (IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试异步字符串
 ///</summary>
- System.String Test02_TaskString (System.String msg,InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.String Test02_TaskString (System.String msg,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试异步字符串
 ///</summary>
-Task<System.String> Test02_TaskStringAsync (System.String msg,InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.String> Test02_TaskStringAsync (System.String msg,IInvokeOption invokeOption = default);
 
- ProxyClass1 Test03_GetProxyClass (InvokeOption invokeOption = null);
-Task<ProxyClass1> Test03_GetProxyClassAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ ProxyClass1 Test03_GetProxyClass (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<ProxyClass1> Test03_GetProxyClassAsync (IInvokeOption invokeOption = default);
 
- System.Int32 Test04_In32DefaultValue (System.Int32 a=100,InvokeOption invokeOption = null);
-Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Test04_In32DefaultValue (System.Int32 a=100,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,IInvokeOption invokeOption = default);
 
-  void Test05_NoneReturnNoneParameter (InvokeOption invokeOption = null);
-void Test05_NoneReturnNoneParameterAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test05_NoneReturnNoneParameter (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Test05_NoneReturnNoneParameterAsync (IInvokeOption invokeOption = default);
 
-  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,IInvokeOption invokeOption = default);
 
-  void Test07_OutStringParameter (out System.String name,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test07_OutStringParameter (out System.String name,IInvokeOption invokeOption = default);
 
-  void Test08_RefStringParameter (ref System.String name,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test08_RefStringParameter (ref System.String name,IInvokeOption invokeOption = default);
 
- System.Boolean Test09_Boolean (System.Boolean b,InvokeOption invokeOption = null);
-Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Boolean Test09_Boolean (System.Boolean b,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,IInvokeOption invokeOption = default);
 
- System.String Test10_StringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null);
-Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.String Test10_StringDefaultNullValue (System.String s=null,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,IInvokeOption invokeOption = default);
 
- System.String Test11_StringDefaultValue (System.String s="RRQM",InvokeOption invokeOption = null);
-Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.String Test11_StringDefaultValue (System.String s="RRQM",IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",IInvokeOption invokeOption = default);
 
- System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,InvokeOption invokeOption = null);
-Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,IInvokeOption invokeOption = default);
 
-  void Test13_Task (InvokeOption invokeOption = null);
-void Test13_TaskAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test13_Task (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Test13_TaskAsync (IInvokeOption invokeOption = default);
 
- System.Collections.Generic.List<Class01> Test14_ListClass01 (System.Int32 length,InvokeOption invokeOption = null);
-Task<System.Collections.Generic.List<Class01>> Test14_ListClass01Async (System.Int32 length,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Collections.Generic.List<Class01> Test14_ListClass01 (System.Int32 length,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Collections.Generic.List<Class01>> Test14_ListClass01Async (System.Int32 length,IInvokeOption invokeOption = default);
 
- Args Test15_ReturnArgs (InvokeOption invokeOption = null);
-Task<Args> Test15_ReturnArgsAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ Args Test15_ReturnArgs (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<Args> Test15_ReturnArgsAsync (IInvokeOption invokeOption = default);
 
- Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
-Task<Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,IInvokeOption invokeOption = default);
 
- System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,InvokeOption invokeOption = null);
-Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,IInvokeOption invokeOption = default);
 
- Class01 Test18_Class1 (Class01 class01,InvokeOption invokeOption = null);
-Task<Class01> Test18_Class1Async (Class01 class01,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ Class01 Test18_Class1 (Class01 class01,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<Class01> Test18_Class1Async (Class01 class01,IInvokeOption invokeOption = default);
 
- System.String Test19_CallBack (System.String id,System.Int32 age,InvokeOption invokeOption = null);
-Task<System.String> Test19_CallBackAsync (System.String id,System.Int32 age,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.String Test19_CallBack (System.String id,System.Int32 age,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.String> Test19_CallBackAsync (System.String id,System.Int32 age,IInvokeOption invokeOption = default);
 
- System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,Args[] args,InvokeOption invokeOption = null);
-Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,Args[] args,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,Args[] args,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,Args[] args,IInvokeOption invokeOption = default);
 
- RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (InvokeOption invokeOption = null);
-Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (IInvokeOption invokeOption = default);
 
- System.Int32 Test22_IncludeCaller (System.Int32 a,InvokeOption invokeOption = null);
-Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Test22_IncludeCaller (System.Int32 a,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,IInvokeOption invokeOption = default);
 
- System.Int32 Test23_InvokeType (InvokeOption invokeOption = null);
-Task<System.Int32> Test23_InvokeTypeAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Test23_InvokeType (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> Test23_InvokeTypeAsync (IInvokeOption invokeOption = default);
 
- System.Int32 Test25_TestStruct (StructArgs structArgs,InvokeOption invokeOption = null);
-Task<System.Int32> Test25_TestStructAsync (StructArgs structArgs,InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Test25_TestStruct (StructArgs structArgs,IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> Test25_TestStructAsync (StructArgs structArgs,IInvokeOption invokeOption = default);
 
- System.Int32 Test26_TestCancellationToken (InvokeOption invokeOption = null);
-Task<System.Int32> Test26_TestCancellationTokenAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+ System.Int32 Test26_TestCancellationToken (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task<System.Int32> Test26_TestCancellationTokenAsync (IInvokeOption invokeOption = default);
 
-  void Test27_TestCallBackFromCallContext (InvokeOption invokeOption = null);
-void Test27_TestCallBackFromCallContextAsync (InvokeOption invokeOption = null);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test27_TestCallBackFromCallContext (IInvokeOption invokeOption = default);
+///<summary>
+///无注释信息
+///</summary>
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Test27_TestCallBackFromCallContextAsync (IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试从RPC创建通道，从而实现流数据的传输
 ///</summary>
-  void Test28_TestChannel (System.Int32 channelID,InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Test28_TestChannel (System.Int32 channelID,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试从RPC创建通道，从而实现流数据的传输
 ///</summary>
-void Test28_TestChannelAsync (System.Int32 channelID,InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Test28_TestChannelAsync (System.Int32 channelID,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///性能测试
 ///</summary>
-  void Json_Test01_Performance (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Json_Test01_Performance (IInvokeOption invokeOption = default);
 ///<summary>
 ///性能测试
 ///</summary>
-void Json_Test01_PerformanceAsync (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Json_Test01_PerformanceAsync (IInvokeOption invokeOption = default);
 
 ///<summary>
 ///性能测试
 ///</summary>
-  void Xml_Test01_Performance (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+  void Xml_Test01_Performance (IInvokeOption invokeOption = default);
 ///<summary>
 ///性能测试
 ///</summary>
-void Xml_Test01_PerformanceAsync (InvokeOption invokeOption = null);
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+Task Xml_Test01_PerformanceAsync (IInvokeOption invokeOption = default);
 
 }
 public class XUnitTestServer :IXUnitTestServer
@@ -149,7 +506,11 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Sum (System.Int32 a,System.Int32 b,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Sum (System.Int32 a,System.Int32 b,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -162,20 +523,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> SumAsync (System.Int32 a,System.Int32 b,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> SumAsync (System.Int32 a,System.Int32 b,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Sum(a,b,invokeOption);});
+object[] parameters = new object[]{a,b};
+return Client.InvokeAsync<System.Int32>("Sum",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test01_Performance (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test01_Performance (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -187,20 +556,28 @@ Client.Invoke("Test01_Performance",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test01_PerformanceAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Test01_PerformanceAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test01_Performance(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Test01_Performance",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Test02_TaskString (System.String msg,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.String Test02_TaskString (System.String msg,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -213,20 +590,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> Test02_TaskStringAsync (System.String msg,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.String> Test02_TaskStringAsync (System.String msg,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test02_TaskString(msg,invokeOption);});
+object[] parameters = new object[]{msg};
+return Client.InvokeAsync<System.String>("Test02_TaskString",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public ProxyClass1 Test03_GetProxyClass (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public ProxyClass1 Test03_GetProxyClass (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -239,20 +624,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<ProxyClass1> Test03_GetProxyClassAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<ProxyClass1> Test03_GetProxyClassAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test03_GetProxyClass(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync<ProxyClass1>("Test03_GetProxyClass",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Test04_In32DefaultValue (System.Int32 a=100,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Test04_In32DefaultValue (System.Int32 a=100,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -265,20 +658,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> Test04_In32DefaultValueAsync (System.Int32 a=100,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test04_In32DefaultValue(a,invokeOption);});
+object[] parameters = new object[]{a};
+return Client.InvokeAsync<System.Int32>("Test04_In32DefaultValue",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test05_NoneReturnNoneParameter (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test05_NoneReturnNoneParameter (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -290,20 +691,28 @@ Client.Invoke("Test05_NoneReturnNoneParameter",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test05_NoneReturnNoneParameterAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Test05_NoneReturnNoneParameterAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test05_NoneReturnNoneParameter(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Test05_NoneReturnNoneParameter",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test06_OutParameters (out System.String name,out System.Int32 age,out System.String occupation,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -329,7 +738,11 @@ occupation=default(System.String);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test07_OutStringParameter (out System.String name,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test07_OutStringParameter (out System.String name,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -351,7 +764,11 @@ name=default(System.String);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test08_RefStringParameter (ref System.String name,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test08_RefStringParameter (ref System.String name,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -369,7 +786,11 @@ name=(System.String)parameters[0];
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Boolean Test09_Boolean (System.Boolean b,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Boolean Test09_Boolean (System.Boolean b,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -382,20 +803,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Boolean> Test09_BooleanAsync (System.Boolean b,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test09_Boolean(b,invokeOption);});
+object[] parameters = new object[]{b};
+return Client.InvokeAsync<System.Boolean>("Test09_Boolean",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Test10_StringDefaultNullValue (System.String s=null,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.String Test10_StringDefaultNullValue (System.String s=null,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -408,20 +837,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.String> Test10_StringDefaultNullValueAsync (System.String s=null,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test10_StringDefaultNullValue(s,invokeOption);});
+object[] parameters = new object[]{s};
+return Client.InvokeAsync<System.String>("Test10_StringDefaultNullValue",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Test11_StringDefaultValue (System.String s="RRQM",InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.String Test11_StringDefaultValue (System.String s="RRQM",IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -434,20 +871,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.String> Test11_StringDefaultValueAsync (System.String s="RRQM",IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test11_StringDefaultValue(s,invokeOption);});
+object[] parameters = new object[]{s};
+return Client.InvokeAsync<System.String>("Test11_StringDefaultValue",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Collections.Generic.Dictionary<System.Int32,System.String> Test12_Dictionary (System.Int32 length,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -460,20 +905,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Collections.Generic.Dictionary<System.Int32,System.String>> Test12_DictionaryAsync (System.Int32 length,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test12_Dictionary(length,invokeOption);});
+object[] parameters = new object[]{length};
+return Client.InvokeAsync<System.Collections.Generic.Dictionary<System.Int32,System.String>>("Test12_Dictionary",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test13_Task (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test13_Task (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -485,20 +938,28 @@ Client.Invoke("Test13_Task",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test13_TaskAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Test13_TaskAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test13_Task(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Test13_Task",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Collections.Generic.List<Class01> Test14_ListClass01 (System.Int32 length,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Collections.Generic.List<Class01> Test14_ListClass01 (System.Int32 length,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -511,20 +972,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Collections.Generic.List<Class01>> Test14_ListClass01Async (System.Int32 length,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Collections.Generic.List<Class01>> Test14_ListClass01Async (System.Int32 length,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test14_ListClass01(length,invokeOption);});
+object[] parameters = new object[]{length};
+return Client.InvokeAsync<System.Collections.Generic.List<Class01>>("Test14_ListClass01",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public Args Test15_ReturnArgs (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Args Test15_ReturnArgs (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -537,20 +1006,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<Args> Test15_ReturnArgsAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<Args> Test15_ReturnArgsAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test15_ReturnArgs(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync<Args>("Test15_ReturnArgs",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Class04 Test16_ReturnClass4 (System.Int32 a,System.String b,System.Int32 c=10,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -563,20 +1040,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<Class04> Test16_ReturnClass4Async (System.Int32 a,System.String b,System.Int32 c=10,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test16_ReturnClass4(a,b,c,invokeOption);});
+object[] parameters = new object[]{a,b,c};
+return Client.InvokeAsync<Class04>("Test16_ReturnClass4",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Double Test17_DoubleDefaultValue (System.Double a=3.1415926,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -589,20 +1074,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Double> Test17_DoubleDefaultValueAsync (System.Double a=3.1415926,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test17_DoubleDefaultValue(a,invokeOption);});
+object[] parameters = new object[]{a};
+return Client.InvokeAsync<System.Double>("Test17_DoubleDefaultValue",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public Class01 Test18_Class1 (Class01 class01,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Class01 Test18_Class1 (Class01 class01,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -615,20 +1108,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<Class01> Test18_Class1Async (Class01 class01,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<Class01> Test18_Class1Async (Class01 class01,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test18_Class1(class01,invokeOption);});
+object[] parameters = new object[]{class01};
+return Client.InvokeAsync<Class01>("Test18_Class1",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Test19_CallBack (System.String id,System.Int32 age,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.String Test19_CallBack (System.String id,System.Int32 age,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -641,20 +1142,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> Test19_CallBackAsync (System.String id,System.Int32 age,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.String> Test19_CallBackAsync (System.String id,System.Int32 age,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test19_CallBack(id,age,invokeOption);});
+object[] parameters = new object[]{id,age};
+return Client.InvokeAsync<System.String>("Test19_CallBack",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,Args[] args,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.String Test20_XmlRpc (System.String param,System.Int32 a,System.Double b,Args[] args,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -667,20 +1176,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,Args[] args,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.String> Test20_XmlRpcAsync (System.String param,System.Int32 a,System.Double b,Args[] args,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test20_XmlRpc(param,a,b,args,invokeOption);});
+object[] parameters = new object[]{param,a,b,args};
+return Client.InvokeAsync<System.String>("Test20_XmlRpc",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public RRQMCore.XREF.Newtonsoft.Json.Linq.JObject Test21_JsonRpcReturnJObject (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -693,20 +1210,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject> Test21_JsonRpcReturnJObjectAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test21_JsonRpcReturnJObject(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync<RRQMCore.XREF.Newtonsoft.Json.Linq.JObject>("Test21_JsonRpcReturnJObject",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Test22_IncludeCaller (System.Int32 a,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Test22_IncludeCaller (System.Int32 a,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -719,20 +1244,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> Test22_IncludeCallerAsync (System.Int32 a,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test22_IncludeCaller(a,invokeOption);});
+object[] parameters = new object[]{a};
+return Client.InvokeAsync<System.Int32>("Test22_IncludeCaller",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Test23_InvokeType (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Test23_InvokeType (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -745,20 +1278,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> Test23_InvokeTypeAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> Test23_InvokeTypeAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test23_InvokeType(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync<System.Int32>("Test23_InvokeType",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Test25_TestStruct (StructArgs structArgs,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Test25_TestStruct (StructArgs structArgs,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -771,20 +1312,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> Test25_TestStructAsync (StructArgs structArgs,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> Test25_TestStructAsync (StructArgs structArgs,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test25_TestStruct(structArgs,invokeOption);});
+object[] parameters = new object[]{structArgs};
+return Client.InvokeAsync<System.Int32>("Test25_TestStruct",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Test26_TestCancellationToken (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public System.Int32 Test26_TestCancellationToken (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -797,20 +1346,28 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> Test26_TestCancellationTokenAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task<System.Int32> Test26_TestCancellationTokenAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-return await Task.Run(() =>{
-return Test26_TestCancellationToken(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync<System.Int32>("Test26_TestCancellationToken",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test27_TestCallBackFromCallContext (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test27_TestCallBackFromCallContext (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -822,20 +1379,28 @@ Client.Invoke("Test27_TestCallBackFromCallContext",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test27_TestCallBackFromCallContextAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Test27_TestCallBackFromCallContextAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test27_TestCallBackFromCallContext(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Test27_TestCallBackFromCallContext",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Test28_TestChannel (System.Int32 channelID,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Test28_TestChannel (System.Int32 channelID,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -847,20 +1412,28 @@ Client.Invoke("Test28_TestChannel",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Test28_TestChannelAsync (System.Int32 channelID,InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Test28_TestChannelAsync (System.Int32 channelID,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Test28_TestChannel(channelID,invokeOption);});
+object[] parameters = new object[]{channelID};
+return Client.InvokeAsync("Test28_TestChannel",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Json_Test01_Performance (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Json_Test01_Performance (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -872,20 +1445,28 @@ Client.Invoke("Json_Test01_Performance",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Json_Test01_PerformanceAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Json_Test01_PerformanceAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Json_Test01_Performance(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Json_Test01_Performance",invokeOption, parameters);
 }
 
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void Xml_Test01_Performance (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public  void Xml_Test01_Performance (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -897,14 +1478,18 @@ Client.Invoke("Xml_Test01_Performance",invokeOption, parameters);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async void Xml_Test01_PerformanceAsync (InvokeOption invokeOption = null)
+/// <exception cref="TimeoutException">调用超时</exception>
+/// <exception cref="RRQMSerializationException">序列化异常</exception>
+/// <exception cref="RRQMRPCInvokeException">RPC异常</exception>
+/// <exception cref="RRQMException">其他异常</exception>
+public Task Xml_Test01_PerformanceAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
-throw new RRQMRPCException("RPCClient为空，请先初始化或者进行赋值");
+throw new RRQMRPCException("IRPCClient为空，请先初始化或者进行赋值");
 }
-await Task.Run(() =>{
-Xml_Test01_Performance(invokeOption);});
+object[] parameters = new object[]{};
+return Client.InvokeAsync("Xml_Test01_Performance",invokeOption, parameters);
 }
 
 }

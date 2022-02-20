@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -26,12 +27,13 @@ namespace RRQMService.NAT
 
             var config = new NATServiceConfig();
             config.ListenIPHosts = new IPHost[] { new IPHost(7788) };
-            config.TargetIPHost = new IPHost("127.0.0.1:7789");
+            config.TargetIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost("127.0.0.1:7790") };
+            config.NATMode = NATMode.TwoWay;
 
             service.Setup(config);
             service.Start();
 
-            Console.WriteLine("转发服务器已启动。已将7788端口转发到127.0.0.1:7789地址");
+            Console.WriteLine("转发服务器已启动。已将7788端口转发到127.0.0.1:7789与127.0.0.1:7790地址");
         }
     }
 }

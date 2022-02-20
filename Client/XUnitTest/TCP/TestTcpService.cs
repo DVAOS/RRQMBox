@@ -5,10 +5,12 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.Log;
 using RRQMSocket;
 using System;
 using Xunit;
@@ -26,7 +28,7 @@ namespace RRQMSocketXUnitTest.TCP
             //注入配置
             var config = new ServiceConfig();
             config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:8848"), new IPHost($"127.0.0.1:8849") })
-                .SetValue(ServiceConfig.LoggerProperty, new Log())//设置内部日志记录器
+                .SetValue(ServiceConfig.LoggerProperty, new ConsoleLogger())//设置内部日志记录器
                 .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
                 .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
                 .SetValue(TcpServiceConfig.ServerNameProperty, "RRQMServer")

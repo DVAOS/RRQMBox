@@ -5,11 +5,14 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore;
 using RRQMSocket;
+using RRQMSocket.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,10 +25,21 @@ namespace XUnitTest.DataAdapter
         {
             this.MaxSize = 1024;
         }
+
+        /// <summary>
+        /// 接口实现，指示固定包头长度
+        /// </summary>
         public override int HeaderLength => 3;
 
+        /// <summary>
+        /// 设置最大长度
+        /// </summary>
         public override int MaxSize { get; set; }
 
+        /// <summary>
+        /// 获取新实例
+        /// </summary>
+        /// <returns></returns>
         protected override MyFixedHeaderRequestInfo GetInstance()
         {
             return new MyFixedHeaderRequestInfo();
@@ -39,12 +53,12 @@ namespace XUnitTest.DataAdapter
 
         protected override void Reset()
         {
-            if (this.tempByteBlock != null)
+            if (this.tempByteBlock!=null)
             {
                 this.tempByteBlock.Dispose();
                 this.tempByteBlock = null;
             }
-
+           
         }
     }
 
@@ -52,7 +66,7 @@ namespace XUnitTest.DataAdapter
     {
         private int bodyLength;
         /// <summary>
-        /// 自定义属性，标识数据长度
+        /// 接口实现，标识数据长度
         /// </summary>
         public int BodyLength
         {
@@ -102,17 +116,17 @@ namespace XUnitTest.DataAdapter
         }
 
         /// <summary>
-        /// 当收到数据，由框架封送固定协议头。您需要在此函数中，解析自己的固定包头，并且返回后续数据的长度
+        /// 当收到数据，由框架封送固定协议头。您需要在此函数中，解析自己的固定包头，并且对<see cref="BodyLength"/>赋值，然后返回True
         /// </summary>
         /// <param name="header"></param>
         /// <returns></returns>
         public FilterResult OnParsingHeader(byte[] header)
         {
             //在该示例中，第一个字节表示后续的所有数据长度，但是header设置的是3，所以后续还应当接收length-2个长度。
-            this.bodyLength = header[0] - 2;
+            this.bodyLength = header[0]-2;
             this.dataType = header[1];
             this.orderType = header[2];
-            return FilterResult.Success;
+            return  FilterResult.Success;
         }
     }
 }

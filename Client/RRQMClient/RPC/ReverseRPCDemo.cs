@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -81,7 +82,7 @@ namespace RRQMClient.RPC
         static void TestPerformance()
         {
             RPCService service = new RPCService();
-            service.ShareProxy(new IPHost(8848));//分享反向代理RPC代理文件
+            //service.ShareProxy(new IPHost(8848));//分享反向代理RPC代理文件，需要时调用
 
             TcpRpcClient client = new TcpRpcClient();
 
@@ -96,7 +97,7 @@ namespace RRQMClient.RPC
             Console.WriteLine("成功连接");
         }
     }
-    public class ReverseCallbackServer : RRQMSocket.RPC.ServerProvider
+    public class ReverseCallbackServer : ServerProvider
     {
         [RRQMRPCCallBack(Async = true)]
         public int ConPerformance(int age)

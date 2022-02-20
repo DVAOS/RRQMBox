@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -80,9 +81,7 @@ namespace RRQMService.Token
         {
             TokenService service = new TokenService();
             service.Connected += (client, e) => { Console.WriteLine($"客户端{client.Name}连接"); };
-
             service.Disconnected += (client, e) => { Console.WriteLine($"客户端{client.Name}断开连接，原因：{e.Message}"); };
-
             service.Received += (client, byteBlock, obj) =>
             {
                 //从客户端收到信息
@@ -180,7 +179,7 @@ namespace RRQMService.Token
                 this.ClientType = ClientType.AbnormalClient;
                 return true;
             }
-            return base.OnAbnormalVerify(byteBlock, requestInfo);
+            return false;
         }
     }
 

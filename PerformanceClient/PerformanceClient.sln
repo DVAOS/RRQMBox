@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPPerformanceClient", "TCP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RRQMClientGUI", "RRQMClientGUI\RRQMClientGUI.csproj", "{1CA3196D-DC57-4D84-A4AA-C22DFA8357CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPPerformance", "TCPPerformance\TCPPerformance.csproj", "{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPPerformance", "TCPPerformance\TCPPerformance.csproj", "{CB6CA2E2-D614-45FA-BCA7-24519B1BE499}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

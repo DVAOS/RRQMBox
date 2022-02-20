@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -20,7 +21,6 @@ namespace RPCPerformanceClient
             Console.WriteLine("1.RRQMRPC-TCP");
             Console.WriteLine("2.NewLifeRPC");
             Console.WriteLine("3.BeetleXRPC");
-            Console.WriteLine("4.Grpc");
             var input = Console.ReadLine();
             Console.Clear();
             switch (input)
@@ -38,11 +38,6 @@ namespace RPCPerformanceClient
                 case "3":
                     {
                         BeetleXRPC.Start(100000);
-                        break;
-                    }
-                case "4":
-                    {
-                        GrpcDemoClient.Start(100000);
                         break;
                     }
                 default:

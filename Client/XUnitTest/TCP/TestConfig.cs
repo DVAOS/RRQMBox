@@ -5,10 +5,12 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore.Log;
 using RRQMSocket;
 using Xunit;
 
@@ -20,7 +22,7 @@ namespace RRQMSocketXUnitTest.TCP
         public void OfRRQMConfigBeOk()
         {
             int bufferLength = 1024;
-            Log logger = new Log();
+            ConsoleLogger logger = new ConsoleLogger();
             RRQMConfig config = new RRQMConfig();
             config.SetValue(RRQMConfig.BufferLengthProperty, bufferLength)
                 .SetValue(RRQMConfig.LoggerProperty, logger);

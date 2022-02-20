@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -99,4 +100,58 @@ namespace RRQMService.RPC
             return qosTcpRpcParser;
         }
     }
+
+    class QosTcpRpcParser : TcpRpcParser
+    {
+        /// <summary>
+        /// 在获取代理时筛选，
+        /// 仅筛选代理代码功能，并不能决定服务能不能调用
+        /// </summary>
+        /// <param name="args"></param>
+        public override void GetProxyInfo(GetProxyInfoArgs args)
+        {
+            if (args.ProxyToken.StartsWith("RPC"))
+            {
+                string ser = args.ProxyToken.Replace("RPC", string.Empty);
+                foreach (var item in this.RPCService.ServerProviders)
+                {
+                    if (item.GetType().Name.Contains(ser))
+                    {
+                        ServerCellCode serverCellCode = CodeGenerator.Generator<RRQMRPCAttribute>(item.GetType());
+                        args.Codes.Add(serverCellCode);
+                    }
+                }
+            }
+            else
+            {
+                args.IsSuccess = false;
+                args.ErrorMessage = "你不配拥有代理文件";
+            }
+        }
+
+        /// <summary>
+        /// 在客户端发现服务时调用，
+        /// 决定该客户端能不能调用某个服务（或服务函数）
+        /// </summary>
+        /// <param name="proxyToken"></param>
+        /// <param name="caller"></param>
+        /// <returns></returns>
+        public override MethodItem[] GetRegisteredMethodItems(string proxyToken, ICaller caller)
+        {
+            if (proxyToken.StartsWith("RPC"))
+            {
+                string ser = proxyToken.Replace("RPC", string.Empty);
+
+                //全部服务
+                MethodItem[] methodItems = this.MethodStore.GetAllMethodItem();
+
+                return methodItems.Where(m => m.ServerName.Contains(ser)).ToArray();
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
 }

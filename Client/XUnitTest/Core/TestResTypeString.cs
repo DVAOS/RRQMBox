@@ -10,22 +10,25 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Xunit;
 
-
-namespace RRQMBox.Server.Properties
+namespace XUnitTest.Core
 {
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
+    public class TestResTypeString
     {
-
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
+        [Fact]
+        public void ShouldOK()
         {
-            get
+            Array array = Enum.GetValues(typeof(ResType));
+
+            foreach (Enum item in array)
             {
-                return defaultInstance;
+                string s = item.GetResString();
+                Assert.False(string.IsNullOrEmpty(s));
             }
         }
     }

@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -16,6 +17,7 @@ using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -78,7 +80,7 @@ namespace FileClientGUI
             try
             {
                 fileClient.Connect("FileService");
-                ShowMsg("连接成功");
+                ShowMsg($"连接成功，ID={this.fileClient.ID}");
                 ((Button)sender).IsEnabled = false;
             }
             catch (Exception ex)
@@ -156,15 +158,15 @@ namespace FileClientGUI
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             PushWindow pushWindow = new PushWindow();
-            if (pushWindow.SelectRequest(out FileRequest fileRequest))
+            if (pushWindow.SelectRequest(out FileRequest fileRequest,out string clientID))
             {
                 if (this.cb_resume.IsChecked == true)
                 {
                     fileRequest.Flags = TransferFlags.BreakpointResume;
                 }
+                fileRequest.FileCheckerType = FileCheckerType.None;
                 fileRequest.Overwrite = (bool)this.cb_overwrite.IsChecked;
                 FileOperator fileOperator = new FileOperator();
-
                 FileInfo fileInfo = new FileInfo(fileRequest.Path);
 
                 TransferModel model = new TransferModel()
@@ -177,14 +179,21 @@ namespace FileClientGUI
                 model.Start();
 
                 this.localModels.Add(model);
-                this.fileClient.PushFileAsync(fileRequest, fileOperator);
+                if (string.IsNullOrEmpty(clientID))
+                {
+                    this.fileClient.PushFileAsync(fileRequest, fileOperator);
+                }
+                else
+                {
+                    this.fileClient.PushFileAsync(clientID,fileRequest, fileOperator);
+                }
             }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             PullWindow pullWindow = new PullWindow();
-            if (pullWindow.SelectRequest(out FileRequest fileRequest))
+            if (pullWindow.SelectRequest(out FileRequest fileRequest,out string clientID))
             {
                 if (this.cb_resume.IsChecked == true)
                 {
@@ -203,7 +212,15 @@ namespace FileClientGUI
                 model.Start();
 
                 this.localModels.Add(model);
-                this.fileClient.PullFileAsync(fileRequest, fileOperator);
+
+                if (string.IsNullOrEmpty(clientID))
+                {
+                    this.fileClient.PullFileAsync(fileRequest, fileOperator);
+                }
+                else
+                {
+                    this.fileClient.PullFileAsync(clientID,fileRequest, fileOperator);
+                }
             }
         }
 
@@ -217,8 +234,10 @@ namespace FileClientGUI
             }
             try
             {
-                this.transferModel.FileOperator.SetCancellationTokenSource(new System.Threading.CancellationTokenSource());
-                this.transferModel.FileOperator.Cancel();
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+
+                this.transferModel.FileOperator.Token=tokenSource.Token;
+                tokenSource.Cancel();
             }
             catch (Exception ex)
             {

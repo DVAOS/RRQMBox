@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -22,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace RRQMClient.FileService
 {
-    public static class FileServiceDemo
+    public static class FileClientDemo
     {
         public static void Start()
         {
@@ -171,6 +172,8 @@ namespace RRQMClient.FileService
             metadata.Add("2", "2");
 
             IResult result = fileClient.PushFile(fileRequest, fileOperator, metadata);
+            fileClient.Shutdown( System.Net.Sockets.SocketShutdown.Both);
+            fileClient.Dispose();
             Console.WriteLine(result);
         }
 
@@ -205,7 +208,7 @@ namespace RRQMClient.FileService
 
             RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
             {
-                //fileOperator.SetMaxSpeed(int.MaxValue);
+               // fileOperator.SetMaxSpeed(int.MaxValue);
             });
 
             Metadata metadata = new Metadata();//传递到服务器的元数据

@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -12,6 +13,7 @@
 using RRQMCore.Run;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
+using RRQMSocket.RPC.RRQMRPC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,27 +88,6 @@ namespace RRQMClient.JsonRpc
             });
             loopAction.RunAsync();
             Console.ReadKey();
-        }
-
-        static void TestProxy()
-        {
-            JsonRpcClient jsonRpcClient = new JsonRpcClient();
-
-            var config = new JsonRpcClientConfig();
-            config.ProtocolType = JsonRpcProtocolType.Http;
-            config.RemoteIPHost = new RRQMSocket.IPHost("127.0.0.1:7706");
-
-            jsonRpcClient.Setup(config);
-
-            jsonRpcClient.Connect();
-            Console.WriteLine("连接成功");
-
-            RRQMProxy.Server server = new RRQMProxy.Server(jsonRpcClient);//载入连接器
-            while (true)
-            {
-                string result = server.TestJsonRpc(Console.ReadLine());
-                Console.WriteLine($"返回结果:{result}");
-            }
         }
 
         static void TestHttpJsonRpcParser()

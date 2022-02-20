@@ -5,12 +5,14 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using RRQMSocket.WebSocket;
+using RRQMSocket.WebSocket.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +92,8 @@ namespace RRQMClient.WebSocket
 
         static void TestClient()
         {
-            MyWSClient myWSClient = new MyWSClient();
+            SimpleWSClient myWSClient = new SimpleWSClient();
+            myWSClient.Received += MyWSClient_Received;
             WSClientConfig config = new WSClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");
             myWSClient.Setup(config);
@@ -99,6 +102,37 @@ namespace RRQMClient.WebSocket
             while (true)
             {
                 myWSClient.Send(Console.ReadLine());
+            }
+        }
+
+        private static void MyWSClient_Received(IWSClientBase client, WSDataFrame dataFrame)
+        {
+            switch (dataFrame.Opcode)
+            {
+                case WSDataType.Cont:
+                    Console.WriteLine($"收到中间数据，长度为：{dataFrame.PayloadLength}");
+                    break;
+                case WSDataType.Text:
+                    Console.WriteLine(dataFrame.GetMessage());
+                    break;
+                case WSDataType.Binary:
+                    if (dataFrame.FIN)
+                    {
+                        Console.WriteLine($"收到二进制数据，长度为：{dataFrame.PayloadLength}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"收到未结束的二进制数据，长度为：{dataFrame.PayloadLength}");
+                    }
+                    break;
+                case WSDataType.Close:
+                    break;
+                case WSDataType.Ping:
+                    break;
+                case WSDataType.Pong:
+                    break;
+                default:
+                    break;
             }
         }
     }

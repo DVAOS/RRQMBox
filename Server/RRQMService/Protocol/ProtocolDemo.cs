@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -32,6 +33,7 @@ namespace RRQMService.Protocol
             Console.WriteLine("5.测试Channel");
             Console.WriteLine("6.测试心跳");
             Console.WriteLine("7.测试Channel HoldOn");
+            Console.WriteLine("8.测试客户端相互Channel");
             switch (Console.ReadLine())
             {
                 case "1":
@@ -69,6 +71,11 @@ namespace RRQMService.Protocol
                         Test_ChannelHoldOn();
                         break;
                     }
+                case "8":
+                    {
+                        Test_ChannelToClient();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -99,6 +106,18 @@ namespace RRQMService.Protocol
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private static void Test_ChannelToClient()
+        {
+            ProtocolService protocolService = CreateProtocolService();
+
+            protocolService.Connecting += (client, eOption) =>
+            {
+                //为初始化配置
+                //因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
+                client.SetDataHandlingAdapter(new FixedHeaderPackageAdapter());
+            };
         }
 
         private static void Test_ChannelHoldOn()

@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -15,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RRQMSocket.Helper;
+using RRQMCore.ByteManager;
 
 namespace RRQMClient.TCP
 {
@@ -28,6 +31,7 @@ namespace RRQMClient.TCP
             Console.WriteLine("4.测试TCP客户端连接性能");
             Console.WriteLine("5.测试TCP客户端发送流量性能");
             Console.WriteLine("6.测试同步发送并等待返回TCP客户端");
+            Console.WriteLine("7.测试断线重连TCP客户端");
             switch (Console.ReadLine())
             {
                 case "1":
@@ -56,11 +60,44 @@ namespace RRQMClient.TCP
                         TCPDemo.CreateSendThenReturnTcpClient();
                         break;
                     }
+                case "7":
+                    {
+                        TCPDemo.CreateBreakResumeTcpClient();
+                        break;
+                    }
                 default:
                     break;
             }
         }
+        private static void CreateBreakResumeTcpClient()
+        {
+            SimpleTcpClient tcpClient = new SimpleTcpClient();
 
+            tcpClient.UseReconnection(tryCount:5,printLog:true);
+
+            tcpClient.Connected += (client, e) =>
+            {
+                Console.WriteLine("成功连接");
+            };
+            tcpClient.Disconnected += (client, e) =>
+            {
+                Console.WriteLine("断开连接");
+                //client.Connect();
+            };
+            tcpClient.Received += (client, byteBlock,requestInfo) =>
+            {
+                Console.WriteLine($"收到信息：{Encoding.UTF8.GetString(byteBlock.Buffer,0,byteBlock.Len)}");
+            };
+            //声明配置
+            var config = new TcpClientConfig();
+            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
+            //载入配置
+            tcpClient.Setup(config);
+
+            tcpClient.Connect();
+
+            Console.ReadKey();
+        }
         private static void CreateSendThenReturnTcpClient()
         {
             SendThenReturnTcpClient tcpClient = new SendThenReturnTcpClient();
@@ -80,7 +117,6 @@ namespace RRQMClient.TCP
                 Console.WriteLine($"同步收到：{Encoding.UTF8.GetString(data)}");
             }
         }
-
         static void StartSimpleTcpClient(ReceiveType receiveType)
         {
             SimpleTcpClient tcpClient = new SimpleTcpClient();
@@ -118,7 +154,6 @@ namespace RRQMClient.TCP
                 tcpClient.Send(Encoding.UTF8.GetBytes(Console.ReadLine()));
             }
         }
-
         static void StartConnectPerformanceTcpClient()
         {
             Console.WriteLine("按Enter键连接1000个客户端，按其他键，退出测试。");
@@ -139,9 +174,8 @@ namespace RRQMClient.TCP
                         //声明配置
                         var config = new TcpClientConfig();
                         config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-                        config.ReceiveType = ReceiveType.IOCP;
-                        config.OnlySend = true;//测试连接性能，启用仅发送功能，此时客户端不投递接收申请。
-                                               //载入配置
+                        config.ReceiveType = ReceiveType.None;//测试连接性能，启用仅发送功能，此时客户端不投递接收申请。
+                                                              //载入配置
                         tcpClient.Setup(config);
 
                         tcpClient.Connect();
@@ -163,8 +197,7 @@ namespace RRQMClient.TCP
             //声明配置
             var config = new TcpClientConfig();
             config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.ReceiveType = ReceiveType.IOCP;
-            config.OnlySend = true;
+            config.ReceiveType = ReceiveType.None;
             tcpClient.Setup(config);
 
             tcpClient.Connect();
@@ -177,6 +210,30 @@ namespace RRQMClient.TCP
             {
                 tcpClient.Send(buffer);
             }
+        }
+    }
+
+    public class MyClient : TcpClient
+    {
+        protected override void HandleReceivedData(ByteBlock byteBlock, IRequestInfo requestInfo)
+        {
+            //此处处理数据，功能相当于Received事件。
+            string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
+            Console.WriteLine($"已接收到信息：{mes}");
+        }
+    }
+
+    public class MyTClient : TcpClient
+    {
+        protected override void HandleReceivedData(ByteBlock byteBlock, IRequestInfo requestInfo)
+        {
+            byteBlock.SetHolding(true);//异步前锁定
+            Task.Run(()=> 
+            {
+                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
+                byteBlock.SetHolding(false);//使用完成后取消锁定，且不用再调用Dispose
+                Console.WriteLine($"已接收到信息：{mes}");
+            });
         }
     }
 }

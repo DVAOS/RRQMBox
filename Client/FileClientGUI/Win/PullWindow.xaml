@@ -13,6 +13,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -25,7 +26,10 @@
         <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="保存路径：" />
         <TextBox x:Name="tb2" Grid.Row="1" Grid.Column="1" Margin="10,0" VerticalAlignment="Center" />
 
-        <Button Grid.Row="2" Grid.ColumnSpan="3" Width="100" Height="30" Click="Button_Click"
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="互传ID：" />
+        <TextBox x:Name="tb3" Grid.Row="2" Grid.Column="1" Margin="10,0" VerticalAlignment="Center" />
+        
+        <Button Grid.Row="3" Grid.ColumnSpan="3" Width="100" Height="30" Click="Button_Click"
                 Content="确定" />
     </Grid>
 </Window>

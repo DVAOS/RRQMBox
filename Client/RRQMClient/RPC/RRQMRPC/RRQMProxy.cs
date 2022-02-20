@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -12,60 +13,56 @@
 using System;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
-using RRQMCore.Exceptions;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 namespace RRQMProxy
 {
-public interface IRpcServer:IRemoteServer
+    public interface IRpcServer:IRemoteServer
 {
 ///<summary>
 ///测试同步调用
 ///</summary>
- System.String TestOne (System.Int32 id,InvokeOption invokeOption = null);
+ System.String TestOne (System.Int32 id,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试同步调用
 ///</summary>
-Task<System.String> TestOneAsync (System.Int32 id,InvokeOption invokeOption = null);
+Task<System.String> TestOneAsync (System.Int32 id,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试TestTwo
 ///</summary>
- System.String TestTwo (System.Int32 id,InvokeOption invokeOption = null);
+ System.String TestTwo (System.Int32 id,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试TestTwo
 ///</summary>
-Task<System.String> TestTwoAsync (System.Int32 id,InvokeOption invokeOption = null);
+Task<System.String> TestTwoAsync (System.Int32 id,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试重载调用
 ///</summary>
- System.String TestOne_Name (System.Int32 id,System.String name,InvokeOption invokeOption = null);
+ System.String TestOne_Name (System.Int32 id,System.String name,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试重载调用
 ///</summary>
-Task<System.String> TestOne_NameAsync (System.Int32 id,System.String name,InvokeOption invokeOption = null);
+Task<System.String> TestOne_NameAsync (System.Int32 id,System.String name,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试Out
 ///</summary>
-  void TestOut (out System.Int32 id,InvokeOption invokeOption = null);
+  void TestOut (out System.Int32 id,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试Ref
 ///</summary>
-  void TestRef (ref System.Int32 id,InvokeOption invokeOption = null);
+  void TestRef (ref System.Int32 id,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试异步
 ///</summary>
- System.String AsyncTestOne (System.Int32 id,InvokeOption invokeOption = null);
+ System.String AsyncTestOne (System.Int32 id,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试异步
 ///</summary>
-Task<System.String> AsyncTestOneAsync (System.Int32 id,InvokeOption invokeOption = null);
+Task<System.String> AsyncTestOneAsync (System.Int32 id,IInvokeOption invokeOption = default);
 
 }
 public class RpcServer :IRpcServer
@@ -78,7 +75,7 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String TestOne (System.Int32 id,InvokeOption invokeOption = null)
+public System.String TestOne (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -91,7 +88,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> TestOneAsync (System.Int32 id,InvokeOption invokeOption = null)
+public  async Task<System.String> TestOneAsync (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -104,7 +101,7 @@ return TestOne(id,invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String TestTwo (System.Int32 id,InvokeOption invokeOption = null)
+public System.String TestTwo (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -117,7 +114,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> TestTwoAsync (System.Int32 id,InvokeOption invokeOption = null)
+public  async Task<System.String> TestTwoAsync (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -130,7 +127,7 @@ return TestTwo(id,invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String TestOne_Name (System.Int32 id,System.String name,InvokeOption invokeOption = null)
+public System.String TestOne_Name (System.Int32 id,System.String name,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -143,7 +140,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> TestOne_NameAsync (System.Int32 id,System.String name,InvokeOption invokeOption = null)
+public  async Task<System.String> TestOne_NameAsync (System.Int32 id,System.String name,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -156,7 +153,7 @@ return TestOne_Name(id,name,invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void TestOut (out System.Int32 id,InvokeOption invokeOption = null)
+public  void TestOut (out System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -178,7 +175,7 @@ id=default(System.Int32);
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  void TestRef (ref System.Int32 id,InvokeOption invokeOption = null)
+public  void TestRef (ref System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -196,7 +193,7 @@ id=(System.Int32)parameters[0];
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String AsyncTestOne (System.Int32 id,InvokeOption invokeOption = null)
+public System.String AsyncTestOne (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -209,7 +206,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> AsyncTestOneAsync (System.Int32 id,InvokeOption invokeOption = null)
+public  async Task<System.String> AsyncTestOneAsync (System.Int32 id,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -225,29 +222,29 @@ public interface IPerformanceRpcServer:IRemoteServer
 ///<summary>
 ///测试性能
 ///</summary>
- System.String Performance (InvokeOption invokeOption = null);
+ System.String Performance (IInvokeOption invokeOption = default);
 ///<summary>
 ///测试性能
 ///</summary>
-Task<System.String> PerformanceAsync (InvokeOption invokeOption = null);
+Task<System.String> PerformanceAsync (IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试并发性能
 ///</summary>
- System.Int32 ConPerformance (System.Int32 num,InvokeOption invokeOption = null);
+ System.Int32 ConPerformance (System.Int32 num,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试并发性能
 ///</summary>
-Task<System.Int32> ConPerformanceAsync (System.Int32 num,InvokeOption invokeOption = null);
+Task<System.Int32> ConPerformanceAsync (System.Int32 num,IInvokeOption invokeOption = default);
 
 ///<summary>
 ///测试并发性能2
 ///</summary>
- System.Int32 ConPerformance2 (System.Int32 num,InvokeOption invokeOption = null);
+ System.Int32 ConPerformance2 (System.Int32 num,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试并发性能2
 ///</summary>
-Task<System.Int32> ConPerformance2Async (System.Int32 num,InvokeOption invokeOption = null);
+Task<System.Int32> ConPerformance2Async (System.Int32 num,IInvokeOption invokeOption = default);
 
 }
 public class PerformanceRpcServer :IPerformanceRpcServer
@@ -260,7 +257,7 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String Performance (InvokeOption invokeOption = null)
+public System.String Performance (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -273,7 +270,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> PerformanceAsync (InvokeOption invokeOption = null)
+public  async Task<System.String> PerformanceAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -286,7 +283,7 @@ return Performance(invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 ConPerformance (System.Int32 num,InvokeOption invokeOption = null)
+public System.Int32 ConPerformance (System.Int32 num,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -299,7 +296,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> ConPerformanceAsync (System.Int32 num,InvokeOption invokeOption = null)
+public  async Task<System.Int32> ConPerformanceAsync (System.Int32 num,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -312,7 +309,7 @@ return ConPerformance(num,invokeOption);});
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 ConPerformance2 (System.Int32 num,InvokeOption invokeOption = null)
+public System.Int32 ConPerformance2 (System.Int32 num,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -325,7 +322,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> ConPerformance2Async (System.Int32 num,InvokeOption invokeOption = null)
+public  async Task<System.Int32> ConPerformance2Async (System.Int32 num,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -341,11 +338,11 @@ public interface IElapsedTimeRpcServer:IRemoteServer
 ///<summary>
 ///测试可取消的调用
 ///</summary>
- System.Boolean DelayInvoke (System.Int32 tick,InvokeOption invokeOption = null);
+ System.Boolean DelayInvoke (System.Int32 tick,IInvokeOption invokeOption = default);
 ///<summary>
 ///测试可取消的调用
 ///</summary>
-Task<System.Boolean> DelayInvokeAsync (System.Int32 tick,InvokeOption invokeOption = null);
+Task<System.Boolean> DelayInvokeAsync (System.Int32 tick,IInvokeOption invokeOption = default);
 
 }
 public class ElapsedTimeRpcServer :IElapsedTimeRpcServer
@@ -358,7 +355,7 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Boolean DelayInvoke (System.Int32 tick,InvokeOption invokeOption = null)
+public System.Boolean DelayInvoke (System.Int32 tick,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -371,7 +368,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Boolean> DelayInvokeAsync (System.Int32 tick,InvokeOption invokeOption = null)
+public  async Task<System.Boolean> DelayInvokeAsync (System.Int32 tick,IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -387,11 +384,11 @@ public interface IInstanceRpcServer:IRemoteServer
 ///<summary>
 ///测试调用实例
 ///</summary>
- System.Int32 Increment (InvokeOption invokeOption = null);
+ System.Int32 Increment (IInvokeOption invokeOption = default);
 ///<summary>
 ///测试调用实例
 ///</summary>
-Task<System.Int32> IncrementAsync (InvokeOption invokeOption = null);
+Task<System.Int32> IncrementAsync (IInvokeOption invokeOption = default);
 
 }
 public class InstanceRpcServer :IInstanceRpcServer
@@ -404,7 +401,7 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.Int32 Increment (InvokeOption invokeOption = null)
+public System.Int32 Increment (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -417,7 +414,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.Int32> IncrementAsync (InvokeOption invokeOption = null)
+public  async Task<System.Int32> IncrementAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -433,11 +430,11 @@ public interface IGetCallerRpcServer:IRemoteServer
 ///<summary>
 ///测试调用上下文
 ///</summary>
- System.String GetCallerID (InvokeOption invokeOption = null);
+ System.String GetCallerID (IInvokeOption invokeOption = default);
 ///<summary>
 ///测试调用上下文
 ///</summary>
-Task<System.String> GetCallerIDAsync (InvokeOption invokeOption = null);
+Task<System.String> GetCallerIDAsync (IInvokeOption invokeOption = default);
 
 }
 public class GetCallerRpcServer :IGetCallerRpcServer
@@ -450,7 +447,7 @@ public IRpcClient Client{get;private set; }
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public System.String GetCallerID (InvokeOption invokeOption = null)
+public System.String GetCallerID (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {
@@ -463,7 +460,7 @@ return returnData;
 ///<summary>
 ///<inheritdoc/>
 ///</summary>
-public  async Task<System.String> GetCallerIDAsync (InvokeOption invokeOption = null)
+public  async Task<System.String> GetCallerIDAsync (IInvokeOption invokeOption = default)
 {
 if(Client==null)
 {

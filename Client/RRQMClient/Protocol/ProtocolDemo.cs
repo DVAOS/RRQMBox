@@ -5,6 +5,7 @@
 //  哔哩哔哩视频：https://space.bilibili.com/94253567
 //  Gitee源代码仓库：https://gitee.com/RRQM_Home
 //  Github源代码仓库：https://github.com/RRQM
+//  API首页：https://www.yuque.com/eo2w71/rrqm
 //  交流QQ群：234762506
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
@@ -34,6 +35,8 @@ namespace RRQMClient.Protocol
             Console.WriteLine("6.测试Channel");
             Console.WriteLine("7.测试PingPong");
             Console.WriteLine("8.测试Channel HoldOn");
+            Console.WriteLine("9.测试客户端相互Channel 创建端");
+            Console.WriteLine("10.测试客户端相互Channel 订阅端");
 
             switch (Console.ReadLine())
             {
@@ -77,6 +80,16 @@ namespace RRQMClient.Protocol
                         Test_ChannelHoldOn();
                         break;
                     }
+                case "9":
+                    {
+                        Test_ChannelToClient_Create();
+                        break;
+                    }
+                case "10":
+                    {
+                        Test_ChannelToClient_Subscribe();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -93,6 +106,69 @@ namespace RRQMClient.Protocol
             protocolClient.Setup(config);
 
             protocolClient.Connect("Token");
+        }
+
+        private static void Test_ChannelToClient_Subscribe()
+        {
+            Console.WriteLine("请启动两个客户端测试");
+            SimpleProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            Console.WriteLine($"client ID={client.ID}");
+
+            Console.WriteLine("请输入ChannelID");
+
+            if (client.TrySubscribeChannel(int.Parse(Console.ReadLine()),out Channel channel))
+            {
+                Task.Run(()=> 
+                {
+                    while (channel.CanMoveNext)
+                    {
+                        while (channel.MoveNext())
+                        {
+                            Console.WriteLine($"收到：{channel.GetCurrent().Length}");
+                        }
+                        Console.WriteLine($"状态：{channel.Status},信息：{channel.LastOperationMes}");
+                    }
+                    Console.WriteLine($"接收结束，状态：{channel.Status}");
+                });
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        channel.Write(new byte[1024 * 1024]);
+                    }
+                    channel.HoldOn($"{i}次发送成功");
+                    Thread.Sleep(1000);
+                }
+
+                channel.Complete();
+                channel.Dispose();
+            }
+        }
+
+        private static void Test_ChannelToClient_Create()
+        {
+            Console.WriteLine("请启动两个客户端测试");
+            SimpleProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            Console.WriteLine($"client ID={client.ID}");
+
+           
+            Console.WriteLine("请输入对方ID");
+
+            Channel channel = client.CreateChannel(Console.ReadLine(), 10);
+
+            Console.WriteLine("已创建，请对方使用10订阅");
+
+            while (channel.CanMoveNext)
+            {
+                while (channel.MoveNext())
+                {
+                    Console.WriteLine($"收到：{channel.GetCurrent().Length}");
+                    channel.Write(new byte[1024 * 1024]);
+                }
+                channel.HoldOn();
+                Console.WriteLine($"状态：{channel.Status},信息：{channel.LastOperationMes}");
+            }
+            Console.WriteLine($"接收结束，状态：{channel.Status}");
         }
 
         private static void Test_ChannelHoldOn()
@@ -120,7 +196,7 @@ namespace RRQMClient.Protocol
                     channel.HoldOn($"第{j}组数据");
                     Thread.Sleep(1000);
                 }
-                
+
 
                 channel.Complete();//最后调用完成
                                    //channel.Cancel();//或调用取消
@@ -289,7 +365,7 @@ namespace RRQMClient.Protocol
         {
             SimpleProtocolClient protocolClient = new SimpleProtocolClient();
 
-            protocolClient.Connecting += (client,e) =>
+            protocolClient.Connecting += (client, e) =>
             {
                 e.DataHandlingAdapter = adapter;
             };
