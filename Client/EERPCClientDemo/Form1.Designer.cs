@@ -64,9 +64,10 @@ namespace EERPCClientDemo
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(30, 250);
+            this.button2.Location = new System.Drawing.Point(15, 130);
+            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(194, 38);
+            this.button2.Size = new System.Drawing.Size(75, 27);
             this.button2.TabIndex = 14;
             this.button2.Text = "刷新所有事件";
             this.button2.UseVisualStyleBackColor = true;
@@ -75,9 +76,10 @@ namespace EERPCClientDemo
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(799, 95);
+            this.checkBox3.Location = new System.Drawing.Point(400, 52);
+            this.checkBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(152, 35);
+            this.checkBox3.Size = new System.Drawing.Size(80, 21);
             this.checkBox3.TabIndex = 13;
             this.checkBox3.Text = "Everyone";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -85,9 +87,10 @@ namespace EERPCClientDemo
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(665, 95);
+            this.checkBox2.Location = new System.Drawing.Point(332, 52);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(128, 35);
+            this.checkBox2.Size = new System.Drawing.Size(68, 21);
             this.checkBox2.TabIndex = 12;
             this.checkBox2.Text = "Service";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -97,25 +100,28 @@ namespace EERPCClientDemo
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(525, 95);
+            this.checkBox1.Location = new System.Drawing.Point(262, 52);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(123, 35);
+            this.checkBox1.Size = new System.Drawing.Size(65, 21);
             this.checkBox1.TabIndex = 11;
             this.checkBox1.Text = "Owner";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(108, 95);
+            this.textBox2.Location = new System.Drawing.Point(54, 52);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(398, 38);
+            this.textBox2.Size = new System.Drawing.Size(201, 23);
             this.textBox2.TabIndex = 10;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(981, 95);
+            this.button1.Location = new System.Drawing.Point(490, 52);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(150, 38);
+            this.button1.Size = new System.Drawing.Size(75, 27);
             this.button1.TabIndex = 9;
             this.button1.Text = "发布事件";
             this.button1.UseVisualStyleBackColor = true;
@@ -123,17 +129,19 @@ namespace EERPCClientDemo
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(447, 396);
+            this.textBox1.Location = new System.Drawing.Point(224, 232);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(857, 430);
+            this.textBox1.Size = new System.Drawing.Size(430, 223);
             this.textBox1.TabIndex = 8;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(30, 29);
+            this.button3.Location = new System.Drawing.Point(15, 16);
+            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(150, 46);
+            this.button3.Size = new System.Drawing.Size(75, 27);
             this.button3.TabIndex = 15;
             this.button3.Text = "连接";
             this.button3.UseVisualStyleBackColor = true;
@@ -141,9 +149,10 @@ namespace EERPCClientDemo
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(525, 179);
+            this.button4.Location = new System.Drawing.Point(262, 98);
+            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(150, 38);
+            this.button4.Size = new System.Drawing.Size(75, 27);
             this.button4.TabIndex = 17;
             this.button4.Text = "订阅事件";
             this.button4.UseVisualStyleBackColor = true;
@@ -151,25 +160,28 @@ namespace EERPCClientDemo
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(108, 179);
+            this.textBox3.Location = new System.Drawing.Point(54, 98);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(398, 38);
+            this.textBox3.Size = new System.Drawing.Size(201, 23);
             this.textBox3.TabIndex = 16;
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 31;
-            this.listBox1.Location = new System.Drawing.Point(30, 294);
+            this.listBox1.ItemHeight = 17;
+            this.listBox1.Location = new System.Drawing.Point(15, 161);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(398, 531);
+            this.listBox1.Size = new System.Drawing.Size(201, 293);
             this.listBox1.TabIndex = 18;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1154, 294);
+            this.button5.Location = new System.Drawing.Point(577, 161);
+            this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(143, 39);
+            this.button5.Size = new System.Drawing.Size(75, 27);
             this.button5.TabIndex = 20;
             this.button5.Text = "触发事件";
             this.button5.UseVisualStyleBackColor = true;
@@ -177,16 +189,18 @@ namespace EERPCClientDemo
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(447, 294);
+            this.textBox4.Location = new System.Drawing.Point(224, 161);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(661, 38);
+            this.textBox4.Size = new System.Drawing.Size(332, 23);
             this.textBox4.TabIndex = 19;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(1154, 95);
+            this.button6.Location = new System.Drawing.Point(577, 52);
+            this.button6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(150, 38);
+            this.button6.Size = new System.Drawing.Size(75, 27);
             this.button6.TabIndex = 21;
             this.button6.Text = "取消发布";
             this.button6.UseVisualStyleBackColor = true;
@@ -194,9 +208,10 @@ namespace EERPCClientDemo
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(695, 179);
+            this.button7.Location = new System.Drawing.Point(348, 98);
+            this.button7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(150, 38);
+            this.button7.Size = new System.Drawing.Size(75, 27);
             this.button7.TabIndex = 22;
             this.button7.Text = "取消订阅";
             this.button7.UseVisualStyleBackColor = true;
@@ -204,9 +219,10 @@ namespace EERPCClientDemo
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(1219, 352);
+            this.button8.Location = new System.Drawing.Point(577, 201);
+            this.button8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(78, 38);
+            this.button8.Size = new System.Drawing.Size(75, 27);
             this.button8.TabIndex = 23;
             this.button8.Text = "清空";
             this.button8.UseVisualStyleBackColor = true;
@@ -215,35 +231,38 @@ namespace EERPCClientDemo
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(448, 360);
+            this.label2.Location = new System.Drawing.Point(224, 197);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 31);
+            this.label2.Size = new System.Drawing.Size(32, 17);
             this.label2.TabIndex = 24;
             this.label2.Text = "日志";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 99);
+            this.label4.Location = new System.Drawing.Point(8, 54);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(86, 31);
+            this.label4.Size = new System.Drawing.Size(44, 17);
             this.label4.TabIndex = 25;
             this.label4.Text = "事件名";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 182);
+            this.label1.Location = new System.Drawing.Point(8, 100);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 31);
+            this.label1.Size = new System.Drawing.Size(44, 17);
             this.label1.TabIndex = 26;
             this.label1.Text = "事件名";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1331, 837);
+            this.ClientSize = new System.Drawing.Size(666, 459);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button8);
@@ -263,6 +282,7 @@ namespace EERPCClientDemo
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
