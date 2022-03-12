@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RRQMSkin" Version="3.7.1" />
-    <PackageReference Include="RRQMSocket" Version="7.0.0" />
+    <PackageReference Include="RRQMSkin" Version="3.8.0" />
+    <PackageReference Include="RRQMSocket" Version="7.0.1" />
     <PackageReference Include="RRQMSocket.FileTransfer" Version="7.0.0" />
     <PackageReference Include="RRQMSocket.RPC" Version="7.0.0" />
     <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="7.0.0" />
