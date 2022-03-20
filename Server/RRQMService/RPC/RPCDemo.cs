@@ -15,10 +15,7 @@ using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.RPC
 {
@@ -42,10 +39,10 @@ namespace RRQMService.RPC
         static void StartRPCService()
         {
             //实例化RPCService
-            RPCService rpcService = new RPCService();
+            RpcService rpcService = new RpcService();
 
             //添加解析器，解析器根据传输协议，序列化方式的不同，调用RPC服务
-            rpcService.AddRPCParser("tcpRpcParser", CreateRRQMTcpParser(7789));
+            rpcService.AddRpcParser("tcpRpcParser", CreateRRQMTcpParser(7789));
 
             //注册服务
             rpcService.RegisterServer<RpcServer>();
@@ -70,25 +67,17 @@ namespace RRQMService.RPC
             Console.ReadKey();
         }
 
-        private static IRPCParser CreateRRQMTcpParser(int port)
+        private static IRpcParser CreateRRQMTcpParser(int port)
         {
             TcpRpcParser qosTcpRpcParser = new TcpRpcParser();
 
             //声明配置
-            var config = new TcpRpcParserConfig();
-
-            //继承TcpService配置
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };//同时监听两个地址
-            //继承TokenService配置
-            config.VerifyToken = "123RPC";//连接验证令箭，可实现多租户模式
-            config.VerifyTimeout = 3 * 1000;//验证3秒超时
-            config.ThreadCount = 20;
-
-            //继承ProcotolService配置
-            config.CanResetID = true;//是否重新设置ID
-
-            //继承TcpRpcParser配置，以实现RPC交互
-            config.ProxyToken = "RPC";//代理令箭，当客户端获取代理文件,或服务时需验证令箭
+            var config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(port) })
+                .SetVerifyToken("123RPC")
+                .SetVerifyTimeout(5 * 1000)
+                .SetThreadCount(20)
+                .SetProxyToken("RPC");
 
             //载入配置
             qosTcpRpcParser.Setup(config);
@@ -113,7 +102,7 @@ namespace RRQMService.RPC
             if (args.ProxyToken.StartsWith("RPC"))
             {
                 string ser = args.ProxyToken.Replace("RPC", string.Empty);
-                foreach (var item in this.RPCService.ServerProviders)
+                foreach (var item in this.RpcService.ServerProviders)
                 {
                     if (item.GetType().Name.Contains(ser))
                     {
@@ -124,8 +113,8 @@ namespace RRQMService.RPC
             }
             else
             {
-                args.IsSuccess = false;
-                args.ErrorMessage = "你不配拥有代理文件";
+                args.RemoveOperation(RRQMCore.Operation.Permit);
+                args.Message = "你不配拥有代理文件";
             }
         }
 
@@ -136,7 +125,7 @@ namespace RRQMService.RPC
         /// <param name="proxyToken"></param>
         /// <param name="caller"></param>
         /// <returns></returns>
-        public override MethodItem[] GetRegisteredMethodItems(string proxyToken, ICaller caller)
+        public override MethodItem[] GetRegisteredMethodItems(string proxyToken, object caller)
         {
             if (proxyToken.StartsWith("RPC"))
             {

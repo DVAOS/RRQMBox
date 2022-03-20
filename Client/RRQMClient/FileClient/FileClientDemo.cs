@@ -14,12 +14,8 @@ using RRQMCore;
 using RRQMCore.Run;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
-using RRQMSocket.FileTransfer.Helper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMClient.FileService
 {
@@ -208,7 +204,7 @@ namespace RRQMClient.FileService
 
             RRQMCore.Run.EasyAction.DelayRun(1000 * 10, () =>
             {
-               // fileOperator.SetMaxSpeed(int.MaxValue);
+                //fileOperator.SetMaxSpeed(int.MaxValue);
             });
 
             Metadata metadata = new Metadata();//传递到服务器的元数据
@@ -224,14 +220,7 @@ namespace RRQMClient.FileService
         {
             FileClient fileClient = new FileClient();
 
-            //声明配置
-            var config = new FileClientConfig();
-
-            //继承TcpClient配置
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-
-            //注入配置
-            fileClient.Setup(config);
+            fileClient.Setup("127.0.0.1:7789");
 
             try
             {

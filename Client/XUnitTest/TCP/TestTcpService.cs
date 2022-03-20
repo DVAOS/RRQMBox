@@ -26,14 +26,14 @@ namespace RRQMSocketXUnitTest.TCP
             Assert.Equal(ServerState.None, service.ServerState);
 
             //注入配置
-            var config = new ServiceConfig();
-            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost($"127.0.0.1:8848"), new IPHost($"127.0.0.1:8849") })
-                .SetValue(ServiceConfig.LoggerProperty, new ConsoleLogger())//设置内部日志记录器
-                .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300)//300秒无数据交互将被清理
-                .SetValue(TcpServiceConfig.ServerNameProperty, "RRQMServer")
-                .SetValue(TcpServiceConfig.MaxCountProperty, 1000)
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+
+            RRQMConfig config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost($"127.0.0.1:8848"), new IPHost($"127.0.0.1:8849") })
+                .SetThreadCount(1)
+                .SetClearInterval(300)
+                .SetServerName("RRQMServer")
+                .SetMaxCount(1000)
+                .SetBufferLength(1024);
 
             //载入配置
             service.Setup(config);

@@ -57,12 +57,9 @@ namespace RRQMClient.Token
                 {
                     for (int i = 0; i < 1000; i++)
                     {
-                        SimpleTokenClient client = new SimpleTokenClient();
+                        TokenClient client = new TokenClient();
 
-                        //声明配置
-                        var config = new TcpClientConfig();
-                        config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-                        client.Setup(config);
+                        client.Setup("127.0.0.1:7789");
 
                         client.Connect("Token");
                         clients.Add(client);
@@ -79,7 +76,7 @@ namespace RRQMClient.Token
 
         static void StartSimpleTokenClient()
         {
-            SimpleTokenClient tcpClient = new SimpleTokenClient();
+            TokenClient tcpClient = new TokenClient();
             tcpClient.Connected += (client, e) =>{Console.WriteLine(e.Message);};//成功连接到服务器
             tcpClient.Received += (client, byteBlock, obj) =>
             {
@@ -89,11 +86,7 @@ namespace RRQMClient.Token
             };
             tcpClient.Disconnected += (client, e) =>{Console.WriteLine(e.Message); };//从服务器断开连接，当连接不成功时不会触发。
 
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            //载入配置
-            tcpClient.Setup(config);
+            tcpClient.Setup("127.0.0.1:7789");
 
             while (true)
             {

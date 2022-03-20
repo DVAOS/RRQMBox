@@ -21,8 +21,6 @@ using RRQMSocket.RPC.XmlRpc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -75,7 +73,7 @@ namespace RRQMService.XUnitTest.Server
     }
 
     [Route("/[controller]/[action]")]
-    public class XUnitTestServer : ControllerBase
+    public class XUnitTestController : ServerProvider
     {
         public static bool isStart;
 
@@ -83,7 +81,7 @@ namespace RRQMService.XUnitTest.Server
 
         private int a;
 
-        public XUnitTestServer()
+        public XUnitTestController()
         {
             System.Timers.Timer timer = new System.Timers.Timer(1000);
             timer.Elapsed += this.Timer_Elapsed;
@@ -92,8 +90,8 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
-        [RRQMRPC]
+        [HttpGet(MethodName ="HttpGetSum")]
+        [RRQMRPC(MethodName ="MySum")]
         public int Sum(int a, int b)
         {
             return a + b;
@@ -101,17 +99,16 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc(MethodName = "Xml_Test01_Performance")]
         [JsonRpc(MethodName = "Json_Test01_Performance")]
-        [Route]
+        [HttpGet(MethodName = "HttpGetPerformance")]
         [RRQMRPC]
         [Description("性能测试")]
         public void Test01_Performance()
         {
-            a++;
+            this.a++;
         }
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         [Description("测试异步字符串")]
         public async Task<string> Test02_TaskString(string msg)
@@ -124,7 +121,7 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
+        [HttpGet(MethodName = "HttpGetGetProxyClass")]
         [RRQMRPC]
         public ProxyClass1 Test03_GetProxyClass()
         {
@@ -133,7 +130,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public int Test04_In32DefaultValue(int a = 100)
         {
@@ -142,7 +138,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public void Test05_NoneReturnNoneParameter()
         {
@@ -170,7 +165,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public bool Test09_Boolean(bool b)
         {
@@ -187,7 +181,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public string Test11_StringDefaultValue(string s = "RRQM")
         {
@@ -195,7 +188,6 @@ namespace RRQMService.XUnitTest.Server
         }
 
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public Dictionary<int, string> Test12_Dictionary(int length)
         {
@@ -210,19 +202,18 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public async Task Test13_Task()
         {
             await Task.Run(() =>
             {
-                ShowMsg("TestTaskAsync");
+                this.ShowMsg("TestTaskAsync");
             });
         }
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
+        [HttpGet(MethodName = "HttpGetGetListClass01")]
         [RRQMRPC]
         public List<Class01> Test14_ListClass01(int length)
         {
@@ -236,7 +227,7 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
+        [HttpGet]
         [RRQMRPC]
         public Args Test15_ReturnArgs()
         {
@@ -245,7 +236,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public Class04 Test16_ReturnClass4(int a, string b, int c = 10)
         {
@@ -254,7 +244,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public double Test17_DoubleDefaultValue(double a = 3.1415926)
         {
@@ -263,7 +252,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public Class01 Test18_Class1(Class01 class01)
         {
@@ -274,14 +262,14 @@ namespace RRQMService.XUnitTest.Server
         public string Test19_CallBack(string id, int age)
         {
             //先在RPC服务器中找到TcpRpc解析器。
-            TcpRpcParser tcpRpcParser = ((TcpRpcParser)this.RPCService.RPCParsers["tcpRPCParser"]);
+            TcpRpcParser tcpRpcParser = ((TcpRpcParser)this.RpcService.RpcParsers["tcpRPCParser"]);
 
             //然后检索出id对应的RpcSocketClient
             if (tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
             {
                 //最后调用CallBack
                 string msg = socketClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, age);
-                ShowMsg($"TestCallBack，mes={msg}");
+                this.ShowMsg($"TestCallBack，mes={msg}");
                 return msg;
             }
             return null;
@@ -289,7 +277,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public string Test20_XmlRpc(string param, int a, double b, Args[] args)
         {
@@ -298,7 +285,6 @@ namespace RRQMService.XUnitTest.Server
 
         [XmlRpc]
         [JsonRpc]
-        [Route]
         [RRQMRPC]
         public JObject Test21_JsonRpcReturnJObject()
         {
@@ -310,7 +296,7 @@ namespace RRQMService.XUnitTest.Server
         }
 
         [JsonRpc]
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public int Test22_IncludeCaller(ICallContext serverCallContext, int a)
         {
             if (serverCallContext is JsonRpcServerCallContext jsonRpcServerCallContext)
@@ -321,10 +307,10 @@ namespace RRQMService.XUnitTest.Server
 
         private int invokeCount;
 
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public int Test23_InvokeType(ICallContext serverCallContext)
         {
-            return invokeCount++;
+            return this.invokeCount++;
         }
 
         [RRQMRPC]
@@ -333,7 +319,7 @@ namespace RRQMService.XUnitTest.Server
             return structArgs.P1;
         }
 
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public int Test26_TestCancellationToken(ICallContext serverCallContext)
         {
             int i = 0;
@@ -353,7 +339,7 @@ namespace RRQMService.XUnitTest.Server
 
             return 1;
         }
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public void Test27_TestCallBackFromCallContext(ICallContext serverCallContext)
         {
             if (serverCallContext.Caller is RpcSocketClient socketClient)
@@ -362,7 +348,7 @@ namespace RRQMService.XUnitTest.Server
                 {
 
                     string msg = socketClient.Invoke<string>("SayHello", InvokeOption.WaitInvoke, 10);
-                    ShowMsg($"TestCallBack，mes={msg}");
+                    this.ShowMsg($"TestCallBack，mes={msg}");
                 });
             }
         }
@@ -373,7 +359,7 @@ namespace RRQMService.XUnitTest.Server
         /// <param name="serverCallContext"></param>
         /// <param name="channelID"></param>
         [Description("测试从RPC创建通道，从而实现流数据的传输")]
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public void Test28_TestChannel(ICallContext serverCallContext, int channelID)
         {
             if (serverCallContext.Caller is RpcSocketClient socketClient)
@@ -397,8 +383,8 @@ namespace RRQMService.XUnitTest.Server
         {
             if (isStart)
             {
-                this.ShowMsg($"PerformanceTest,处理{a}次");
-                a = 0;
+                this.ShowMsg($"PerformanceTest,处理{this.a}次");
+                this.a = 0;
             }
         }
     }

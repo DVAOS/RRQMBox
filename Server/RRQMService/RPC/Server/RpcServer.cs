@@ -13,10 +13,7 @@
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +36,7 @@ namespace RRQMService.RPC.Server
         }
 
         [Description("测试重载调用")]
-        [RRQMRPC("TestOne_Name")]//在重载服务时需要重新设定服务唯一键
+        [RRQMRPC(MethodName = "TestOne_Name")]//在重载服务时需要重新设定服务唯一键
         public string TestOne(int id, string name)
         {
             return $"若汝棋茗,Name={name},id={id}";
@@ -73,21 +70,21 @@ namespace RRQMService.RPC.Server
     public class PerformanceRpcServer : ServerProvider
     {
         [Description("测试性能")]
-        [RRQMRPC(async: true)]//设置Task执行
+        [RRQMRPC]
         public string Performance()//同步服务
         {
             return "若汝棋茗";
         }
 
         [Description("测试并发性能")]
-        [RRQMRPC(async: true)]
+        [RRQMRPC]
         public int ConPerformance(int num)
         {
             return ++num;
         }
 
         [Description("测试并发性能2")]
-        [RRQMRPC(async: true)]
+        [RRQMRPC]
         public int ConPerformance2(int num)
         {
             return ++num;
@@ -97,7 +94,7 @@ namespace RRQMService.RPC.Server
     public class ElapsedTimeRpcServer : ServerProvider
     {
         [Description("测试可取消的调用")]
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public bool DelayInvoke(ICallContext serverCallContext, int tick)//同步服务
         {
             for (int i = 0; i < tick; i++)
@@ -121,14 +118,14 @@ namespace RRQMService.RPC.Server
         [RRQMRPC]
         public int Increment()//同步服务
         {
-            return ++Count;
+            return ++this.Count;
         }
     }
 
     public class GetCallerRpcServer : ServerProvider
     {
         [Description("测试调用上下文")]
-        [RRQMRPC(MethodFlags.IncludeCallContext)]
+        [RRQMRPC(MethodFlags = MethodFlags.IncludeCallContext)]
         public string GetCallerID(ICallContext callContext)
         {
             if (callContext.Caller is RpcSocketClient socketClient)

@@ -20,22 +20,8 @@ using System.Threading.Tasks;
 
 namespace RRQMClient.Protocol
 {
-    class PingPongClient : RRQMSocket.ProtocolClient
+    class PingPongClient : ProtocolClientBase
     {
-        protected override void HandleProtocolData(short procotol, ByteBlock byteBlock)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void HandleStream(StreamStatusEventArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void PreviewHandleStream(StreamOperationEventArgs args)
-        {
-            throw new NotImplementedException();
-        }
         protected override void OnPong()
         {
             Console.WriteLine("Pong");

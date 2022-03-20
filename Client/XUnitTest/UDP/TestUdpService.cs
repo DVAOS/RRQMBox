@@ -23,14 +23,14 @@ namespace RRQMSocketXUnitTest.UDP
         [Fact]
         public void ShouldShowProperties()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
             Assert.Equal(ServerState.None, udpSession.ServerState);
 
-            var config = new UdpSessionConfig();//UDP配置
-            config.RemoteIPHost = new IPHost("127.0.0.1:10086");
-            config.BindIPHost = new IPHost("127.0.0.1:10087");
-            config.ServerName = "RRQMUdpServer";
-            config.BufferLength = 2048;
+            var config = new RRQMConfig();//UDP配置
+            config.SetRemoteIPHost(new IPHost("127.0.0.1:10086"))
+                .SetBindIPHost(new IPHost("127.0.0.1:10087"))
+                .SetServerName("RRQMUdpServer")
+                .SetBufferLength(2048);
 
             udpSession.Setup(config);//加载配置
             udpSession.Start();//启动
@@ -61,7 +61,7 @@ namespace RRQMSocketXUnitTest.UDP
         [Fact]
         public void ShouldCanSendAndReceive()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
 
             int count = 0;
             udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
@@ -69,12 +69,11 @@ namespace RRQMSocketXUnitTest.UDP
                 count++;
                 Assert.Equal(count, BitConverter.ToInt32(e.Buffer, 0));
             };
-            var config = new UdpSessionConfig();//UDP配置
-            config.RemoteIPHost = new IPHost("127.0.0.1:7790");
-            config.BindIPHost = new IPHost("127.0.0.1:7791");
 
-            udpSession.Setup(config);//加载配置
-            udpSession.Start();//启动
+            udpSession.Setup(new RRQMConfig()//加载配置
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7790"))
+                .SetBindIPHost(new IPHost("127.0.0.1:7791")))
+                .Start();
 
             udpSession.Send(BitConverter.GetBytes(1));
 

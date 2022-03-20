@@ -11,12 +11,15 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMClient.FileService;
+using RRQMClient.Http;
+using RRQMClient.JsonRpc;
 using RRQMClient.Protocol;
 using RRQMClient.RPC;
 using RRQMClient.Ssl;
 using RRQMClient.TCP;
 using RRQMClient.Token;
 using RRQMClient.UDP;
+using RRQMClient.WebApi;
 using RRQMClient.WebSocket;
 using System;
 
@@ -35,6 +38,9 @@ namespace RRQMClient
             Console.WriteLine("7.RRQM RPC客户端");
             Console.WriteLine("8.RRQM 反向RPC客户端");
             Console.WriteLine("9.文件客户端");
+            Console.WriteLine("10.Http客户端");
+            Console.WriteLine("11.JsonRpc客户端");
+            Console.WriteLine("12.WebApi客户端");
             var input = Console.ReadLine();
             Console.Clear();
             switch (input)
@@ -82,6 +88,21 @@ namespace RRQMClient
                 case "9":
                     {
                         FileClientDemo.Start();
+                        break;
+                    } 
+                case "10":
+                    {
+                        HttpDemo.Start();
+                        break;
+                    }
+                case "11":
+                    {
+                        JsonRpcDemo.Start();
+                        break;
+                    }
+                case "12":
+                    {
+                        WebApiDemo.Start();
                         break;
                     }
                 default:

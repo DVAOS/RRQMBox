@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMService.FileServiceN;
+using RRQMService.HTTP;
 using RRQMService.JsonRpc;
 using RRQMService.NAT;
 using RRQMService.Protocol;
@@ -19,7 +20,6 @@ using RRQMService.Ssl;
 using RRQMService.TCP;
 using RRQMService.Token;
 using RRQMService.UDP;
-using RRQMService.WebSocket;
 using RRQMService.XUnitTest;
 using System;
 
@@ -34,7 +34,7 @@ namespace RRQMService
             Console.WriteLine("3.SslTCP服务器");
             Console.WriteLine("4.Token服务器");
             Console.WriteLine("5.Protocol服务器");
-            Console.WriteLine("6.WebSocket服务器");
+            Console.WriteLine("6.HTTP、WebSocket、静态网页托管服务器");
             Console.WriteLine("7.RRQM RPC服务器");
             Console.WriteLine("8.RRQM 反向RPC服务器");
             Console.WriteLine("9.NAT 地址转换服务器");
@@ -72,7 +72,7 @@ namespace RRQMService
                     }
                 case "6":
                     {
-                        WebSocketDemo.Start();
+                        HttpDemo.Start();
                         break;
                     }
                 case "7":
@@ -94,7 +94,7 @@ namespace RRQMService
                     {
                         FileServiceDemo.Start();
                         break;
-                    } 
+                    }
                 case "11":
                     {
                         JsonRpcDemo.Start();
@@ -104,7 +104,7 @@ namespace RRQMService
                     {
                         XUnitTestDemo.Start();
                         break;
-                    }
+                    } 
                 default:
                     break;
             }

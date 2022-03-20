@@ -6,8 +6,13 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="RRQMSocket.WebSocket" Version="7.0.0" />
 		<PackageReference Include="WebSocket4Net" Version="0.15.2" />
 		<PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="RRQMSocketFramework">
+	    <HintPath>..\..\..\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>

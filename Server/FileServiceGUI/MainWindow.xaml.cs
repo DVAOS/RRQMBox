@@ -12,6 +12,7 @@
 //------------------------------------------------------------------------------
 using FileServiceGUI.Models;
 using FileServiceGUI.Win;
+using RRQMCore;
 using RRQMSkin.MVVM;
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
@@ -30,7 +31,7 @@ namespace FileServiceGUI
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Loaded += this.MainWindow_Loaded;
         }
 
@@ -72,34 +73,35 @@ namespace FileServiceGUI
         private void Start()
         {
             //启动
-            if (fileService != null)
+            if (this.fileService != null)
             {
                 return;
             }
-            fileService = new FileService();
-            fileService.Received += FileService_Received;
-            fileService.Connected += this.FileService_Connected;
-            fileService.Disconnected += this.FileService_Disconnected;
-            fileService.BeforeFileTransfer += this.FileService_BeforeFileTransfer;
-            var config = new FileServiceConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(7789) };
-            config.VerifyToken = "FileService";
+            this.fileService = new FileService();
+            this.fileService.Received += this.FileService_Received;
+            this.fileService.Connected += this.FileService_Connected;
+            this.fileService.Disconnected += this.FileService_Disconnected;
+            this.fileService.FileTransfering += this.FileService_FileTransfering;
+
+            var config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(7789) })
+                .SetVerifyToken("FileService");
 
             try
             {
-                fileService.Setup(config);
-                fileService.Start();
-                ShowMsg("启动成功");
+                this.fileService.Setup(config);
+                this.fileService.Start();
+                this.ShowMsg("启动成功");
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
         }
 
         private void FileService_Received(FileSocketClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
         {
-            ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len-2}");
+            this.ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len - 2}");
             if (protocol == -1)
             {
                 socketClient.Send(byteBlock.ToArray(2));
@@ -110,7 +112,7 @@ namespace FileServiceGUI
             }
         }
 
-        private void FileService_BeforeFileTransfer(FileSocketClient client, FileOperationEventArgs e)
+        private void FileService_FileTransfering(FileSocketClient client, FileOperationEventArgs e)
         {
             TransferModel model = new TransferModel();
             model.FileOperator = e.FileOperator;
@@ -133,7 +135,7 @@ namespace FileServiceGUI
             }
             model.Start();
 
-            UIInvoke(() =>
+            this.UIInvoke(() =>
             {
                 this.remoteModels.Add(model);
             });
@@ -141,15 +143,15 @@ namespace FileServiceGUI
 
         private void FileService_Disconnected(FileSocketClient client, MesEventArgs e)
         {
-            UIInvoke(() =>
+            this.UIInvoke(() =>
             {
                 this.clients.Remove(client);
             });
         }
 
-        private void FileService_Connected(FileSocketClient client, MesEventArgs e)
+        private void FileService_Connected(FileSocketClient client, RRQMEventArgs e)
         {
-            UIInvoke(() =>
+            this.UIInvoke(() =>
             {
                 this.clients.Add(client);
             });
@@ -167,7 +169,7 @@ namespace FileServiceGUI
 
         private void InputBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (transferModel == null || transferModel.FileOperator.Result.ResultCode != RRQMCore.ResultCode.Default)
+            if (this.transferModel == null || this.transferModel.FileOperator.Result.ResultCode != RRQMCore.ResultCode.Default)
             {
                 MessageBox.Show("请选择一个条目，然后控制。");
                 return;
@@ -179,18 +181,18 @@ namespace FileServiceGUI
                 {
                     return;
                 }
-               // this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
+                //this.transferModel.FileOperator.SetMaxSpeed(int.Parse(((TextBox)sender).Text));
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //取消
-            if (transferModel == null || transferModel.FileOperator.Result.ResultCode != RRQMCore.ResultCode.Default)
+            if (this.transferModel == null || this.transferModel.FileOperator.Result.ResultCode != RRQMCore.ResultCode.Default)
             {
                 MessageBox.Show("请选择一个条目，然后控制。");
                 return;
@@ -198,12 +200,12 @@ namespace FileServiceGUI
             try
             {
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
-                this.transferModel.FileOperator.Token=tokenSource.Token;
+                this.transferModel.FileOperator.Token = tokenSource.Token;
                 tokenSource.Cancel();
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
         }
 

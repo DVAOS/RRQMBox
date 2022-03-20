@@ -98,12 +98,10 @@ namespace RRQMClient.Protocol
         private static void Test_PingPong()
         {
             PingPongClient protocolClient = new PingPongClient();
-            //声明配置
-            var config = new ProtocolClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.HeartbeatFrequency = 100;
-            //载入配置
-            protocolClient.Setup(config);
+
+            protocolClient.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetHeartbeatFrequency(100));
 
             protocolClient.Connect("Token");
         }
@@ -111,7 +109,7 @@ namespace RRQMClient.Protocol
         private static void Test_ChannelToClient_Subscribe()
         {
             Console.WriteLine("请启动两个客户端测试");
-            SimpleProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine($"client ID={client.ID}");
 
             Console.WriteLine("请输入ChannelID");
@@ -148,7 +146,7 @@ namespace RRQMClient.Protocol
         private static void Test_ChannelToClient_Create()
         {
             Console.WriteLine("请启动两个客户端测试");
-            SimpleProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient client = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine($"client ID={client.ID}");
 
            
@@ -173,7 +171,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_ChannelHoldOn()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             Console.WriteLine("输入Channel的ID订阅，然后读写。");
 
@@ -216,7 +214,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Channel()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             Console.WriteLine("输入Channel的ID订阅，然后读写。");
 
@@ -252,7 +250,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send_Then_Return_Performance()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             WaitSenderSubscriber subscriber = new WaitSenderSubscriber(10000);
             protocolClient.AddProtocolSubscriber(subscriber);
@@ -281,7 +279,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send_Then_Return()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine("输入信息，然后Enter发送");
 
             WaitSenderSubscriber waitSenderSubscriber = new WaitSenderSubscriber(10000);
@@ -296,7 +294,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_Protocol_10000_Send()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
             Console.WriteLine("输入信息，然后Enter发送");
             while (true)
             {
@@ -307,7 +305,7 @@ namespace RRQMClient.Protocol
         private static void Test_StreamSend()
         {
             //在测试流接收时，因为发送与接收太频繁，所以数据处理适配器应当选择具有解决粘包、分包能力的。
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new FixedHeaderPackageAdapter());
 
             byte[] data = new byte[1024 * 1024 * 50];
             new Random().NextBytes(data);
@@ -343,7 +341,7 @@ namespace RRQMClient.Protocol
 
         private static void Test_ProtocolSend()
         {
-            SimpleProtocolClient protocolClient = CreateSimpleProtocolClient(new NormalDataHandlingAdapter());
+            ProtocolClient protocolClient = CreateSimpleProtocolClient(new NormalDataHandlingAdapter());
             Console.WriteLine("仅输入信息，按Enter发送，则按空协议发送");
             Console.WriteLine("输入short类型协议，中间空格，然后Enter发送，则按输入协议发送");
             while (true)
@@ -361,9 +359,9 @@ namespace RRQMClient.Protocol
             }
         }
 
-        private static SimpleProtocolClient CreateSimpleProtocolClient(DataHandlingAdapter adapter)
+        private static ProtocolClient CreateSimpleProtocolClient(DataHandlingAdapter adapter)
         {
-            SimpleProtocolClient protocolClient = new SimpleProtocolClient();
+            ProtocolClient protocolClient = new ProtocolClient();
 
             protocolClient.Connecting += (client, e) =>
             {
@@ -379,20 +377,16 @@ namespace RRQMClient.Protocol
 
                 if (protocol == -1)
                 {
-                    Console.WriteLine($"已从{client.Name}接收默认协议信息：{mes}");//意味着发送方是直接使用Send发送
+                    Console.WriteLine($"已从{client.IP}:{client.Port}接收默认协议信息：{mes}");//意味着发送方是直接使用Send发送
                 }
                 else
                 {
                     //运行到此处的数据，意味着该数据既不是系统协议数据，也没有订阅该协议数据。可以自由处理。
-                    Console.WriteLine($"已从{client.Name}接收到未订阅处理的信息，协议为：‘{protocol}’，信息：{mes}");
+                    Console.WriteLine($"已从{client.IP}:{client.Port}接收到未订阅处理的信息，协议为：‘{protocol}’，信息：{mes}");
                 }
             };
 
-            //声明配置
-            var config = new ProtocolClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            //载入配置
-            protocolClient.Setup(config);
+            protocolClient.Setup("127.0.0.1:7789");
 
             protocolClient.Connect("Token");
 

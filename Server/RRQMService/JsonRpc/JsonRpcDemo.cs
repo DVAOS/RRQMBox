@@ -10,58 +10,56 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMSocket;
+using RRQMSocket.Http;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.JsonRpc
 {
-   public static class JsonRpcDemo
+    public static class JsonRpcDemo
     {
         public static void Start()
         {
-            RPCService rpcService = new RPCService();
-            rpcService.ShareProxy(new RRQMSocket.IPHost(8848));
+            RpcService rpcService = new RpcService();
+            rpcService.ShareProxy(new IPHost(8848));
 
-            rpcService.AddRPCParser("tcpJsonRpcParser ", CreateTcpJsonRpcParser());
-            rpcService.AddRPCParser("httpJsonRpcParser ", CreateHTTPJsonRpcParser());
+            rpcService.AddRpcParser("tcpJsonRpcParser ", CreateTcpJsonRpcParser());
+            rpcService.AddRpcParser("httpJsonRpcParser ", CreateHTTPJsonRpcParser());
 
             rpcService.RegisterServer<Server>();//注册服务
             Console.WriteLine("RPC服务已启动");
         }
 
-        static IRPCParser CreateTcpJsonRpcParser()
+        static IRpcParser CreateTcpJsonRpcParser()
         {
-            JsonRpcParser jsonRpcParser = new JsonRpcParser();
+            TcpService service = new TcpService();
+            service.Connecting += (client, e) =>
+            {
+                e.DataHandlingAdapter = new TerminatorPackageAdapter(client.MaxPackageSize,"\r\n");
+            };
 
-            JsonRpcParserConfig config = new JsonRpcParserConfig();
-            config.ProtocolType = JsonRpcProtocolType.Tcp;//使用Tcp协议，调用时，有且仅有调用消息末尾追加“\r\n”。否则会调用失败。
-            config.ListenIPHosts = new RRQMSocket.IPHost[] { new RRQMSocket.IPHost(7705) };
-            config.ProxyToken = "RPC";//生成代理时需要验证
+            service.Setup(new RRQMConfig()
+                .UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(7705) }))
+                .Start();
 
-            jsonRpcParser.Setup(config);
-            jsonRpcParser.Start();
-            Console.WriteLine("TCP协议的JsonRpc已启动");
-            return jsonRpcParser;
+            return service.AddPlugin<JsonRpcParserPlugin>()
+                 .SetProxyToken("RPC");
         }
 
-        static IRPCParser CreateHTTPJsonRpcParser()
+        static IRpcParser CreateHTTPJsonRpcParser()
         {
-            JsonRpcParser jsonRpcParser = new JsonRpcParser();
+            HttpService service = new HttpService();
 
-            JsonRpcParserConfig config = new JsonRpcParserConfig();
-            config.ProtocolType = JsonRpcProtocolType.Http;//使用Tcp协议，调用时，有且仅有调用消息末尾追加“\r\n”。否则会调用失败。
-            config.ListenIPHosts = new RRQMSocket.IPHost[] { new RRQMSocket.IPHost(7706) };
-            config.ProxyToken = "RPC";
+            service.Setup(new RRQMConfig().UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(7706) }))
+                .Start();
 
-            jsonRpcParser.Setup(config);
-            jsonRpcParser.Start();
-            Console.WriteLine("HTTP协议的JsonRpc已启动");
-            return jsonRpcParser;
+            return service.AddPlugin<JsonRpcParserPlugin>()
+                 .SetProxyToken("RPC")
+                 .SetJsonRpcUrl("/jsonRpc");
         }
     }
 

@@ -14,7 +14,6 @@ using RRQMCore.ByteManager;
 using RRQMSocket;
 using RRQMSocket.Http;
 using RRQMSocket.WebSocket;
-using RRQMSocket.WebSocket.Helper;
 using System;
 using System.Text;
 using System.Threading;
@@ -45,6 +44,8 @@ namespace XUnitTest.DataAdapter
         }
 
         [Theory]
+        [InlineData(10000, 10)]
+        [InlineData(10000, 100)]
         [InlineData(10000, 1000)]
         public void FixedSizeShouldBeOk(int inputCount, int bufferLength)
         {
@@ -69,32 +70,18 @@ namespace XUnitTest.DataAdapter
         }
 
         [Theory]
-        [InlineData(10000, 10, HttpType.Server)]
-        [InlineData(10000, 100, HttpType.Server)]
-        [InlineData(10000, 1000, HttpType.Server)]
-        [InlineData(10000, 10, HttpType.Client)]
-        [InlineData(10000, 100, HttpType.Client)]
-        [InlineData(10000, 1000, HttpType.Client)]
-        public void HttpAdapterShouldBeOk(int inputCount, int bufferLength, HttpType httpType)
+        [InlineData(10000, 10)]
+        [InlineData(10000, 100)]
+        [InlineData(10000, 1000)]
+        public void HttpServerAdapterShouldBeOk(int inputCount, int bufferLength)
         {
-            DataAdapterTester tester = DataAdapterTester.CreateTester(new HttpDataHandlingAdapter(1024, httpType), bufferLength);//用BufferLength模拟粘包，分包
+            DataAdapterTester tester = DataAdapterTester.CreateTester(new HttpServerDataHandlingAdapter(1024), bufferLength);//用BufferLength模拟粘包，分包
 
             ByteBlock byteBlock = BytePool.GetByteBlock(1024);
-            switch (httpType)
-            {
-                case HttpType.Server:
-                    HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.Method = "GET";
-                    httpRequest.FromText("RRQM");
-                    httpRequest.Build(byteBlock);
-                    break;
-
-                case HttpType.Client:
-                    HttpResponse httpResponse = new HttpResponse();
-                    httpResponse.FromText("RRQM");
-                    httpResponse.Build(byteBlock);
-                    break;
-            }
+            HttpRequest httpRequest = new HttpRequest();
+            httpRequest.Method = "GET";
+            httpRequest.FromText("RRQM");
+            httpRequest.Build(byteBlock);
             byte[] data = byteBlock.ToArray();
             string s = Encoding.UTF8.GetString(data);
             byteBlock.Dispose();
@@ -103,32 +90,17 @@ namespace XUnitTest.DataAdapter
         }
 
         [Theory]
-        [InlineData(10000, 10, HttpType.Server)]
-        [InlineData(10000, 100, HttpType.Server)]
-        [InlineData(10000, 1000, HttpType.Server)]
-        [InlineData(10000, 10, HttpType.Client)]
-        [InlineData(10000, 100, HttpType.Client)]
-        [InlineData(10000, 1000, HttpType.Client)]
-        public void HttpCustomAdapterShouldBeOk(int inputCount, int bufferLength, HttpType httpType)
+        [InlineData(10000, 10)]
+        [InlineData(10000, 100)]
+        [InlineData(10000, 1000)]
+        public void HttpClientAdapterShouldBeOk(int inputCount, int bufferLength)
         {
-            DataAdapterTester tester = DataAdapterTester.CreateTester(new HttpCustomDataHandlingAdapter(1024, httpType), bufferLength);//用BufferLength模拟粘包，分包
+            DataAdapterTester tester = DataAdapterTester.CreateTester(new HttpClientDataHandlingAdapter(1024), bufferLength);//用BufferLength模拟粘包，分包
 
             ByteBlock byteBlock = BytePool.GetByteBlock(1024);
-            switch (httpType)
-            {
-                case HttpType.Server:
-                    HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.Method = "GET";
-                    httpRequest.FromText("RRQM");
-                    httpRequest.Build(byteBlock);
-                    break;
-
-                case HttpType.Client:
-                    HttpResponse httpResponse = new HttpResponse();
-                    httpResponse.FromText("RRQM");
-                    httpResponse.Build(byteBlock);
-                    break;
-            }
+            HttpResponse httpResponse = new HttpResponse();
+            httpResponse.FromText("RRQM");
+            httpResponse.Build(byteBlock);
             byte[] data = byteBlock.ToArray();
             string s = Encoding.UTF8.GetString(data);
             byteBlock.Dispose();

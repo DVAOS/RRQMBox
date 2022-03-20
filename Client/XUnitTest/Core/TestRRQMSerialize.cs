@@ -244,7 +244,7 @@ namespace XUnitTest.Core
 
             for (int i = 0; i < count; i++)
             {
-                Assert.Equal(list[i],list3[i]);
+                Assert.Equal(list[i], list3[i]);
             }
         }
 
@@ -271,7 +271,7 @@ namespace XUnitTest.Core
             list = new string[count];
             for (int i = 0; i < count; i++)
             {
-                list[i]=i.ToString();
+                list[i] = i.ToString();
             }
             data = SerializeConvert.RRQMBinarySerialize(list);
             var list3 = SerializeConvert.RRQMBinaryDeserialize<string[]>(data, 0);
@@ -292,22 +292,22 @@ namespace XUnitTest.Core
         [InlineData(1000000)]
         public void ShouldSerializeDic(int count)
         {
-            Dictionary<int,int> list = null;
+            Dictionary<int, int> list = null;
 
             byte[] data = SerializeConvert.RRQMBinarySerialize(list);
             var list1 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
             Assert.Null(list1);
 
-            list = new  Dictionary<int, int>();
+            list = new Dictionary<int, int>();
             data = SerializeConvert.RRQMBinarySerialize(list);
             var list2 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
             Assert.NotNull(list2);
             Assert.True(list2.Count == 0);
 
-            list = new  Dictionary<int, int>();
+            list = new Dictionary<int, int>();
             for (int i = 0; i < count; i++)
             {
-                list.Add(i,i);
+                list.Add(i, i);
             }
             data = SerializeConvert.RRQMBinarySerialize(list);
             var list3 = SerializeConvert.RRQMBinaryDeserialize<Dictionary<int, int>>(data, 0);
@@ -319,6 +319,36 @@ namespace XUnitTest.Core
                 Assert.Equal(list[i], list3[i]);
             }
         }
+
+        [Fact]
+        public void ShouldSerializeNullableBeOk()
+        {
+            TestNullable test = new TestNullable();
+            test.P1 = 10;
+            test.P2 = "RRQM";
+            test.P3 = null;
+            test.P4 = new ProcessInfo() { Location = "中国", Name = "RRQM", PID = 100, WinName = "RRQM" };
+
+            byte[] data = SerializeConvert.RRQMBinarySerialize(test);
+            TestNullable newTest = SerializeConvert.RRQMBinaryDeserialize<TestNullable>(data);
+
+            Assert.NotNull(newTest);
+            Assert.Equal(test.P1, newTest.P1);
+            Assert.Equal(test.P2, newTest.P2);
+            Assert.Equal(test.P3, newTest.P3);
+            Assert.Equal(test.P4.Location, newTest.P4.Location);
+            Assert.Equal(test.P4.Name, newTest.P4.Name);
+            Assert.Equal(test.P4.PID, newTest.P4.PID);
+            Assert.Equal(test.P4.WinName, newTest.P4.WinName);
+        }
+    }
+
+    public class TestNullable
+    {
+        public int? P1 { get; set; }
+        public string? P2 { get; set; }
+        public char? P3 { get; set; }
+        public ProcessInfo? P4 { get; set; }
     }
 
     public class ProcessInfo

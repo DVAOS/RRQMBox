@@ -10,15 +10,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+using RRQMCore;
+using RRQMSocket;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EERPCServiceDemo
@@ -27,29 +22,35 @@ namespace EERPCServiceDemo
     {
         public Form1()
         {
-            InitializeComponent();
-            this.Load += Form1_Load;
+            this.InitializeComponent();
+            this.Load += this.Form1_Load;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Control.CheckForIllegalCrossThreadCalls = false;
             this.tcpRpcParser = new TcpRpcParser();
-            this.tcpRpcParser.Connected += TcpRpcParser_Connected;
-            this.tcpRpcParser.Disconnected += TcpRpcParser_Disconnected;
-            var config = new TcpRpcParserConfig();
-            config.ListenIPHosts = new RRQMSocket.IPHost[] { new RRQMSocket.IPHost(7789) };
-            config.ClearInterval = -1;
-            tcpRpcParser.Setup(config).Start();
+            this.tcpRpcParser.Connected += this.TcpRpcParser_Connected;
+            this.tcpRpcParser.Disconnected += this.TcpRpcParser_Disconnected;
+
+            var config = new RRQMConfig();
+            config.SetListenIPHosts(new RRQMSocket.IPHost[] { new RRQMSocket.IPHost(7789) })
+                .SetClearInterval(-1);
+
+            this.tcpRpcParser.Setup(config).Start();
             this.ShowMsg("服务器已启动");
         }
 
         private void TcpRpcParser_Disconnected(RpcSocketClient client, RRQMSocket.MesEventArgs e)
         {
-            this.listBox2.Items.Remove(client.ID);
+            lock (this)
+            {
+                this.listBox2.Items.Remove(client.ID);
+            }
+            
         }
 
-        private void TcpRpcParser_Connected(RpcSocketClient client, RRQMSocket.MesEventArgs e)
+        private void TcpRpcParser_Connected(RpcSocketClient client, RRQMEventArgs e)
         {
             this.listBox2.Items.Add(client.ID);
         }
@@ -81,28 +82,28 @@ namespace EERPCServiceDemo
                 if (this.checkBox4.Checked)
                 {
                     this.tcpRpcParser.PublishEvent(this.textBox2.Text, accessType);
-                    ShowMsg("发布成功");
+                    this.ShowMsg("发布成功");
                 }
                 else if (this.listBox2.SelectedItem is string id)
                 {
                     if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
                     {
                         socketClient.PublishEvent(this.textBox2.Text, accessType);
-                        ShowMsg("发布成功");
+                        this.ShowMsg("发布成功");
                     }
                     else
                     {
-                        ShowMsg("没有找到对应客户端");
+                        this.ShowMsg("没有找到对应客户端");
                     }
                 }
                 else
                 {
-                    ShowMsg("请选择一个客户端ID");
+                    this.ShowMsg("请选择一个客户端ID");
                 }
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
 
         }
@@ -121,29 +122,29 @@ namespace EERPCServiceDemo
             {
                 if (this.checkBox4.Checked)
                 {
-                    this.tcpRpcParser.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-                    ShowMsg("订阅成功");
+                    this.tcpRpcParser.SubscribeEvent<string>(this.textBox3.Text, this.SubscribeEvent);
+                    this.ShowMsg("订阅成功");
                 }
                 else if (this.listBox2.SelectedItem is string id)
                 {
                     if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
                     {
-                        socketClient.SubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-                        ShowMsg("订阅成功");
+                        socketClient.SubscribeEvent<string>(this.textBox3.Text, this.SubscribeEvent);
+                        this.ShowMsg("订阅成功");
                     }
                     else
                     {
-                        ShowMsg("没有找到对应客户端");
+                        this.ShowMsg("没有找到对应客户端");
                     }
                 }
                 else
                 {
-                    ShowMsg("请选择一个客户端ID");
+                    this.ShowMsg("请选择一个客户端ID");
                 }
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
 
         }
@@ -157,38 +158,38 @@ namespace EERPCServiceDemo
         {
             try
             {
-                if (listBox1.SelectedItem is string eventName)
+                if (this.listBox1.SelectedItem is string eventName)
                 {
                     if (this.checkBox4.Checked)
                     {
                         this.tcpRpcParser.RaiseEvent(eventName, this.textBox4.Text);
-                        ShowMsg("触发成功");
+                        this.ShowMsg("触发成功");
                     }
                     else if (this.listBox2.SelectedItem is string id)
                     {
                         if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
                         {
                             socketClient.RaiseEvent(eventName, this.textBox4.Text);
-                            ShowMsg("触发成功");
+                            this.ShowMsg("触发成功");
                         }
                         else
                         {
-                            ShowMsg("没有找到对应客户端");
+                            this.ShowMsg("没有找到对应客户端");
                         }
                     }
                     else
                     {
-                        ShowMsg("请选择一个客户端ID");
+                        this.ShowMsg("请选择一个客户端ID");
                     }
                 }
                 else
                 {
-                    ShowMsg("请先选择事件");
+                    this.ShowMsg("请先选择事件");
                 }
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
 
         }
@@ -199,29 +200,29 @@ namespace EERPCServiceDemo
             {
                 if (this.checkBox4.Checked)
                 {
-                    this.tcpRpcParser.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-                    ShowMsg("取消订阅成功");
+                    this.tcpRpcParser.UnsubscribeEvent(this.textBox3.Text);
+                    this.ShowMsg("取消订阅成功");
                 }
                 else if (this.listBox2.SelectedItem is string id)
                 {
                     if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
                     {
-                        socketClient.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
-                        ShowMsg("取消订阅成功");
+                        socketClient.UnsubscribeEvent(this.textBox3.Text);
+                        this.ShowMsg("取消订阅成功");
                     }
                     else
                     {
-                        ShowMsg("没有找到对应客户端");
+                        this.ShowMsg("没有找到对应客户端");
                     }
                 }
                 else
                 {
-                    ShowMsg("请选择一个客户端ID");
+                    this.ShowMsg("请选择一个客户端ID");
                 }
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
 
         }
@@ -233,28 +234,28 @@ namespace EERPCServiceDemo
                 if (this.checkBox4.Checked)
                 {
                     this.tcpRpcParser.UnpublishEvent(this.textBox2.Text);
-                    ShowMsg("取消发布成功");
+                    this.ShowMsg("取消发布成功");
                 }
                 else if (this.listBox2.SelectedItem is string id)
                 {
                     if (this.tcpRpcParser.TryGetSocketClient(id, out RpcSocketClient socketClient))
                     {
                         socketClient.UnpublishEvent(this.textBox2.Text);
-                        ShowMsg("取消发布成功");
+                        this.ShowMsg("取消发布成功");
                     }
                     else
                     {
-                        ShowMsg("没有找到对应客户端");
+                        this.ShowMsg("没有找到对应客户端");
                     }
                 }
                 else
                 {
-                    ShowMsg("请选择一个客户端ID");
+                    this.ShowMsg("请选择一个客户端ID");
                 }
             }
             catch (Exception ex)
             {
-                ShowMsg(ex.Message);
+                this.ShowMsg(ex.Message);
             }
 
         }

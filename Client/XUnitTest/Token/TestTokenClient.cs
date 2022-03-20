@@ -24,7 +24,7 @@ namespace RRQMSocketXUnitTest.Token
         public void ShouldCanConnectAndReceive()
         {
             int waitTime = 1000;
-            SimpleTokenClient client = new SimpleTokenClient();
+            TokenClient client = new TokenClient();
 
             bool connected = false;
             int disconnectCount = 0;
@@ -44,10 +44,7 @@ namespace RRQMSocketXUnitTest.Token
                 receivedCount++;
             };
 
-            var config = new TokenClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7792");
-
-            client.Setup(config);//载入配置
+            client.Setup("127.0.0.1:7792");//载入配置
             client.Connect("XUnitTest");//连接
             Thread.Sleep(waitTime);
 
@@ -64,7 +61,7 @@ namespace RRQMSocketXUnitTest.Token
             Thread.Sleep(waitTime);
             Assert.Equal(2, receivedCount);
 
-            client.Disconnect();
+            client.Close();
             Thread.Sleep(waitTime);
             Assert.True(!client.Online);
             Assert.True(!connected);
@@ -103,11 +100,8 @@ namespace RRQMSocketXUnitTest.Token
         [Fact]
         public void ShouldCanNotConnect()
         {
-            SimpleTokenClient client = new SimpleTokenClient();
-            var config = new TcpClientConfig();
-            config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7792"));//连接地址
-
-            client.Setup(config);
+            TokenClient client = new TokenClient();
+            client.Setup("127.0.0.1:7792");
             Assert.Throws<RRQMTokenVerifyException>(() =>
             {
                 client.Connect("Error");

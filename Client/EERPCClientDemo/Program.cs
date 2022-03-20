@@ -29,6 +29,7 @@ namespace EERPCClientDemo
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            new Form1().Show();
             Application.Run(new Form1());
         }
     }

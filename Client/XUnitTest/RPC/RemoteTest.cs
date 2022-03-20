@@ -22,11 +22,11 @@ namespace RRQMSocketXUnitTest.RPC
 {
     public class RemoteTest
     {
-        private IXUnitTestServer server;
+        private IXUnitTestController server;
 
         public RemoteTest(IRpcClient client)
         {
-            server = new XUnitTestServer(client);
+            server = new XUnitTestController(client);
         }
 
         public void Test01(string invokeType)
@@ -197,15 +197,6 @@ namespace RRQMSocketXUnitTest.RPC
             Assert.Equal(10, value);
         }
 
-        public int Test23(InvokeType invokeType)
-        {
-            InvokeOption invokeOption = new InvokeOption();
-            invokeOption.InvokeType = invokeType;
-            invokeOption.SerializationType = SerializationType.Json;
-            invokeOption.FeedbackType = FeedbackType.WaitInvoke;
-
-            return server.Test23_InvokeType(invokeOption);
-        }
 
         public void Test25()
         {
@@ -217,7 +208,6 @@ namespace RRQMSocketXUnitTest.RPC
         {
             InvokeOption invokeOption1 = new InvokeOption()
             {
-                InvokeType = InvokeType.GlobalInstance,
                 FeedbackType = FeedbackType.WaitInvoke,
                 SerializationType = SerializationType.RRQMBinary,
                 Timeout = 20 * 1000
@@ -230,8 +220,7 @@ namespace RRQMSocketXUnitTest.RPC
 
             InvokeOption invokeOption2 = new InvokeOption()
             {
-                CancellationToken = tokenSource.Token,
-                InvokeType = InvokeType.GlobalInstance,
+                Token = tokenSource.Token,
                 FeedbackType = FeedbackType.WaitInvoke,
                 SerializationType = SerializationType.RRQMBinary,
                 Timeout = 20 * 1000

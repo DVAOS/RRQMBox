@@ -12,10 +12,6 @@
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.NAT
 {
@@ -25,10 +21,10 @@ namespace RRQMService.NAT
         {
             NATService service = new NATService();
 
-            var config = new NATServiceConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(7788) };
-            config.TargetIPHosts = new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost("127.0.0.1:7790") };
-            config.NATMode = NATMode.TwoWay;
+            var config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(7788) })
+                .SetTargetIPHosts(new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost("127.0.0.1:7790") })
+                .SetNATMode(NATMode.TwoWay);
 
             service.Setup(config);
             service.Start();

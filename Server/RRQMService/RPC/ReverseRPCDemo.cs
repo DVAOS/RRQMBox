@@ -14,9 +14,6 @@ using RRQMSocket;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.RRQMRPC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RRQMService.RPC
@@ -46,13 +43,13 @@ namespace RRQMService.RPC
 
         static void TestSleepPerformance()
         {
-            RPCService service = new RPCService();
+            RpcService service = new RpcService();
 
             TcpRpcParser tcpRPCParser = new TcpRpcParser();
-            service.AddRPCParser("tcpRPCParser", tcpRPCParser);
+            service.AddRpcParser("tcpRPCParser", tcpRPCParser);
             service.RegisterServer<PerformanceServer>();
 
-            tcpRPCParser.Connected += (client, e) =>//在客户端完成连接时，就反向调用，同时正向RPC由客户端完成。
+            tcpRPCParser.Handshaked += (client, e) =>//在客户端握手完成连接时，就反向调用，同时正向RPC由客户端完成。
             {
                 Task.Run(() =>
                 {
@@ -72,24 +69,21 @@ namespace RRQMService.RPC
                     }
                 });
             };
-            //创建配置
-            var config = new TcpRpcParserConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(7789) };//监听一个IP地址
-            config.VerifyToken = "123RPC";//令箭值
-            config.ProxyToken = "RPC";//默认服务代理令箭
-            //载入配置
-            tcpRPCParser.Setup(config);
 
-            //启动服务
-            tcpRPCParser.Start();
+            tcpRPCParser.Setup(new RRQMConfig()
+                .SetListenIPHosts(new IPHost[] { new IPHost(7789) })
+                .SetVerifyToken("123RPC")
+                .SetProxyToken("RPC"))
+                .Start();
+
             Console.WriteLine("服务已启动");
             Console.ReadKey();
         }
 
         static void TestPerformance()
         {
-            TcpRpcParser tcpRPCParser = new TcpRpcParser();
-            tcpRPCParser.Connected += (client, e) =>
+            TcpRpcParser tcpRpcParser = new TcpRpcParser();
+            tcpRpcParser.Handshaked += (client, e) =>
             {
                 Task.Run(() =>
                 {
@@ -111,16 +105,13 @@ namespace RRQMService.RPC
                     Console.WriteLine($"测试完成，用时{timeSpan}");
                 });
             };
-            //创建配置
-            var config = new TcpRpcParserConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(7789) };//监听一个IP地址
-            config.VerifyToken = "123RPC";//令箭值
-            config.ProxyToken = "RPC";//默认服务代理令箭
-            //载入配置
-            tcpRPCParser.Setup(config);
 
-            //启动服务
-            tcpRPCParser.Start();
+            tcpRpcParser.Setup(new RRQMConfig()
+                .SetListenIPHosts(new IPHost[] { new IPHost(7789) })
+                .SetVerifyToken("123RPC")
+                .SetProxyToken("RPC"))
+                .Start();
+
             Console.WriteLine("服务已启动");
             Console.ReadKey();
         }

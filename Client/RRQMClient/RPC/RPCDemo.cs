@@ -18,6 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using RRQMProxy;
+using RRQMCore.ByteManager;
 
 namespace RRQMClient.RPC
 {
@@ -47,7 +48,7 @@ namespace RRQMClient.RPC
                     }
                 case "2":
                     {
-                        Test_InstanceRpcServer();
+                        Console.WriteLine("已取消该功能");
                         break;
                     }
                 case "3":
@@ -73,10 +74,10 @@ namespace RRQMClient.RPC
         {
             TcpRpcClient client = new TcpRpcClient();
 
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            config.SeparateThreadSend = false;
-            client.Setup(config);
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                //.UseSeparateThreadSend()//想要起飞，请解除注释，且将调用配置设置为InvokeOption.OnlySend，让你感受每秒30w的调用
+                );
 
             try
             {
@@ -95,8 +96,8 @@ namespace RRQMClient.RPC
             TcpRpcClient client1 = GetTcpRpcClient();
             TcpRpcClient client2 = GetTcpRpcClient();
 
-            RPCService service = new RPCService();
-            service.AddRPCParser("client1", client1);
+            RpcService service = new RpcService();
+            service.AddRpcParser("client1", client1);
             service.RegisterServer<CallbackServer>();
 
             TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
@@ -177,7 +178,7 @@ namespace RRQMClient.RPC
                 invokeOption.FeedbackType = FeedbackType.WaitInvoke;
                 invokeOption.SerializationType = RRQMCore.Serialization.SerializationType.RRQMBinary;
 
-                invokeOption.CancellationToken = tokenSource.Token;
+                invokeOption.Token = tokenSource.Token;
 
                 //实际上当为false时，并不是返回的值，而是default值
                 bool status = rpcServer.DelayInvoke(tick, invokeOption);
@@ -186,88 +187,6 @@ namespace RRQMClient.RPC
 
             Console.ReadKey();
             tokenSource.Cancel();
-        }
-
-        private static void Test_InstanceRpcServer()
-        {
-            Console.WriteLine("接下来，将由两个客户端，分别调用5次，并输出结果");
-            Console.WriteLine("选择调用模式");
-
-            Console.WriteLine("1.GlobalInstance");
-            Console.WriteLine("2.CustomInstance");
-            Console.WriteLine("3.NewInstance");
-            switch (Console.ReadLine())
-            {
-                case "1":
-                    {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            TcpRpcClient tcpRpcClient = GetTcpRpcClient();
-                            InstanceRpcServer rpcServer = new InstanceRpcServer(tcpRpcClient);
-
-                            InvokeOption invokeOption = new InvokeOption()
-                            {
-                                FeedbackType = FeedbackType.WaitInvoke,
-                                InvokeType = RRQMSocket.RPC.InvokeType.GlobalInstance,
-                                SerializationType = RRQMCore.Serialization.SerializationType.RRQMBinary
-                            };
-
-                            for (int j = 0; j < 5; j++)
-                            {
-                                Console.WriteLine($"由ID={tcpRpcClient.ID}的客户端调用{nameof(rpcServer.Increment)}调用成功，结果={rpcServer.Increment(invokeOption)}");
-                            }
-                            tcpRpcClient.Dispose();
-                            Console.WriteLine();
-                        }
-                        break;
-                    }
-                case "2":
-                    {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            TcpRpcClient tcpRpcClient = GetTcpRpcClient();
-                            InstanceRpcServer rpcServer = new InstanceRpcServer(tcpRpcClient);
-
-                            InvokeOption invokeOption = new InvokeOption()
-                            {
-                                FeedbackType = FeedbackType.WaitInvoke,
-                                InvokeType = RRQMSocket.RPC.InvokeType.CustomInstance,
-                                SerializationType = RRQMCore.Serialization.SerializationType.RRQMBinary
-                            };
-
-                            for (int j = 0; j < 5; j++)
-                            {
-                                Console.WriteLine($"由ID={tcpRpcClient.ID}的客户端调用{nameof(rpcServer.Increment)}调用成功，结果={rpcServer.Increment(invokeOption)}");
-                            }
-                            Console.WriteLine();
-                        }
-                        break;
-                    }
-                case "3":
-                    {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            TcpRpcClient tcpRpcClient = GetTcpRpcClient();
-                            InstanceRpcServer rpcServer = new InstanceRpcServer(tcpRpcClient);
-
-                            InvokeOption invokeOption = new InvokeOption()
-                            {
-                                FeedbackType = FeedbackType.WaitInvoke,
-                                InvokeType = RRQMSocket.RPC.InvokeType.NewInstance,
-                                SerializationType = RRQMCore.Serialization.SerializationType.RRQMBinary
-                            };
-
-                            for (int j = 0; j < 5; j++)
-                            {
-                                Console.WriteLine($"由ID={tcpRpcClient.ID}的客户端调用{nameof(rpcServer.Increment)}调用成功，结果={rpcServer.Increment(invokeOption)}");
-                            }
-                            Console.WriteLine();
-                        }
-                        break;
-                    }
-                default:
-                    break;
-            }
         }
 
         private static async void Test_InvokeMyRpcServer()
@@ -300,8 +219,9 @@ namespace RRQMClient.RPC
 
             Console.WriteLine("请输入待测试客户端数量");
             int clientCount = int.Parse(Console.ReadLine());
-            ThreadPool.SetMinThreads(clientCount + 10, clientCount + 10);
+            ThreadPool.SetMinThreads(clientCount + 1, clientCount + 1);
 
+            bool end = false;
             for (int i = 0; i < clientCount; i++)
             {
                 TcpRpcClient client = GetTcpRpcClient();
@@ -310,9 +230,9 @@ namespace RRQMClient.RPC
 
                 Task.Run(() =>
                 {
-                    while (true)
+                    while (!end)
                     {
-                        rpcServer.Performance();
+                        rpcServer.Performance(InvokeOption.WaitInvoke);
                         count++;
                     }
                 });
@@ -324,6 +244,15 @@ namespace RRQMClient.RPC
                 count = 0;
             });
             loopAction.RunAsync();
+            
+            while (true)
+            {
+                Console.ReadKey();
+                end = true;
+                GC.Collect();
+                BytePool.Clear();
+                Console.WriteLine("已清空内存池");
+            }
         }
     }
 

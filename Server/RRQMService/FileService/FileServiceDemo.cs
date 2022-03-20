@@ -13,11 +13,7 @@
 using RRQMSocket;
 using RRQMSocket.FileTransfer;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.FileServiceN
 {
@@ -41,7 +37,7 @@ namespace RRQMService.FileServiceN
         static void TestMultiple()
         {
             FileService fileService = CreateFileServicePro();
-            fileService.BeforeFileTransfer += (client, e) =>
+            fileService.FileTransfering += (client, e) =>
             {
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "Received", e.FileInfo.FileName);
                 if (!Directory.Exists(Path.GetDirectoryName(path)))
@@ -50,26 +46,24 @@ namespace RRQMService.FileServiceN
                 }
                 e.FileRequest.SavePath = path;
             };
-            fileService.FinishedFileTransfer += FileService_FinishedFileTransfer;
+            fileService.FileTransfered += FileService_FinishedFileTransfer;
         }
 
         private static void FileService_FinishedFileTransfer(FileSocketClient client, FileTransferStatusEventArgs e)
         {
-            
+
         }
 
         private static FileService CreateFileServicePro()
         {
             FileService fileService = new FileService();
 
-            //声明配置
-            var config = new FileServiceConfig();
-
-            //继承TcpService配置
-            config.ListenIPHosts = new IPHost[] { new IPHost(7789) };//同时监听两个地址
-            config.VerifyToken = "FileServer";//连接验证令箭，可实现多租户模式
-            fileService.Setup(config);
-            fileService.Start();
+            fileService.Setup(new RRQMConfig()
+                .SetListenIPHosts(new IPHost[] { new IPHost(7789) })
+                .SetBufferLength(1024 * 1024)
+                .SetThreadCount(1)
+                .SetVerifyToken("FileServer"))
+                .Start();
             Console.WriteLine("启动成功");
             return fileService;
         }

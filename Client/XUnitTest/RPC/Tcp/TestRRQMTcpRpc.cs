@@ -28,10 +28,8 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         public void ShouldBeAbleToDiscoveryService()
         {
             TcpRpcClient client = new TcpRpcClient();
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
 
-            client.Setup(config);
+            client.Setup("127.0.0.1:7794");
             client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService("RPC");
             Assert.NotNull(methodItems);
@@ -42,10 +40,8 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         public void ShouldFailedToDiscoveryService()
         {
             TcpRpcClient client = new TcpRpcClient();
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
 
-            client.Setup(config);
+            client.Setup("127.0.0.1:7794");
             client.Connect("123RPC");
 
             Assert.ThrowsAny<Exception>(() =>
@@ -64,14 +60,11 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         {
             TcpRpcClient client = new TcpRpcClient();
 
-            RPCService service = new RPCService();
-            service.AddRPCParser("client", client);
+            RpcService service = new RpcService();
+            service.AddRpcParser("client", client);
             service.RegisterServer<CallbackServer>();
 
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-            client.Setup(config);
+            client.Setup("127.0.0.1:7794");
             client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService("RPC");
 
@@ -112,81 +105,10 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         }
 
         [Fact]
-        public void ShouldSuccessfulCallGlobalInstance()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                TcpRpcClient client = new TcpRpcClient();
-                var config = new TcpRpcClientConfig();
-                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-                client.Setup(config);
-                client.Connect("123RPC");
-                client.DiscoveryService("RPC");
-
-                RemoteTest remoteTest = new RemoteTest(client);
-                int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.GlobalInstance);
-                Assert.Equal(i, value);
-                client.Dispose();
-            }
-        }
-
-        [Fact]
-        public void ShouldSuccessfulCallCustomInstance()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                TcpRpcClient client = new TcpRpcClient();
-                var config = new TcpRpcClientConfig();
-                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-                client.Setup(config);
-                client.Connect("123RPC");
-                client.DiscoveryService("RPC");
-
-                RemoteTest remoteTest = new RemoteTest(client);
-                for (int j = 0; j < 10; j++)
-                {
-                    int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.CustomInstance);
-                    Assert.Equal(j, value);
-                }
-
-                client.Dispose();
-            }
-        }
-
-        [Fact]
-        public void ShouldSuccessfulCallNewInstance()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                TcpRpcClient client = new TcpRpcClient();
-                var config = new TcpRpcClientConfig();
-                config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-                client.Setup(config);
-                client.Connect("123RPC");
-                client.DiscoveryService("RPC");
-
-                RemoteTest remoteTest = new RemoteTest(client);
-                for (int j = 0; j < 10; j++)
-                {
-                    int value = remoteTest.Test23(RRQMSocket.RPC.InvokeType.NewInstance);
-                    Assert.Equal(0, value);
-                }
-
-                client.Dispose();
-            }
-        }
-
-        [Fact]
         public void ShouldSuccessfulCallCancellationToken()
         {
             TcpRpcClient client = new TcpRpcClient();
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-            client.Setup(config);
+            client.Setup("127.0.0.1:7794");
             client.Connect("123RPC");
             client.DiscoveryService("RPC");
 
@@ -198,14 +120,11 @@ namespace RRQMSocketXUnitTest.RPC.Tcp
         public void ShouldCreateChannelAndReadWrite()
         {
             TcpRpcClient client = new TcpRpcClient();
-            var config = new TcpRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7794");
-
-            client.Setup(config);
+            client.Setup("127.0.0.1:7794");
             client.Connect("123RPC");
             MethodItem[] methodItems = client.DiscoveryService("RPC");
 
-            XUnitTestServer server = new XUnitTestServer(client);
+            XUnitTestController server = new XUnitTestController(client);
 
             Channel channel = client.CreateChannel();
             int length = 0;

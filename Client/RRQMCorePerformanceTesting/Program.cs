@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using RRQMCore.ByteManager;
+using RRQMCore.Collections.Concurrent;
 using RRQMCore.Data.Security;
 using RRQMCore.Data.XML;
 using RRQMCore.Diagnostics;
@@ -36,6 +37,7 @@ namespace RRQMCorePerformanceTesting
             Console.WriteLine("2.测试内存池延迟释放性能");
             Console.WriteLine("3.测试RRQM序列化和系统序列化");
             Console.WriteLine("4.测试等待池");
+            Console.WriteLine("5.测试TestConcurrentList");
 
             switch (Console.ReadLine())
             {
@@ -64,12 +66,57 @@ namespace RRQMCorePerformanceTesting
                             });
                         }
                         break;
+                    } 
+                case "5":
+                    {
+                        TestConcurrentList();
+                        break;
                     }
                 default:
                     break;
             }
 
             Console.ReadKey();
+        }
+
+        static void TestConcurrentList()
+        {
+            ConcurrentList<int> list = new ConcurrentList<int>();
+            Task.Run(()=> 
+            {
+                while (true)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        list.Add(i);
+                    }
+                }
+            });
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        list.Remove(i);
+                    }
+                }
+            });
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    int count = 0;
+                    foreach (var item in list)
+                    {
+                        count++;
+                    }
+
+                    Console.WriteLine($"count={count}");
+                }
+            });
         }
 
         static RRQMWaitHandlePool<IWaitResult> WaitHandlePool = new RRQMWaitHandlePool<IWaitResult>();

@@ -12,11 +12,7 @@
 //------------------------------------------------------------------------------
 using RRQMSocket;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.UDP
 {
@@ -45,32 +41,30 @@ namespace RRQMService.UDP
 
         private static void TestUdpPerformance()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
 
             udpSession.Received += (remote, byteBlock) =>
             {
                 udpSession.Send(remote, byteBlock);
             };
-            UdpSessionConfig config = new UdpSessionConfig();
-            config.BindIPHost = new IPHost(7789);
-            udpSession.Setup(config);
-            udpSession.Start();
-
+          
+            udpSession.Setup(new RRQMConfig()
+                .SetBindIPHost(new IPHost(7789)))
+                .Start();
             Console.WriteLine("等待接收");
         }
 
         private static void TestUdpSession()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
             udpSession.Received += (remote, byteBlock) =>
             {
                 udpSession.Send(remote, byteBlock);
                 Console.WriteLine($"收到：{Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len)}");
             };
-            UdpSessionConfig config = new UdpSessionConfig();
-            config.BindIPHost = new IPHost(7789);
-            udpSession.Setup(config);
-            udpSession.Start();
+            udpSession.Setup(new RRQMConfig()
+                 .SetBindIPHost(new IPHost(7789)))
+                 .Start();
             Console.WriteLine("等待接收");
         }
     }

@@ -13,11 +13,10 @@
 using RRQMSocket;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RRQMSocket.Helper;
 using RRQMCore.ByteManager;
+using RRQMCore;
 
 namespace RRQMClient.TCP
 {
@@ -26,41 +25,33 @@ namespace RRQMClient.TCP
         public static void Start()
         {
             Console.WriteLine("1.IOCP简单TCP客户端");
-            Console.WriteLine("2.BIO简单TCP客户端");
-            Console.WriteLine("3.Select简单TCP客户端");//客户端Select模型和BIO一样
-            Console.WriteLine("4.测试TCP客户端连接性能");
-            Console.WriteLine("5.测试TCP客户端发送流量性能");
-            Console.WriteLine("6.测试同步发送并等待返回TCP客户端");
-            Console.WriteLine("7.测试断线重连TCP客户端");
+            Console.WriteLine("2.测试TCP客户端连接性能");
+            Console.WriteLine("3.测试TCP客户端发送流量性能");
+            Console.WriteLine("4.测试同步发送并等待返回TCP客户端");
+            Console.WriteLine("5.测试断线重连TCP客户端");
             switch (Console.ReadLine())
             {
                 case "1":
                     {
-                        TCPDemo.StartSimpleTcpClient(ReceiveType.IOCP);
+                        TCPDemo.StartSimpleTcpClient();
                         break;
                     }
                 case "2":
-                case "3":
-                    {
-                        TCPDemo.StartSimpleTcpClient(ReceiveType.Select);
-                        break;
-                    }
-                case "4":
                     {
                         TCPDemo.StartConnectPerformanceTcpClient();
                         break;
                     }
-                case "5":
+                case "3":
                     {
                         TCPDemo.StartFlowPerformanceTcpClient();
                         break;
                     }
-                case "6":
+                case "4":
                     {
                         TCPDemo.CreateSendThenReturnTcpClient();
                         break;
                     }
-                case "7":
+                case "5":
                     {
                         TCPDemo.CreateBreakResumeTcpClient();
                         break;
@@ -71,7 +62,7 @@ namespace RRQMClient.TCP
         }
         private static void CreateBreakResumeTcpClient()
         {
-            SimpleTcpClient tcpClient = new SimpleTcpClient();
+            TcpClient tcpClient = new TcpClient();
 
             tcpClient.UseReconnection(tryCount:5,printLog:true);
 
@@ -88,11 +79,8 @@ namespace RRQMClient.TCP
             {
                 Console.WriteLine($"收到信息：{Encoding.UTF8.GetString(byteBlock.Buffer,0,byteBlock.Len)}");
             };
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            //载入配置
-            tcpClient.Setup(config);
+
+            tcpClient.Setup("127.0.0.1:7789");
 
             tcpClient.Connect();
 
@@ -100,13 +88,9 @@ namespace RRQMClient.TCP
         }
         private static void CreateSendThenReturnTcpClient()
         {
-            SendThenReturnTcpClient tcpClient = new SendThenReturnTcpClient();
+            WaitingTcpClient tcpClient = new WaitingTcpClient();
 
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            //载入配置
-            tcpClient.Setup(config);
+            tcpClient.Setup("127.0.0.1:7789");
 
             tcpClient.Connect();
 
@@ -117,9 +101,9 @@ namespace RRQMClient.TCP
                 Console.WriteLine($"同步收到：{Encoding.UTF8.GetString(data)}");
             }
         }
-        static void StartSimpleTcpClient(ReceiveType receiveType)
+        static void StartSimpleTcpClient()
         {
-            SimpleTcpClient tcpClient = new SimpleTcpClient();
+            TcpClient tcpClient = new TcpClient();
 
             tcpClient.Connected += (client, e) =>
             {
@@ -139,12 +123,7 @@ namespace RRQMClient.TCP
                 Console.WriteLine(e.Message);
             };
 
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.ReceiveType = receiveType;
-            //载入配置
-            tcpClient.Setup(config);
+            tcpClient.Setup("127.0.0.1:7789");
 
             tcpClient.Connect();
 
@@ -169,14 +148,11 @@ namespace RRQMClient.TCP
                 {
                     for (int i = 0; i < 1000; i++)
                     {
-                        SimpleTcpClient tcpClient = new SimpleTcpClient();
+                        TcpClient tcpClient = new TcpClient();
 
-                        //声明配置
-                        var config = new TcpClientConfig();
-                        config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-                        config.ReceiveType = ReceiveType.None;//测试连接性能，启用仅发送功能，此时客户端不投递接收申请。
-                                                              //载入配置
-                        tcpClient.Setup(config);
+                        tcpClient.Setup(new RRQMConfig()
+                           .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                           .SetReceiveType( ReceiveType.None));//测试连接性能，启用仅发送功能，此时客户端不投递接收申请。
 
                         tcpClient.Connect();
                         clients.Add(tcpClient);
@@ -192,15 +168,13 @@ namespace RRQMClient.TCP
         }
         static void StartFlowPerformanceTcpClient()
         {
-            SimpleTcpClient tcpClient = new SimpleTcpClient();
+            TcpClient tcpClient = new TcpClient();
 
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.ReceiveType = ReceiveType.None;
-            tcpClient.Setup(config);
+            tcpClient.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetReceiveType( ReceiveType.None))
+                .Connect();
 
-            tcpClient.Connect();
             Console.WriteLine("连接成功");
 
             byte[] buffer = new byte[1024 * 1024];

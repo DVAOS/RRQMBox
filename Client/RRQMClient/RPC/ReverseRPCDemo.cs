@@ -45,17 +45,18 @@ namespace RRQMClient.RPC
         }
         static void TestSleepPerformance()
         {
-            RPCService service = new RPCService();
+            RpcService service = new RpcService();
             service.ShareProxy(new IPHost(8848));//分享反向代理RPC代理文件，不使用代理时，可以不用。
 
             TcpRpcClient client = new TcpRpcClient();
 
-            service.AddRPCParser("client", client);//添加解析
+            service.AddRpcParser("client", client);//添加解析
             service.RegisterServer<ReverseCallbackServer>();//注册服务
-            var config = new TcpRpcClientConfig();
-            config.ProxyToken = "RPC";//获取代理时的验证令箭
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            client.Setup(config);
+
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetProxyToken("RPC"));
+
             client.Connect("123RPC");
             client.DiscoveryService("RPC");
             Console.WriteLine("成功连接");
@@ -81,17 +82,16 @@ namespace RRQMClient.RPC
 
         static void TestPerformance()
         {
-            RPCService service = new RPCService();
+            RpcService service = new RpcService();
             //service.ShareProxy(new IPHost(8848));//分享反向代理RPC代理文件，需要时调用
 
             TcpRpcClient client = new TcpRpcClient();
 
-            service.AddRPCParser("client", client);//添加解析
+            service.AddRpcParser("client", client);//添加解析
             service.RegisterServer<ReverseCallbackServer>();//注册服务
-            var config = new TcpRpcClientConfig();
-            config.ProxyToken = "RPC";//获取代理时的验证令箭
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");
-            client.Setup(config);
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetProxyToken("RPC"));
             client.Connect("123RPC");
             client.DiscoveryService("RPC");
             Console.WriteLine("成功连接");

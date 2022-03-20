@@ -23,11 +23,11 @@ namespace RRQMSocketXUnitTest.RPC.Udp
         public void ShouldSuccessfulCallService(string ipHost, int port)
         {
             UdpRpc client = new UdpRpc();
-            var config = new UdpRpcClientConfig();
-            config.RemoteIPHost = new IPHost(ipHost);
-            config.BindIPHost = new IPHost(port);
-           
-            client.Setup(config);
+
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost(ipHost))
+                .SetBindIPHost(new IPHost(port)));
+
             client.Start();
             MethodItem[] methodItems = client.DiscoveryService("RPC");
 

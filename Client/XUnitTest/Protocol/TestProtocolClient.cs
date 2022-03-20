@@ -25,7 +25,7 @@ namespace RRQMSocketXUnitTest.Protocol
         public void ShouldCanReceiveAndResetID()
         {
             int waitTime = 100;
-            SimpleProtocolClient client = new SimpleProtocolClient();
+            ProtocolClient client = new ProtocolClient();
 
             bool connected = false;
             int disconnectCount = 0;
@@ -44,7 +44,7 @@ namespace RRQMSocketXUnitTest.Protocol
 
             int receivedCount = 0;
             string newID = null;
-            client.Received += (SimpleProtocolClient protocolClient, short arg1, ByteBlock arg2) =>
+            client.Received += (ProtocolClient protocolClient, short arg1, ByteBlock arg2) =>
             {
                 if (arg1 == 10)
                 {
@@ -56,10 +56,7 @@ namespace RRQMSocketXUnitTest.Protocol
                 }
             };
 
-            var config = new TokenClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7793");
-
-            client.Setup(config);//载入配置
+            client.Setup("127.0.0.1:7793");//载入配置
             client.Connect("XUnitTest");//连接
             Thread.Sleep(waitTime);
             Assert.NotNull(client.ID);
@@ -85,7 +82,7 @@ namespace RRQMSocketXUnitTest.Protocol
             Thread.Sleep(waitTime);
             Assert.Equal(2, receivedCount);
 
-            client.Disconnect();
+            client.Close();
             Thread.Sleep(waitTime);
             Assert.True(!client.Online);
             Assert.True(!connected);

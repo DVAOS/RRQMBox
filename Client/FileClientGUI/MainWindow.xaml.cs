@@ -67,15 +67,11 @@ namespace FileClientGUI
         private void ConButton_Click(object sender, RoutedEventArgs e)
         {
             fileClient = new FileClient();
-            fileClient.BeforeFileTransfer += this.FileClient_BeforeFileTransfer;
+            fileClient.FileTransfering += this.FileClient_BeforeFileTransfer;
             fileClient.Received += FileClient_Received;
-            //声明配置
-            var config = new FileClientConfig();
 
-            //继承TcpClient配置
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-
-            fileClient.Setup(config);
+            fileClient.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789")));
 
             try
             {

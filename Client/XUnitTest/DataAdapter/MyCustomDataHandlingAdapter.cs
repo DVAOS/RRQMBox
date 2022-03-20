@@ -23,7 +23,7 @@ namespace XUnitTest.DataAdapter
     {
         public MyCustomDataHandlingAdapter()
         {
-            this.MaxSize = 1024;
+            this.MaxPackageSize = 1024;
         }
 
         /// <summary>
@@ -32,23 +32,12 @@ namespace XUnitTest.DataAdapter
         public override int HeaderLength => 3;
 
         /// <summary>
-        /// 设置最大长度
-        /// </summary>
-        public override int MaxSize { get; set; }
-
-        /// <summary>
         /// 获取新实例
         /// </summary>
         /// <returns></returns>
         protected override MyFixedHeaderRequestInfo GetInstance()
         {
             return new MyFixedHeaderRequestInfo();
-        }
-
-        protected override bool OnReceivingError(DataResult dataResult)
-        {
-            this.Owner.Logger.Debug(RRQMCore.Log.LogType.Error, this, dataResult.Message, null);
-            return true;
         }
 
         protected override void Reset()
@@ -100,33 +89,25 @@ namespace XUnitTest.DataAdapter
             get { return body; }
         }
 
-        /// <summary>
-        /// 当收到数据，由框架封送有效载荷数据。
-        /// </summary>
-        /// <param name="body"></param>
-        /// <returns>是否成功有效</returns>
-        public DataResult OnParsingBody(byte[] body)
+       
+        public bool OnParsingBody(byte[] body)
         {
             if (body.Length == this.bodyLength)
             {
                 this.body = body;
-                return DataResult.SuccessResult;
+                return true;
             }
-            return new DataResult("数据长度不对", DataResultCode.Error);
+            return false;
         }
 
-        /// <summary>
-        /// 当收到数据，由框架封送固定协议头。您需要在此函数中，解析自己的固定包头，并且对<see cref="BodyLength"/>赋值，然后返回True
-        /// </summary>
-        /// <param name="header"></param>
-        /// <returns></returns>
-        public FilterResult OnParsingHeader(byte[] header)
+      
+        public bool OnParsingHeader(byte[] header)
         {
             //在该示例中，第一个字节表示后续的所有数据长度，但是header设置的是3，所以后续还应当接收length-2个长度。
             this.bodyLength = header[0]-2;
             this.dataType = header[1];
             this.orderType = header[2];
-            return  FilterResult.Success;
+            return  true;
         }
     }
 }

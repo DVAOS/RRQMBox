@@ -52,17 +52,9 @@ namespace RRQMClient.JsonRpc
         }
         private static void Test_PerformanceRpcServer()
         {
-            JsonRpcClient jsonRpcClient = new JsonRpcClient();
+            JsonRpcClient jsonRpcClient = new JsonRpcClient(JRPT.Tcp);
 
-            var config = new JsonRpcClientConfig();
-
-            config.ProtocolType = JsonRpcProtocolType.Tcp;
-            config.RemoteIPHost = new RRQMSocket.IPHost("127.0.0.1:7705");
-
-            //config.ProtocolType = JsonRpcProtocolType.Http;
-            //config.RemoteIPHost = new RRQMSocket.IPHost("127.0.0.1:7706");
-
-            jsonRpcClient.Setup(config);
+            jsonRpcClient.Setup("127.0.0.1:7705");
 
             jsonRpcClient.Connect();
             Console.WriteLine("连接成功");
@@ -92,13 +84,9 @@ namespace RRQMClient.JsonRpc
 
         static void TestHttpJsonRpcParser()
         {
-            JsonRpcClient jsonRpcClient = new JsonRpcClient();
+            JsonRpcClient jsonRpcClient = new JsonRpcClient(JRPT.Http);
 
-            var config = new JsonRpcClientConfig();
-            config.ProtocolType = JsonRpcProtocolType.Http;
-            config.RemoteIPHost = new RRQMSocket.IPHost("127.0.0.1:7706");
-
-            jsonRpcClient.Setup(config);
+            jsonRpcClient.Setup("http://127.0.0.1:7706/jsonrpc");
 
             jsonRpcClient.Connect();
             Console.WriteLine("连接成功");
@@ -112,13 +100,9 @@ namespace RRQMClient.JsonRpc
 
         static void TestTcpJsonRpcParser()
         {
-            JsonRpcClient jsonRpcClient = new JsonRpcClient();
+            JsonRpcClient jsonRpcClient = new JsonRpcClient(JRPT.Tcp);
 
-            var config = new JsonRpcClientConfig();
-            config.ProtocolType = JsonRpcProtocolType.Tcp;
-            config.RemoteIPHost = new RRQMSocket.IPHost("127.0.0.1:7705");
-
-            jsonRpcClient.Setup(config);
+            jsonRpcClient.Setup("127.0.0.1:7705");
 
             jsonRpcClient.Connect();
             Console.WriteLine("连接成功");

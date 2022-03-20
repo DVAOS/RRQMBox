@@ -19,16 +19,12 @@ namespace RRQMSocketXUnitTest.RPC.Json
     public class TestJsonlRpc
     {
         [Theory]
-        [InlineData("127.0.0.1:7803", JsonRpcProtocolType.Tcp)]
-        [InlineData("127.0.0.1:7804", JsonRpcProtocolType.Http)]
-        public void ShouldSuccessfulCallService(string ipHost, JsonRpcProtocolType protocolType)
+        [InlineData("127.0.0.1:7803", JRPT.Tcp)]
+        [InlineData("http://127.0.0.1:7804/jsonRpc", JRPT.Http)]
+        public void ShouldSuccessfulCallService(string ipHost, JRPT jrpt)
         {
-            JsonRpcClient client = new JsonRpcClient();
-            var config = new JsonRpcClientConfig();
-            config.RemoteIPHost = new IPHost(ipHost);
-            config.ProtocolType = protocolType;
-
-            client.Setup(config);
+            JsonRpcClient client = new JsonRpcClient(jrpt);
+            client.Setup(ipHost);
 
             client.Connect();
 

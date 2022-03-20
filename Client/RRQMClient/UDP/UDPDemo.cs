@@ -46,7 +46,7 @@ namespace RRQMClient.UDP
 
         private static void TestUdpPerformance()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
 
             int receivedCount = 0;
             udpSession.Received += (remote, byteBlock) =>
@@ -54,10 +54,7 @@ namespace RRQMClient.UDP
                 receivedCount++;
             };
 
-            UdpSessionConfig config = new UdpSessionConfig();
-            config.BindIPHost = new IPHost(7790);
-            udpSession.Setup(config);
-            udpSession.Start();
+            udpSession.Setup(7790).Start();
 
             //EndPoint endPoint = new IPHost("127.0.0.1:7789").EndPoint;
             EndPoint endPoint = new IPHost("127.0.0.1:7789").EndPoint;
@@ -81,16 +78,14 @@ namespace RRQMClient.UDP
 
         private static void TestUdpSession()
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
             udpSession.Received += (remote, byteBlock) =>
             {
                 Console.WriteLine($"收到：{Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len)}");
             };
-            UdpSessionConfig config = new UdpSessionConfig();
-            config.BindIPHost = new IPHost(7788);
-            udpSession.Setup(config);
-            udpSession.Start();
 
+            //udpSession.Setup(7788).Start();
+          
             while (true)
             {
                 udpSession.Send(new IPHost("127.0.0.1:7789").EndPoint, Encoding.UTF8.GetBytes(Console.ReadLine()));

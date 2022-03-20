@@ -10,9 +10,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-using RRQMBox.Server.Common;
 using RRQMBox.Server.Model;
+using RRQMCore;
 using RRQMCore.ByteManager;
+using RRQMCore.Log;
 using RRQMSkin.MVVM;
 using RRQMSkin.Windows;
 using RRQMSocket;
@@ -30,21 +31,21 @@ namespace RRQMBox.Server.Win
     {
         public CreateTcpWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.Loaded += this.CreatTcpWindow_Loaded;
-            timer = new Timer(1000);
-            timer.Elapsed += this.Timer_Elapsed;
-            timer.Start();
+            this.timer = new Timer(1000);
+            this.timer.Elapsed += this.Timer_Elapsed;
+            this.timer.Start();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            UIInvoke(() =>
+            this.UIInvoke(() =>
             {
-                this.Tb_TickShow.Text = $"已收到{count}条消息，共计{(size / (1024.0 * 1024)).ToString("0.000")}Mb";
-                count = 0;
-                size = 0;
+                this.Tb_TickShow.Text = $"已收到{this.count}条消息，共计{(this.size / (1024.0 * 1024)).ToString("0.000")}Mb";
+                this.count = 0;
+                this.size = 0;
             });
         }
 
@@ -62,19 +63,21 @@ namespace RRQMBox.Server.Win
 
         private void Bt_Start_Click(object sender, RoutedEventArgs e)
         {
-            CreateTcp();
+            this.CreateTcp();
         }
 
         private void CreateTcp()
         {
-            if (tcpService == null)
+            if (this.tcpService == null)
             {
-                tcpService = new TcpService();
+                this.tcpService = new TcpService();
+                this.tcpService.Container.RegisterTransient<ILog, ConsoleLogger>();
+
                 //订阅事件
-                tcpService.Connected += Service_ClientConnected;//订阅连接事件
-                tcpService.Disconnected += Service_ClientDisconnected;//订阅断开连接事件
-                tcpService.Connecting += Service_Connecting;
-                tcpService.Received += this.OnReceived;
+                this.tcpService.Connected += this.Service_ClientConnected;//订阅连接事件
+                this.tcpService.Disconnected += this.Service_ClientDisconnected;//订阅断开连接事件
+                this.tcpService.Connecting += this.Service_Connecting;
+                this.tcpService.Received += this.TcpService_Received;
 
                 //string[] ids = tcpService.SocketClients.GetIDs();//获取目前在线的所有ID
                 //foreach (var id in ids)//遍历ID
@@ -89,38 +92,40 @@ namespace RRQMBox.Server.Win
             this.adapterIndex = this.Cb_AdapterType.SelectedIndex;
 
             //注入配置
-            var config = new TcpServiceConfig();
-            config.MaxCount = 100000;
-            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
-                .SetValue(TcpServiceConfig.ClearTypeProperty, ClearType.Receive | ClearType.Send)
-                .SetValue(ServiceConfig.LoggerProperty, new MsgLog(this.ShowMsg))//设置内部日志记录器
-                .SetValue(ServiceConfig.ThreadCountProperty, int.Parse(this.Tb_ThreadCount.Text))//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 1000*20)//10秒无数据交互将被清理
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024);//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。;
+            var config = new RRQMConfig();
+            config.SetMaxCount(10000)
+                .SetListenIPHosts(new IPHost[] { new IPHost(this.Tb_iPHost.Text) })
+                .SetClearInterval(1000 * 20)
+                .SetThreadCount(int.Parse(this.Tb_ThreadCount.Text))
+                .SetClearType(ClearType.Receive | ClearType.Send)
+                .SetBufferLength(1024);
 
             //载入配置
-            tcpService.Setup(config);
-
-            //或通过实例注入配置，实例注入时须实例化对应配置，否则部分属性不可见
-            //var config1 = new TcpServiceConfig();
-            //config1.ListenIPHosts = new IPHost[] { new IPHost(this.Tb_iPHost.Text) };
-            //config1.Logger = new MsgLog(this.ShowMsg);
-            //config1.ThreadCount = int.Parse(this.Tb_ThreadCount.Text);
-            //config1.ClearInterval = 300;
-            //config1.BufferLength = 1024;
-
-            //载入配置
-            //tcpService.Setup(config1);
+            this.tcpService.Setup(config);
 
             //启动
-            tcpService.Start();
+            this.tcpService.Start();
 
-            ShowMsg("绑定成功");
+            this.ShowMsg("绑定成功");
+        }
+
+        private void TcpService_Received(SocketClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
+        {
+            if (this.isPerformanceTest)
+            {
+                this.count++;
+                this.size += byteBlock.Length;
+            }
+            else
+            {
+                string mes = byteBlock.ToString();
+                this.ShowMsg($"已接收到信息：{mes}");
+            }
         }
 
         private int adapterIndex;
 
-        private void Service_Connecting(SimpleSocketClient arg1, ClientOperationEventArgs arg2)
+        private void Service_Connecting(SocketClient arg1, ClientOperationEventArgs arg2)
         {
             switch (this.adapterIndex)
             {
@@ -151,29 +156,15 @@ namespace RRQMBox.Server.Win
                         break;
                     }
             }
-            if (!isPerformanceTest)
+            if (!this.isPerformanceTest)
             {
-                ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
+                this.ShowMsg($"正在使用适配器=>{arg1.DataHandlingAdapter.GetType().Name}");
             }
         }
 
         private int count;
         private long size;
 
-        private void OnReceived(SimpleSocketClient client, ByteBlock byteBlock, object obj)
-        {
-            //System.Threading.Thread.Sleep(10);
-            if (isPerformanceTest)
-            {
-                count++;
-                size += byteBlock.Length;
-            }
-            else
-            {
-                string mes = Encoding.UTF8.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
-                ShowMsg($"已接收到信息：{mes}");
-            }
-        }
 
         private void Service_ClientDisconnected(object sender, MesEventArgs e)
         {
@@ -184,7 +175,7 @@ namespace RRQMBox.Server.Win
             });
         }
 
-        private void Service_ClientConnected(object sender, MesEventArgs e)
+        private void Service_ClientConnected(object sender, RRQMEventArgs e)
         {
             this.UIInvoke(() =>
             {
@@ -211,29 +202,29 @@ namespace RRQMBox.Server.Win
 
         private void Bt_Stop_Click(object sender, RoutedEventArgs e)
         {
-            if (tcpService != null && tcpService.ServerState == ServerState.Running)
+            if (this.tcpService != null && this.tcpService.ServerState == ServerState.Running)
             {
-                tcpService.Stop();
-                ShowMsg("解除绑定");
+                this.tcpService.Stop();
+                this.ShowMsg("解除绑定");
                 this.onLineClient.Clear();
             }
             else
             {
-                ShowMsg("服务器未绑定");
+                this.ShowMsg("服务器未绑定");
             }
         }
 
         private void Bt_Dispose_Click(object sender, RoutedEventArgs e)
         {
-            if (tcpService != null && tcpService.ServerState == ServerState.Running)
+            if (this.tcpService != null && this.tcpService.ServerState == ServerState.Running)
             {
-                tcpService.Dispose();
-                ShowMsg("释放绑定");
+                this.tcpService.Dispose();
+                this.ShowMsg("释放绑定");
                 this.onLineClient.Clear();
             }
             else
             {
-                ShowMsg("服务器未绑定");
+                this.ShowMsg("服务器未绑定");
             }
         }
 
@@ -252,7 +243,7 @@ namespace RRQMBox.Server.Win
             }
             else
             {
-                ShowMsg("请先选择客户端列表");
+                this.ShowMsg("请先选择客户端列表");
             }
         }
 
@@ -262,11 +253,11 @@ namespace RRQMBox.Server.Win
         {
             if (this.Cb_PerformanceTest.IsChecked == true)
             {
-                isPerformanceTest = true;
+                this.isPerformanceTest = true;
             }
             else
             {
-                isPerformanceTest = false;
+                this.isPerformanceTest = false;
             }
         }
 

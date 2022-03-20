@@ -13,17 +13,15 @@
 using RRQMCore.ByteManager;
 using RRQMService.XUnitTest.Server;
 using RRQMSocket;
+using RRQMSocket.Http;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.JsonRpc;
 using RRQMSocket.RPC.RRQMRPC;
 using RRQMSocket.RPC.WebApi;
 using RRQMSocket.RPC.XmlRpc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RRQMService.XUnitTest
 {
@@ -39,122 +37,126 @@ namespace RRQMService.XUnitTest
         }
         private static void CreateRPCService()
         {
-            RPCService rpcService = new RPCService();
+            RpcService rpcService = new RpcService();
 
             CodeGenerator.AddProxyType<RpcArgsClassLib.ProxyClass1>();
             CodeGenerator.AddProxyType<RpcArgsClassLib.ProxyClass2>(deepSearch: true);
 
-            rpcService.AddRPCParser("tcpRPCParser", CreateRRQMTcpParser(7794));
+            rpcService.AddRpcParser("tcpRPCParser", CreateRRQMTcpParser(7794));
 
-            rpcService.AddRPCParser("udpRPCParser", CreateRRQMUdpParser(7797));
+            rpcService.AddRpcParser("udpRPCParser", CreateRRQMUdpParser(7797));
 
-            rpcService.AddRPCParser("webApiParser_Xml", CreateWebApiParser(7800, new XmlDataConverter()));
-            rpcService.AddRPCParser("webApiParser_Json", CreateWebApiParser(7801, new JsonDataConverter()));
+            rpcService.AddRpcParser("webApiParser_Xml", CreateWebApiParser(7800, new XmlDataConverter()));
+            rpcService.AddRpcParser("webApiParser_Json", CreateWebApiParser(7801, new JsonDataConverter()));
 
-            rpcService.AddRPCParser("xmlRpcParser", CreateXmlRpcParser(7802));
+            rpcService.AddRpcParser("xmlRpcParser", CreateXmlRpcParser(7802));
 
-            rpcService.AddRPCParser("JsonRpcParser_Tcp", CreateJsonRpcParser(7803, JsonRpcProtocolType.Tcp));
-            rpcService.AddRPCParser("JsonRpcParser_Http", CreateJsonRpcParser(7804, JsonRpcProtocolType.Http));
-            rpcService.RegisterServer<XUnitTestServer>();//注册服务
+            rpcService.AddRpcParser("JsonRpcParser_Tcp", CreateTcpJsonRpcParser(7803));
+            Console.WriteLine($"JsonRpcParser_Tcp解析器添加完成，端口号：{7803}");
 
+            rpcService.AddRpcParser("JsonRpcParser_Http", CreateHTTPJsonRpcParser(7804));
+            Console.WriteLine($"JsonRpcParser_Http解析器添加完成，端口号：{7804}");
 
-            foreach (var item in ((WebApiParser)rpcService.RPCParsers["webApiParser_Xml"]).RouteMap.Urls)
-            {
-                Console.WriteLine($"使用：http://127.0.0.1:7800" + item);
-            }
-
-            foreach (var item in ((WebApiParser)rpcService.RPCParsers["webApiParser_Json"]).RouteMap.Urls)
-            {
-                Console.WriteLine($"使用：http://127.0.0.1:7801" + item);
-            }
-
+            rpcService.RegisterServer<XUnitTestController>();//注册服务
             rpcService.ShareProxy(new IPHost(8848));
             Console.WriteLine("RPC代理已开启分享，请通过8848端口获取。");
+            Console.WriteLine();
+            Console.WriteLine("以下连接用于测试webApi");
+            Console.WriteLine($"使用：http://127.0.0.1:7801/XUnitTest/Sum?a=10&b=20");
+            Console.WriteLine($"使用：http://127.0.0.1:7801/XUnitTest/Test15_ReturnArgs");
+            Console.WriteLine($"使用：http://127.0.0.1:7801/XUnitTest/HttpGetGetListClass01?length=10");
 
-            //RpcProxyInfo proxyInfo = rpcService.GetProxyInfo(RpcType.RRQMRPC | RpcType.JsonRpc | RpcType.XmlRpc, "RPC");
+
+            //RpcProxyInfo proxyInfo = rpcService.GetProxyInfo(RpcType.WebApi, "RPC");
 
             //string code = CodeGenerator.ConvertToCode("RRQM", proxyInfo.Codes);
-            //byte[] data = SerializeConvert.RRQMBinarySerialize(proxyInfo);
-            //var obj = SerializeConvert.RRQMBinaryDeserialize<RpcProxyInfo>(data, 0);
+            //Console.WriteLine(code);
         }
 
-        private static IRPCParser CreateJsonRpcParser(int port, JsonRpcProtocolType protocolType)
+        static IRpcParser CreateTcpJsonRpcParser(int port)
         {
-            JsonRpcParser jsonRpcParser = new JsonRpcParser();
+            TcpService service = new TcpService();
+            service.Connecting += (client, e) =>
+            {
+                e.DataHandlingAdapter = new TerminatorPackageAdapter(client.MaxPackageSize, "\r\n");
+            };
 
-            var config = new JsonRpcParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.ProtocolType = protocolType;
-            config.ProxyToken = "RPC";
-            jsonRpcParser.Setup(config);
-            jsonRpcParser.Start();
-            Console.WriteLine($"jsonRpcParser解析器添加完成，端口号：{port}，协议：{protocolType}");
-            return jsonRpcParser;
+            service.Setup(new RRQMConfig().UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(port) }))
+                .Start();
+
+            return service.AddPlugin<JsonRpcParserPlugin>()
+                 .SetProxyToken("RPC");
         }
 
-        private static IRPCParser CreateXmlRpcParser(int port)
+        static IRpcParser CreateHTTPJsonRpcParser(int port)
         {
-            XmlRpcParser xmlRpcParser = new XmlRpcParser();
-            var config = new XmlRpcParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.ProxyToken = "RPC";
-            xmlRpcParser.Setup(config);
-            xmlRpcParser.Start();
+            HttpService service = new HttpService();
 
-            Console.WriteLine($"xmlRpcParser解析器添加完成，端口号：{port}");
-            return xmlRpcParser;
+            service.Setup(new RRQMConfig().UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(port) }))
+                .Start();
+
+            return service.AddPlugin<JsonRpcParserPlugin>()
+                 .SetProxyToken("RPC")
+                 .SetJsonRpcUrl("/jsonRpc");
         }
 
-        private static IRPCParser CreateWebApiParser(int port, ApiDataConverter dataConverter)
+        private static IRpcParser CreateXmlRpcParser(int port)
         {
-            WebApiParser webApiParser = new WebApiParser();
-            var config = new WebApiParserConfig();
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };
-            config.ApiDataConverter = dataConverter;
-            webApiParser.Setup(config);
-            webApiParser.Start();
-            Console.WriteLine($"webApiParser解析器添加完成，端口号：{port}，序列化器：{dataConverter.GetType().Name}");
-            return webApiParser;
+            HttpService service = new HttpService();
+
+            service.Setup(new RRQMConfig().UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(port) }))
+                .Start();
+
+            return service.AddPlugin<XmlRpcParserPlugin>()
+                 .SetProxyToken("RPC");
         }
 
-        private static IRPCParser CreateRRQMUdpParser(int port)
+        private static IRpcParser CreateWebApiParser(int port, ApiDataConverter dataConverter)
         {
-            UdpRpc udpRPCParser = new UdpRpc();
-            var config = new UdpRpcParserConfig();
-            config.BindIPHost = new IPHost(port);
-            config.BufferLength = 1024;
-            config.ThreadCount = 1;
-            config.ProxyToken = "RPC";
+            HttpService service = new HttpService();
 
-            udpRPCParser.Setup(config);
+            service.Setup(new RRQMConfig()
+                .UsePlugin()
+                .SetListenIPHosts(new IPHost[] { new IPHost(port) }))
+                .Start();
 
-            udpRPCParser.Start();
-
-            Console.WriteLine($"UDP解析器添加完成，端口号：{port}，ProxyToken={udpRPCParser.ProxyToken}");
-            return udpRPCParser;
+            return service.AddPlugin<WebApiParserPlugin>()
+                 .SetProxyToken("RPC")
+                 .SetApiDataConverter(dataConverter);
         }
 
-        private static IRPCParser CreateRRQMTcpParser(int port)
+        private static IRpcParser CreateRRQMUdpParser(int port)
+        {
+            UdpRpc udpRpcParser = new UdpRpc();
+
+            RRQMConfig config = new RRQMConfig();
+            config.SetBindIPHost(new IPHost(port))
+                .SetBufferLength(1024)
+                .SetThreadCount(1)
+                .SetProxyToken("RPC");
+
+            udpRpcParser.Setup(config);
+
+            udpRpcParser.Start();
+
+            Console.WriteLine($"UDP解析器添加完成，端口号：{port}，ProxyToken={udpRpcParser.ProxyToken}");
+            return udpRpcParser;
+        }
+
+        private static IRpcParser CreateRRQMTcpParser(int port)
         {
             TcpRpcParser tcpRPCParser = new TcpRpcParser();
 
-            //创建配置
-            var config = new TcpRpcParserConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost(port) };//监听一个IP地址
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = -1;//规定不清理无数据客户端
-            config.VerifyTimeout = 3 * 1000;//令箭验证超时时间，3秒
-            config.VerifyToken = "123RPC";//令箭值
-            config.ProxyToken = "RPC";//默认服务代理令箭
+            RRQMConfig config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(port) })
+                .SetBufferLength(1024)
+                .SetThreadCount(1)
+                .SetProxyToken("RPC")
+                .SetVerifyToken("123RPC");
+
             //载入配置
             tcpRPCParser.Setup(config);
 
@@ -168,27 +170,24 @@ namespace RRQMService.XUnitTest
         private static void CreateProtocolService(int port)
         {
             ProtocolService service = new ProtocolService();
-            service.Received += (SimpleProtocolSocketClient arg1, short arg2, ByteBlock arg3) =>
+            service.Received += (client, protocol, byteBlock) =>
             {
-                Console.WriteLine($"ProtocolService收到数据，协议为：{arg2}，数据长度为：{arg3.Len - 2}");
-                if (arg2 == 10)
+                Console.WriteLine($"ProtocolService收到数据，协议为：{protocol}，数据长度为：{byteBlock.Len - 2}");
+                if (protocol == 10)
                 {
-                    arg1.Send(10, Encoding.UTF8.GetBytes(arg1.ID));
+                    client.Send(10, Encoding.UTF8.GetBytes(client.ID));
                 }
                 else
                 {
-                    arg1.Send(arg3.Buffer, 2, arg3.Len - 2);
+                    client.Send(byteBlock.Buffer, 2, byteBlock.Len - 2);
                 }
             };
 
-            //属性设置
-            var config = new ServiceConfig();
-            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
-                .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300 * 1000)//300秒无数据交互将被清理
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TokenServiceConfig.VerifyTokenProperty, "XUnitTest")//设置验证令箭
-                .SetValue(TokenServiceConfig.VerifyTimeoutProperty, 3000);//验证超时时间为3秒
+            RRQMConfig config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(port) })
+                .SetBufferLength(1024)
+                .SetThreadCount(1)
+                .SetVerifyToken("XUnitTest");
 
             //方法
             service.Setup(config);
@@ -199,9 +198,9 @@ namespace RRQMService.XUnitTest
         private static void CreateTokenService(int port)
         {
             TokenService service = new TokenService();
-            service.Received += (arg1, arg2, arg3) =>
+            service.Received += (client, byteBlock, requestInfo) =>
             {
-                arg1.Send(arg2);
+                client.Send(byteBlock);
             };
 
             service.Connecting += (arg1, arg2) =>
@@ -209,14 +208,11 @@ namespace RRQMService.XUnitTest
                 arg1.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
             };
 
-            //属性设置
-            var config = new ServiceConfig();
-            config.SetValue(TcpServiceConfig.ListenIPHostsProperty, new IPHost[] { new IPHost(port) })
-                .SetValue(ServiceConfig.ThreadCountProperty, 1)//设置多线程数量
-                .SetValue(TcpServiceConfig.ClearIntervalProperty, 300 * 1000)//300秒无数据交互将被清理
-                .SetValue(ServiceConfig.BufferLengthProperty, 1024)//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
-                .SetValue(TokenServiceConfig.VerifyTokenProperty, "XUnitTest")//设置验证令箭
-                .SetValue(TokenServiceConfig.VerifyTimeoutProperty, 3000);//验证超时时间为3秒
+            RRQMConfig config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(port) })
+                .SetBufferLength(1024)
+                .SetThreadCount(1)
+                .SetVerifyToken("XUnitTest");
 
             //方法
             service.Setup(config);
@@ -226,13 +222,14 @@ namespace RRQMService.XUnitTest
 
         private static void CreateUdpService(int bindPort, int targetPort)
         {
-            SimpleUdpSession udpSession = new SimpleUdpSession();
+            UdpSession udpSession = new UdpSession();
             udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
             {
                 udpSession.Send(endpoint, e);//将接收到的数据发送至默认终端
             };
-            var config = new UdpSessionConfig();//UDP配置
-            config.BindIPHost = new IPHost($"127.0.0.1:{bindPort}");
+
+            RRQMConfig config = new RRQMConfig();
+            config.SetBindIPHost(new IPHost($"127.0.0.1:{bindPort}"));
 
             udpSession.Setup(config);//加载配置
             udpSession.Start();//启动
@@ -250,30 +247,27 @@ namespace RRQMService.XUnitTest
             };
 
             //订阅连接事件
-            tcpService.Connected += (SimpleSocketClient client, MesEventArgs e) =>
+            tcpService.Connected += (client, e) =>
             {
                 Console.WriteLine("客户端已连接到TcpService");
             };
 
             //订阅收到消息事件
-            tcpService.Received += (arg1,  arg2, arg3) =>
+            tcpService.Received += (client, byteBlock, requestInfo) =>
             {
-                arg1.Send(arg2);
+                client.Send(byteBlock);
             };
 
             //订阅断开连接事件
-            tcpService.Disconnected += (SimpleSocketClient client, MesEventArgs e) =>
+            tcpService.Disconnected += (client, e) =>
             {
                 Console.WriteLine("客户端已断开");
             };
 
-            //注入配置
-            var config = new TcpServiceConfig();
-            config.ListenIPHosts = new IPHost[] { new IPHost($"127.0.0.1:{port}") };
-            config.ThreadCount = 1;//设置多线程数量
-            config.ClearInterval = 300 * 1000;//300秒无数据交互将被清理
-            config.ClearType = ClearType.Receive | ClearType.Send;//清除客户端时，Receive或Send均在统计之内。
-            config.BufferLength = 1024;//设置缓存池大小，该数值在框架中经常用于申请ByteBlock，所以该值会影响内存池效率。
+            RRQMConfig config = new RRQMConfig();
+            config.SetListenIPHosts(new IPHost[] { new IPHost(port) })
+                .SetBufferLength(1024)
+                .SetThreadCount(1);
 
             //载入配置
             tcpService.Setup(config);

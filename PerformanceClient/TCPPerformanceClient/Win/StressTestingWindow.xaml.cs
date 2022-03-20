@@ -68,7 +68,7 @@ namespace RRQMClientGUI.Win
                         testObject.Num = i;
 
                         var config = new TcpClientConfig();
-                        config.OnlySend = true;
+                        config.ReceiveType =  ReceiveType.None;
                         config.RemoteIPHost= new IPHost("127.0.0.1:7789");
                         config.SeparateThreadSend = false;
 

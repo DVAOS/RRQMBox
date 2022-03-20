@@ -45,7 +45,7 @@ namespace EERPCClientDemo
             ShowMsg("连接成功");
         }
 
-        private void TcpRpcClient_Disconnected(RRQMSocket.ITcpClient client, RRQMSocket.MesEventArgs e)
+        private void TcpRpcClient_Disconnected(RRQMSocket.ITcpClientBase client, RRQMSocket.ClientDisconnectedEventArgs e)
         {
             ShowMsg("已断开连接");
         }
@@ -142,7 +142,7 @@ namespace EERPCClientDemo
         {
             try
             {
-                this.tcpRpcClient.UnsubscribeEvent<string>(this.textBox3.Text, SubscribeEvent);
+                this.tcpRpcClient.UnsubscribeEvent(this.textBox3.Text);
                 ShowMsg("取消订阅成功");
             }
             catch (Exception ex)

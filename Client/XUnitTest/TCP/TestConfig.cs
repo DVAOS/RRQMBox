@@ -24,11 +24,9 @@ namespace RRQMSocketXUnitTest.TCP
             int bufferLength = 1024;
             ConsoleLogger logger = new ConsoleLogger();
             RRQMConfig config = new RRQMConfig();
-            config.SetValue(RRQMConfig.BufferLengthProperty, bufferLength)
-                .SetValue(RRQMConfig.LoggerProperty, logger);
+            config.SetValue(RRQMConfig.BufferLengthProperty, bufferLength);
 
             Assert.Equal(bufferLength, config.BufferLength);
-            Assert.Equal(logger, config.Logger);
         }
     }
 }

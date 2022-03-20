@@ -22,10 +22,8 @@ namespace RRQMSocketXUnitTest.RPC.Xml
         public void ShouldSuccessfulCallService()
         {
             XmlRpcClient client = new XmlRpcClient();
-            var config = new XmlRpcClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7802");
 
-            client.Setup(config);
+            client.Setup("http://127.0.0.1:7802/xmlrpc");
             client.Connect();
 
            

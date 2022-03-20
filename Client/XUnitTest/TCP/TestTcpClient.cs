@@ -24,7 +24,7 @@ namespace RRQMSocketXUnitTest.TCP
         public void ShouldCanConnectAndReceive()
         {
             int waitTime = 100;
-            SimpleTcpClient client = new SimpleTcpClient();
+            TcpClient client = new TcpClient();
 
             bool connected = false;
             int disconnectCount = 0;
@@ -44,11 +44,7 @@ namespace RRQMSocketXUnitTest.TCP
                 receivedCount++;
             };
 
-            var config = new TcpClientConfig();
-            config.SetValue(TcpClientConfig.RemoteIPHostProperty, new IPHost("127.0.0.1:7789"))//远程IPHost
-                .SetValue(TcpClientConfig.SeparateThreadSendProperty, false);//独立线程发送;
-
-            client.Setup(config);//载入配置
+            client.Setup("127.0.0.1:7789");//载入配置
             client.Connect();//连接
             Thread.Sleep(waitTime);
 
@@ -65,7 +61,7 @@ namespace RRQMSocketXUnitTest.TCP
             Thread.Sleep(waitTime);
             Assert.Equal(2, receivedCount);
 
-            client.Disconnect();
+            client.Close();
             Thread.Sleep(waitTime);
             Assert.True(!client.Online);
             Assert.True(!connected);

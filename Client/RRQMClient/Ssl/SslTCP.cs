@@ -25,14 +25,12 @@ namespace RRQMClient.Ssl
     {
         public static void Start()
         {
-            Console.WriteLine("1.BIO简单SslTCP客户端");
-            Console.WriteLine("2.Select简单SslTCP客户端");//客户端Select模型和BIO一样
+            Console.WriteLine("1.简单SslTCP客户端");
             switch (Console.ReadLine())
             {
                 case "1":
-                case "2":
                     {
-                        StartSimpleTcpClient(ReceiveType.BIO);
+                        StartSimpleTcpClient();
                         break;
                     }
               
@@ -40,9 +38,9 @@ namespace RRQMClient.Ssl
                     break;
             }
         }
-        static void StartSimpleTcpClient(ReceiveType receiveType)
+        static void StartSimpleTcpClient()
         {
-            SimpleTcpClient tcpClient = new SimpleTcpClient();
+            TcpClient tcpClient = new TcpClient();
 
             tcpClient.Connected += (client, e) =>
             {
@@ -62,20 +60,15 @@ namespace RRQMClient.Ssl
                 Console.WriteLine(e.Message);
             };
 
-            //声明配置
-            var config = new TcpClientConfig();
-            config.RemoteIPHost = new IPHost("127.0.0.1:7789");//远程IPHost
-            config.ReceiveType = receiveType;
-            config.SslOption = new ClientSslOption()
-            {
-                ClientCertificates = new X509CertificateCollection() { new X509Certificate2("RRQMSocket.pfx", "RRQMSocket") },
-                SslProtocols = SslProtocols.Tls12,
-                TargetHost = "127.0.0.1",
-                CertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => { return true; }
-            };
-
-            //载入配置
-            tcpClient.Setup(config);
+            tcpClient.Setup(new RRQMConfig()
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetClientSslOption(new ClientSslOption()
+                {
+                    ClientCertificates = new X509CertificateCollection() { new X509Certificate2("RRQMSocket.pfx", "RRQMSocket") },
+                    SslProtocols = SslProtocols.Tls12,
+                    TargetHost = "127.0.0.1",
+                    CertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => { return true; }
+                }));
 
             tcpClient.Connect();
 

@@ -23,7 +23,7 @@ namespace FileServiceGUI.Win
     {
         public PushWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         public bool SelectRequest(out FileRequest fileRequest)
@@ -38,7 +38,7 @@ namespace FileServiceGUI.Win
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            fileRequest = new FileRequest()
+            this.fileRequest = new FileRequest()
             {
                 FileCheckerType = FileCheckerType.MD5,
                 Path = this.tb1.Text,
