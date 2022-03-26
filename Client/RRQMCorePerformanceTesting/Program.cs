@@ -119,7 +119,7 @@ namespace RRQMCorePerformanceTesting
             });
         }
 
-        static RRQMWaitHandlePool<IWaitResult> WaitHandlePool = new RRQMWaitHandlePool<IWaitResult>();
+        static WaitHandlePool<IWaitResult> WaitHandlePool = new WaitHandlePool<IWaitResult>();
         static void TestWaitPool()
         {
             TimeSpan timeSpan = RRQMCore.Diagnostics.TimeMeasurer.Run(() =>
@@ -423,7 +423,7 @@ namespace RRQMCorePerformanceTesting
 
         private static void CreatWaitHandle()
         {
-            RRQMWaitHandlePool<MyWaitResult> waitHandle = new RRQMWaitHandlePool<MyWaitResult>();
+            WaitHandlePool<MyWaitResult> waitHandle = new WaitHandlePool<MyWaitResult>();
             WaitData<MyWaitResult> waitData = waitHandle.GetWaitData(new MyWaitResult());
             waitData.Wait(10 * 1000);
 
