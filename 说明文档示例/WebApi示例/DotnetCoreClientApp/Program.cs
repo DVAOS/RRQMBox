@@ -5,6 +5,7 @@ using System;
 using System.Security.Authentication;
 using RRQMCore.Extensions;
 using RRQMSocket.Http;
+using System.Collections.Generic;
 
 namespace DotnetCoreClientApp
 {
@@ -15,7 +16,7 @@ namespace DotnetCoreClientApp
             var client = CreateWebApiClient();
             WeatherForecastController weatherForecastController = new WeatherForecastController(client);
 
-            var result = weatherForecastController.Get();
+            IEnumerable<WeatherForecast> result = weatherForecastController.Get();
             Console.WriteLine(result.ToJsonString());
             Console.ReadKey();
         }
