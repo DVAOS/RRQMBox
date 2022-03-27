@@ -18,11 +18,8 @@ namespace WebApplication
         public static void Main(string[] args)
         {
             RpcService rpcService = new RpcService();
-            rpcService.Container.RegisterTransient<ILogger<WeatherForecastController>, Logger<WeatherForecastController>>();
-            rpcService.Container.RegisterTransient<ILoggerFactory, LoggerFactory>();
-
             rpcService.AddRpcParser("webApiParser", new WebApiParserPlugin() { ProxyToken="RPC" });
-            rpcService.RegisterServer<WeatherForecastController>();//注册服务
+            rpcService.RegisterServer(new WeatherForecastController(null));//注册服务，此处实例不会用于调用。可以认为没意义
 
             //生成的WebApi的本地代理文件。
             //RpcProxyInfo proxyInfo = rpcService.GetProxyInfo(RpcType.WebApi, "RPC");
