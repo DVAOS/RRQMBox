@@ -1,5 +1,6 @@
 ﻿using RRQMSocket;
 using RRQMSocket.Http;
+using RRQMSocket.Http.Plugins;
 using RRQMSocket.RPC;
 using RRQMSocket.RPC.XmlRpc;
 using System;
@@ -38,9 +39,20 @@ namespace XmlRpcServerApp
                 .SetListenIPHosts(new IPHost[] { new IPHost(7706) }))
                 .Start();
 
+            service.AddPlugin<MyPlugin>();
+
             return service.AddPlugin<XmlRpcParserPlugin>()
                  .SetProxyToken("RPC")
                  .SetXmlRpcUrl("/xmlRpc");
+        }
+    }
+
+    public class MyPlugin : HttpPluginBase
+    {
+        protected override void OnPost(ITcpClientBase client, HttpContextEventArgs e)
+        {
+            string s = e.Request.GetBody();
+            base.OnPost(client, e);
         }
     }
 
