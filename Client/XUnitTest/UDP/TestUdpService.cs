@@ -64,10 +64,10 @@ namespace RRQMSocketXUnitTest.UDP
             UdpSession udpSession = new UdpSession();
 
             int count = 0;
-            udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
+            udpSession.Received += (endpoint, byteBlock,requestInfo) =>
             {
                 count++;
-                Assert.Equal(count, BitConverter.ToInt32(e.Buffer, 0));
+                Assert.Equal(count, BitConverter.ToInt32(byteBlock.Buffer, 0));
             };
 
             udpSession.Setup(new RRQMConfig()//加载配置

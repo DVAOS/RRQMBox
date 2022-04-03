@@ -49,7 +49,7 @@ namespace RRQMClient.UDP
             UdpSession udpSession = new UdpSession();
 
             int receivedCount = 0;
-            udpSession.Received += (remote, byteBlock) =>
+            udpSession.Received += (remote, byteBlock,IRequestInfo) =>
             {
                 receivedCount++;
             };

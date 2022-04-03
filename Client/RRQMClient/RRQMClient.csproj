@@ -4,11 +4,11 @@
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="RRQMSocket" Version="8.0.0" />
-    <PackageReference Include="RRQMSocket.FileTransfer" Version="8.0.0-beta" />
-    <PackageReference Include="RRQMSocket.RPC" Version="8.0.0" />
+    <PackageReference Include="RRQMSocket" Version="8.0.1" />
+    <PackageReference Include="RRQMSocket.FileTransfer" Version="8.0.1" />
+    <PackageReference Include="RRQMSocket.RPC" Version="8.0.1" />
     <PackageReference Include="RRQMSocket.RPC.JsonRpc" Version="8.0.0" />
-    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="8.0.0" />
+    <PackageReference Include="RRQMSocket.RPC.WebApi" Version="8.0.1" />
     <PackageReference Include="RRQMSocket.RPC.XmlRpc" Version="8.0.0" />
     <PackageReference Include="RRQMSocket.WebSocket" Version="8.0.0" />
   </ItemGroup>
