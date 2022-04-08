@@ -79,7 +79,7 @@ namespace RRQMClient.UDP
         private static void TestUdpSession()
         {
             UdpSession udpSession = new UdpSession();
-            udpSession.Received += (remote, byteBlock) =>
+            udpSession.Received += (remote, byteBlock,requestInfo) =>
             {
                 Console.WriteLine($"收到：{Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len)}");
             };

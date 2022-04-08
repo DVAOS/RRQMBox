@@ -223,9 +223,9 @@ namespace RRQMService.XUnitTest
         private static void CreateUdpService(int bindPort, int targetPort)
         {
             UdpSession udpSession = new UdpSession();
-            udpSession.Received += (EndPoint endpoint, ByteBlock e) =>
+            udpSession.Received += (endpoint, byteBlock, requestInfo) =>
             {
-                udpSession.Send(endpoint, e);//将接收到的数据发送至默认终端
+                udpSession.Send(endpoint, byteBlock);//将接收到的数据发送至默认终端
             };
 
             RRQMConfig config = new RRQMConfig();

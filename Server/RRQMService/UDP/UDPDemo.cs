@@ -43,7 +43,7 @@ namespace RRQMService.UDP
         {
             UdpSession udpSession = new UdpSession();
 
-            udpSession.Received += (remote, byteBlock) =>
+            udpSession.Received += (remote, byteBlock,requestInfo) =>
             {
                 udpSession.Send(remote, byteBlock);
             };
@@ -57,7 +57,7 @@ namespace RRQMService.UDP
         private static void TestUdpSession()
         {
             UdpSession udpSession = new UdpSession();
-            udpSession.Received += (remote, byteBlock) =>
+            udpSession.Received += (remote, byteBlock, requestInfo) =>
             {
                 udpSession.Send(remote, byteBlock);
                 Console.WriteLine($"收到：{Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len)}");

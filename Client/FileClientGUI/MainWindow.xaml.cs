@@ -68,7 +68,7 @@ namespace FileClientGUI
         {
             fileClient = new FileClient();
             fileClient.FileTransfering += this.FileClient_BeforeFileTransfer;
-            fileClient.Received += FileClient_Received;
+            fileClient.Received += this.FileClient_Received;
 
             fileClient.Setup(new RRQMConfig()
                 .SetRemoteIPHost(new IPHost("127.0.0.1:7789")));
@@ -85,7 +85,7 @@ namespace FileClientGUI
             }
         }
 
-        private void FileClient_Received(RRQMSocket.RPC.RRQMRPC.TcpRpcClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
+        private void FileClient_Received(ProtocolClient socketClient, short protocol, RRQMCore.ByteManager.ByteBlock byteBlock)
         {
             ShowMsg($"收到数据：协议={protocol},数据长度:{byteBlock.Len - 2}");
         }
