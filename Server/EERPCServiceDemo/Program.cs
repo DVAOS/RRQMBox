@@ -23,6 +23,13 @@ namespace EERPCServiceDemo
         [STAThread]
         static void Main()
         {
+            try
+            {
+                RRQMCore.Enterprise.ForTest();
+            }
+            catch (Exception)
+            {
+            }
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
