@@ -243,7 +243,7 @@ namespace RRQMService.TCP
 
             //声明配置
             var config = new RRQMConfig();
-            config.SetListenIPHosts(new IPHost[] { new IPHost("127.0.0.1:7789"), new IPHost(7790) })//同时监听两个地址
+            config.SetListenIPHosts(new IPHost[] { new IPHost(7789) })//同时监听两个地址
                 .SetBufferLength(1024 * 1024)
                 .SetThreadCount(10);
 

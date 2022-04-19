@@ -170,8 +170,9 @@ namespace RRQMClient.TCP
         {
             TcpClient tcpClient = new TcpClient();
 
+            Console.WriteLine("输入Ip&port");
             tcpClient.Setup(new RRQMConfig()
-                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetRemoteIPHost(new IPHost(Console.ReadLine()))
                 .SetReceiveType( ReceiveType.None))
                 .Connect();
 
