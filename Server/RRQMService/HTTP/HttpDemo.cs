@@ -45,6 +45,11 @@ namespace RRQMService.HTTP
             var config = new RRQMConfig();
             config.UsePlugin()
                 .SetReceiveType(ReceiveType.Auto)
+                //.SetServiceSslOption(new ServiceSslOption()
+                //{
+                //    Certificate = new X509Certificate2("RRQMSocket.pfx", "RRQMSocket"),
+                //    SslProtocols = SslProtocols.Tls12
+                //})
                 .SetListenIPHosts(new IPHost[] { new IPHost(7789) });
 
             service.Setup(config).Start();
@@ -125,6 +130,11 @@ namespace RRQMService.HTTP
         protected override void OnGet(ITcpClientBase client, HttpContextEventArgs e)
         {
             Console.WriteLine(e.Request.ToString());
+            HttpResponse httpResponse = new HttpResponse();
+            httpResponse.FileNotFind();
+            e.Response = httpResponse;
+
+            e.Handled = true;
             base.OnGet(client, e);
         }
 
