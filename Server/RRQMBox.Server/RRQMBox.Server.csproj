@@ -44,8 +44,8 @@
     <Reference Include="RRQMSkin, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7683a946e727800c, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSkin.3.6.0\lib\net461\RRQMSkin.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket, Version=8.0.5.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.8.0.5\lib\net45\RRQMSocket.dll</HintPath>
+    <Reference Include="RRQMSocket, Version=8.0.6.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.8.0.6\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
     <Reference Include="RRQMSocket.FileTransfer, Version=8.0.2.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.FileTransfer.8.0.2\lib\net45\RRQMSocket.FileTransfer.dll</HintPath>
@@ -65,8 +65,8 @@
     <Reference Include="RRQMSocket.RPC.XmlRpc, Version=8.0.0.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
       <HintPath>..\packages\RRQMSocket.RPC.XmlRpc.8.0.0\lib\net45\RRQMSocket.RPC.XmlRpc.dll</HintPath>
     </Reference>
-    <Reference Include="RRQMSocket.WebSocket, Version=8.0.3.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\RRQMSocket.WebSocket.8.0.3\lib\net45\RRQMSocket.WebSocket.dll</HintPath>
+    <Reference Include="RRQMSocket.WebSocket, Version=8.0.4.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.WebSocket.8.0.4\lib\net45\RRQMSocket.WebSocket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
