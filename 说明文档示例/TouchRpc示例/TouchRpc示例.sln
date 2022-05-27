@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TouchRpcServerApp", "TouchR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchRpcClientApp", "TcpTouchRpcClientApp\TouchRpcClientApp.csproj", "{3358BC46-50BD-4ECA-BDA1-24BD22FBF1DD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "协议Demo", "协议Demo", "{5D668639-A94B-44CC-8F8C-87DEFC16FB98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtocolServerConsoleApp", "ProtocolServerConsoleApp\ProtocolServerConsoleApp.csproj", "{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{3358BC46-50BD-4ECA-BDA1-24BD22FBF1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3358BC46-50BD-4ECA-BDA1-24BD22FBF1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3358BC46-50BD-4ECA-BDA1-24BD22FBF1DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +70,7 @@ Global
 		{FBF5DC23-4F93-4A35-A57B-67D715896C11} = {D3CE8917-69F7-4B76-8C6E-0B0C2E9675FF}
 		{082E1E3A-5C89-419F-8770-DBD601AC64D4} = {F3C2AC65-DF27-4134-9FB0-E4542111A663}
 		{3358BC46-50BD-4ECA-BDA1-24BD22FBF1DD} = {F3C2AC65-DF27-4134-9FB0-E4542111A663}
+		{9A78E0E4-D443-4FA0-A8B0-DFFABB15359A} = {5D668639-A94B-44CC-8F8C-87DEFC16FB98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE03932C-4309-45CD-B15E-F6AD1B148AD3}

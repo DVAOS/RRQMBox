@@ -13,6 +13,15 @@ namespace TouchRpcServerApp
     {
         static void Main(string[] args)
         {
+            try
+            {
+                Enterprise.ForTest();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"HttpTouchRpcService为企业版功能，所以需要开启企业版功能。");
+            }
+
             RpcStore rpcStore = new RpcStore();
             rpcStore.ProxyUrl = "/proxy";//代理url
             rpcStore.OnRequestProxy = (request) =>//此处做请求验证，保证代理文件安全。
@@ -38,7 +47,7 @@ namespace TouchRpcServerApp
             //或者直接本地导出代理文件。
             ServerCellCode[] codes = rpcStore.GetProxyInfo(RpcStore.ProxyAttributeMap.Values.ToArray());
             string codeString = CodeGenerator.ConvertToCode("RRQMProxy", codes);
-            Console.WriteLine(codeString);
+            //Console.WriteLine(codeString);
 
             Console.WriteLine("服务器已启动");
             Console.ReadKey();
