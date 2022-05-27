@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="RRQMSocketFramework">
+      <HintPath>..\..\..\..\RRQMSocketFramework\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

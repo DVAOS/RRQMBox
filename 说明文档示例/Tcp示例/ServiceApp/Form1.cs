@@ -71,5 +71,31 @@ namespace ServiceApp
                 this.m_service.Logger.Warning("请先选择一个客户端。");
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //先找到与远程TcpClient对应的SocketClient
+            if (this.listBox1.SelectedItem is string id && this.m_service.TryGetSocketClient(id, out SocketClient client))
+            {
+                try
+                {
+                    //然后调用GetWaitingClient获取到IWaitingClient的对象。该对象会复用。
+                    byte[] returnData = client.GetWaitingClient(WaitingOptions.AllAdapter).SendThenReturn(Encoding.UTF8.GetBytes(textBox2.Text));
+                    this.m_service.Logger.Message($"收到回应消息：{Encoding.UTF8.GetString(returnData)}");
+                }
+                catch (TimeoutException)
+                {
+                    this.m_service.Logger.Error("等待超时");
+                }
+                catch(Exception ex)
+                {
+                    this.m_service.Logger.Exception(ex);
+                }
+            }
+            else
+            {
+                this.m_service.Logger.Warning("请先选择一个客户端。");
+            }
+        }
     }
 }
