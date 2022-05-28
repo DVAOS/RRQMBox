@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RRQMSocketFramework" Version="8.0.6" />
+    <PackageReference Include="RRQMSocketFramework" Version="8.1.0" />
   </ItemGroup>
 
 </Project>
