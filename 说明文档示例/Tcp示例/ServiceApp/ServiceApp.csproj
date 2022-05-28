@@ -33,8 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RRQMSocketFramework">
-      <HintPath>..\..\..\..\RRQMSocketFramework\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
+    <Reference Include="RRQMCore, Version=8.1.0.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMCore.8.1.0\lib\net45\RRQMCore.dll</HintPath>
+    </Reference>
+    <Reference Include="RRQMSocket, Version=8.1.0.0, Culture=neutral, PublicKeyToken=83a466fd8c19d6a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\RRQMSocket.8.1.0\lib\net45\RRQMSocket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,6 +72,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
