@@ -23,8 +23,10 @@ namespace TouchRpcClientApp
         private void button1_Click(object sender, EventArgs e)
         {
             TcpTouchRpcClient client = new TcpTouchRpcClient();
-            client.Setup("127.0.0.1:7789");
-            client.Connect("TouchRpc");
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost("127.0.0.1:7789")
+                .SetVerifyToken("TouchRpc"));
+            client.Connect();
 
             //直接调用时，第一个参数为服务名+方法名（必须全小写）
             //第二个参数为调用配置参数，可设置调用超时时间，取消调用等功能。
@@ -38,8 +40,10 @@ namespace TouchRpcClientApp
         private void button2_Click(object sender, EventArgs e)
         {
             TcpTouchRpcClient client = new TcpTouchRpcClient();
-            client.Setup("127.0.0.1:7789");
-            client.Connect("TouchRpc");
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost("127.0.0.1:7789")
+                .SetVerifyToken("TouchRpc"));
+            client.Connect();
 
             MyRpcServer myRpcServer = new MyRpcServer(client);//MyRpcServer类是由代码工具生成的类。
 
@@ -53,8 +57,10 @@ namespace TouchRpcClientApp
         private void button3_Click(object sender, EventArgs e)
         {
             TcpTouchRpcClient client = new TcpTouchRpcClient();
-            client.Setup("127.0.0.1:7789");
-            client.Connect("TouchRpc");
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost("127.0.0.1:7789")
+                .SetVerifyToken("TouchRpc"));
+            client.Connect();
 
             //扩展调用时，首先要保证本地已有代理文件，然后调用和和本地调用一样。只是会多一个调用配置参数。
             bool result = client.Login(textBox1.Text, textBox2.Text, InvokeOption.WaitInvoke);
@@ -112,9 +118,10 @@ namespace TouchRpcClientApp
         private void button7_Click(object sender, EventArgs e)
         {
             HttpTouchRpcClient client = new HttpTouchRpcClient();
-            client.Setup("127.0.0.1:7790");
-            client.Connect("TouchRpc");
-
+            client.Setup(new RRQMConfig()
+               .SetRemoteIPHost("127.0.0.1:7790")
+               .SetVerifyToken("TouchRpc"));
+            client.Connect();
             //直接调用时，第一个参数为服务名+方法名（必须全小写）
             //第二个参数为调用配置参数，可设置调用超时时间，取消调用等功能。
             //后续参数为调用参数。
@@ -127,9 +134,10 @@ namespace TouchRpcClientApp
         private void button9_Click(object sender, EventArgs e)
         {
             HttpTouchRpcClient client = new HttpTouchRpcClient();
-            client.Setup("127.0.0.1:7790");
-            client.Connect("TouchRpc");
-
+            client.Setup(new RRQMConfig()
+                .SetRemoteIPHost("127.0.0.1:7790")
+                .SetVerifyToken("TouchRpc"));
+            client.Connect();
             MyRpcServer myRpcServer = new MyRpcServer(client);//MyRpcServer类是由代码工具生成的类。
 
             //代理调用时，基本和本地调用一样。只是会多一个调用配置参数。
@@ -142,9 +150,10 @@ namespace TouchRpcClientApp
         private void button8_Click(object sender, EventArgs e)
         {
             HttpTouchRpcClient client = new HttpTouchRpcClient();
-            client.Setup("127.0.0.1:7790");
-            client.Connect("TouchRpc");
-
+            client.Setup(new RRQMConfig()
+               .SetRemoteIPHost("127.0.0.1:7790")
+               .SetVerifyToken("TouchRpc"));
+            client.Connect();
             //扩展调用时，首先要保证本地已有代理文件，然后调用和和本地调用一样。只是会多一个调用配置参数。
             bool result = client.Login(textBox1.Text, textBox2.Text, InvokeOption.WaitInvoke);
             MessageBox.Show(result.ToString());

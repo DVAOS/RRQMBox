@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="RRQMSocketFramework">
-      <HintPath>..\..\..\..\RRQMSocketFramework\RRQMSocketFramework\bin\Debug\net45\RRQMSocketFramework.dll</HintPath>
-    </Reference>
+    <PackageReference Include="RRQMSocketFramework" Version="8.1.1" />
   </ItemGroup>
 
 </Project>

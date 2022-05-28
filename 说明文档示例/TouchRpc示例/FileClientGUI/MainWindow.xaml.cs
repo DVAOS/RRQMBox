@@ -84,11 +84,12 @@ namespace FileClientGUI
             fileClient.Received += FileClient_Received;
 
             fileClient.Setup(new RRQMConfig()
-                .SetRemoteIPHost(new IPHost("127.0.0.1:7789")));
+                .SetRemoteIPHost(new IPHost("127.0.0.1:7789"))
+                .SetVerifyToken("FileService"));
 
             try
             {
-                fileClient.Connect("FileService");
+                fileClient.Connect();
                
                 ((Button)sender).IsEnabled = false;
 

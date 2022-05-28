@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RRQMSocketFramework" Version="8.1.1" />
+  </ItemGroup>
+
 </Project>
