@@ -10,6 +10,7 @@ using RRQMSocket.RPC.XmlRpc;
 using RRQMSocket.WebSocket;
 using RRQMSocket.WebSocket.Plugins;
 using System;
+using RRQMCore.Extensions;
 
 namespace ServiceConsoleApp
 {
@@ -27,7 +28,9 @@ namespace ServiceConsoleApp
             {
 
             }
-           
+
+            Console.WriteLine("输入本地监听端口");
+            int port =int.Parse(Console.ReadLine());
 
             //此处直接建立HttpTouchRpcService。
             //此组件包含Http所有功能，可以承载JsonRpc、XmlRpc、WebSocket、TouchRpc等等。
@@ -36,7 +39,7 @@ namespace ServiceConsoleApp
                 .SetBufferLength(1024 * 64)
                 .SetThreadCount(50)
                 .SetReceiveType(ReceiveType.Auto)
-                .SetListenIPHosts(new IPHost[] { new IPHost(7789) })
+                .SetListenIPHosts(new IPHost[] { new IPHost(port) })
                 .SetLogger<ConsoleLogger>()
                 .BuildWithHttpTouchRpcService();
 
@@ -44,7 +47,7 @@ namespace ServiceConsoleApp
 
             service.AddPlugin<WebSocketServerPlugin>().//添加WebSocket功能
                     SetWSUrl("/ws");
-            service.Logger.Message("WS插件已加载，使用 ws://127.0.0.1:7789/ws 连接");
+            service.Logger.Message($"WS插件已加载，使用 ws://127.0.0.1:{port}/ws 连接");
 
             service.AddPlugin<MyWebSocketPlug>();//添加WebSocket业务数据接收插件
             service.AddPlugin<MyWebSocketCommand>();//添加WebSocket快捷实现，常规WS客户端发送文本“Add 10 20”即可得到30。
@@ -52,11 +55,11 @@ namespace ServiceConsoleApp
 
             IRpcParser jsonRpcParser = service.AddPlugin<JsonRpcParserPlugin>()
                  .SetJsonRpcUrl("/jsonrpc");
-            service.Logger.Message("jsonrpc插件已加载，使用 Http://127.0.0.1:7789/jsonrpc +JsonRpc规范调用");
+            service.Logger.Message($"jsonrpc插件已加载，使用 Http://127.0.0.1:{port}/jsonrpc +JsonRpc规范调用");
 
             IRpcParser xmlRpcParser = service.AddPlugin<XmlRpcParserPlugin>()
                 .SetXmlRpcUrl("/xmlrpc");
-            service.Logger.Message("jsonrpc插件已加载，使用 Http://127.0.0.1:7789/xmlrpc +XmlRpc规范调用");
+            service.Logger.Message($"jsonrpc插件已加载，使用 Http://127.0.0.1:{port}/xmlrpc +XmlRpc规范调用");
 
             IRpcParser webApiParser = service.AddPlugin<WebApiParserPlugin>();
             service.Logger.Message("WebApi插件已加载");
@@ -69,11 +72,11 @@ namespace ServiceConsoleApp
             rpcStore.RegisterServer<MyServer>();
             service.Logger.Message("RPC注册完成。");
 
-            rpcStore.ShareProxy(new IPHost(8848));
-            rpcStore.ProxyUrl = "/proxy";
-            service.Logger.Message("RPC代理文件已分享，使用 Http://127.0.0.1:8848/proxy?proxy=all 获取");
+            //rpcStore.ShareProxy(new IPHost(8848));
+            //rpcStore.ProxyUrl = "/proxy";
+            //service.Logger.Message("RPC代理文件已分享，使用 Http://127.0.0.1:8848/proxy?proxy=all 获取");
 
-            RegisterConsul();
+            RegisterConsul(port);
             service.Logger.Message("Consul已成功注册");
 
             while (Console.ReadKey().Key!= ConsoleKey.Escape)
@@ -85,7 +88,7 @@ namespace ServiceConsoleApp
         /// <summary>
         /// 注册Consul，使用该功能时，请先了解Consul，然后配置基本如下。
         /// </summary>
-        public static void RegisterConsul()
+        public static void RegisterConsul(int port)
         {
             var consulClient = new ConsulClient(p => { p.Address = new Uri($"http://127.0.0.1:8500"); });//请求注册的 Consul 地址
                                                                                                          //这里的这个ip 就是本机的ip，这个端口8500 这个是默认注册服务端口 
@@ -93,7 +96,7 @@ namespace ServiceConsoleApp
             {
                 DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),//服务启动多久后注册
                 Interval = TimeSpan.FromSeconds(10),//间隔固定的时间访问一次，https://127.0.0.1:7789/api/Health
-                HTTP = $"http://127.0.0.1:7789/api/Health",//健康检查地址
+                HTTP = $"http://127.0.0.1:{port}/api/Health",//健康检查地址
                 Timeout = TimeSpan.FromSeconds(5)
             };
 
@@ -101,9 +104,9 @@ namespace ServiceConsoleApp
             {
                 Checks = new[] { httpCheck },
                 ID = Guid.NewGuid().ToString(),
-                Name = "RRQMService",
+                Name = "RRQMService"+port,
                 Address = "127.0.0.1",
-                Port = 7789
+                Port = port
             };
 
             consulClient.Agent.ServiceRegister(registration).Wait();//注册服务 
