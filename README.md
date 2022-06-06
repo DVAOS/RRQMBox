@@ -1,3 +1,3 @@
-本仓是RRQM系产品的示例Demo。
+本仓停止维护，对应的demo，请在源码仓库寻找，例如，tcp demo在RRQMSocket仓库中。
 
-其中界面元素来自于[RRQMSkin](https://gitee.com/RRQM_OS/RRQMSkin)，测试元素来自[RRQMSocket](https://gitee.com/dotnetchina/RRQMSocket)系。
+更多看文档：https://www.yuque.com/eo2w71/rrqm/index
