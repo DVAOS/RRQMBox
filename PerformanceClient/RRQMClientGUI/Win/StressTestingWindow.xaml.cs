@@ -71,11 +71,11 @@ namespace RRQMClientGUI.Win
                         var config = new TcpClientConfig();
                         config.OnlySend = false;
                         config.RemoteIPHost= new IPHost("127.0.0.1:7789");
-                        config.SeparateThreadSend = false;
+                        config.SeparateThreadSend = true;
 
                         testObject.Client.Setup(config);
                         testObject.Client.Connect();
-                        testObject.Client.SetDataHandlingAdapter(new NormalDataHandlingAdapter());
+                        testObject.Client.SetDataHandlingAdapter(new FixedHeaderDataHandlingAdapter());
 
                         testObject.Status = "连接成功";
                     }
@@ -108,7 +108,7 @@ namespace RRQMClientGUI.Win
 
         private void GroupSend()
         {
-            int size = Math.Min(this.TestObjects.Count, 100);//每个线程托管的客户端
+            int size = Math.Min(this.TestObjects.Count, 1);//每个线程托管的客户端
             int threadCount;
             if (this.TestObjects.Count % size == 0)
             {
